@@ -482,5 +482,61 @@
       "passwordRequired": "Introduce la contraseña de la cuenta.",
       "rateLimited": "Demasiados cambios. Espera un rato."
     }
+  },
+  "Chat": {
+    "title": "Chat del pedido",
+    "description": {
+      "customer": "Habla con tu booster aquí mismo. También puedes enviar capturas de pantalla.",
+      "booster": "Habla con el cliente sobre este pedido. Mantén todo el contacto dentro del sitio.",
+      "staff": "Vista de solo lectura del chat de este pedido."
+    },
+    "author": {
+      "me": "Tú",
+      "customer": "Cliente",
+      "booster": "Booster",
+      "staff": "Soporte"
+    },
+    "empty": "Todavía no hay mensajes.",
+    "placeholder": "Escribe un mensaje…",
+    "send": "Enviar",
+    "attach": "Adjuntar captura",
+    "removeFile": "Quitar archivo",
+    "hint": "Enter envía, Mayús+Enter añade una línea. PNG, JPG o WebP de hasta 5 MB.",
+    "hintNoUploads": "Enter envía, Mayús+Enter añade una línea.",
+    "filtered": "El filtro del chat ocultó algunas palabras.",
+    "seen": "Visto",
+    "attachmentAlt": "Captura de pantalla",
+    "attachmentMissing": "Imagen no disponible",
+    "closed": {
+      "waitingForBooster": "El chat se abre en cuanto un booster acepte tu pedido.",
+      "closed": "Este chat está cerrado. Puedes seguir leyendo el historial."
+    },
+    "errors": {
+      "notFound": "Chat no encontrado.",
+      "closed": "Este chat está cerrado.",
+      "empty": "Escribe un mensaje o adjunta una captura.",
+      "tooLong": "Los mensajes pueden tener como máximo 1000 caracteres.",
+      "rateLimited": "Estás enviando mensajes demasiado rápido. Espera un momento.",
+      "uploadsDisabled": "Ahora mismo no se pueden subir capturas.",
+      "uploadFailed": "No se pudo subir la captura. Inténtalo de nuevo.",
+      "fileType": "Solo se pueden enviar imágenes PNG, JPG o WebP.",
+      "fileTooLarge": "Las imágenes pueden pesar como máximo 5 MB."
+    }
+  },
+  "Notifications": {
+    "title": "Notificaciones",
+    "open": "Notificaciones",
+    "unread": "{count, plural, =0 {nada sin leer} other {# sin leer}}",
+    "markAllRead": "Marcar todo como leído",
+    "empty": "Estás al día.",
+    "loadFailed": "No se pudieron cargar las notificaciones.",
+    "orderStatus": "{orderNumber}: {status}",
+    "orderUpdated": "{orderNumber} se actualizó",
+    "orderDetailsUpdated": "{orderNumber}: el cliente actualizó los datos de la cuenta",
+    "newMessageFrom": "{from} te escribió sobre {orderNumber}",
+    "newMessage": "Nuevo mensaje sobre {orderNumber}",
+    "dispute": "{orderNumber}: disputa {status, select, OPEN {abierta} RESOLVED {resuelta} other {actualizada}}",
+    "payout": "Retiro de {amount} {status, select, PENDING {solicitado} APPROVED {aprobado} REJECTED {rechazado} PAID {pagado} other {actualizado}}",
+    "system": "Aviso del sistema"
   }
 }

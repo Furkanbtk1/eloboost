@@ -6,6 +6,7 @@ import { getTranslations } from "next-intl/server";
 
 import { Providers } from "@/components/providers";
 import { routing } from "@/i18n/routing";
+import { realtimeClientConfig } from "@/lib/realtime/server";
 
 import "../globals.css";
 
@@ -37,7 +38,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
     >
       <body className="flex min-h-full flex-col">
         <NextIntlClientProvider>
-          <Providers>{children}</Providers>
+          <Providers realtime={realtimeClientConfig()}>{children}</Providers>
         </NextIntlClientProvider>
       </body>
     </html>

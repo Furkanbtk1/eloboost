@@ -523,7 +523,7 @@ async function seedOrders(users: Awaited<ReturnType<typeof seedUsers>>) {
       { orderId: inProgress.id, senderId: shadowCarry.id, content: "No problem, I'll stick to mid and ADC. Starting tonight at 20:00 CET.", isRead: true, createdAt: daysAgo(1, 18) },
       { orderId: inProgress.id, senderId: shadowCarry.id, content: "Diamond III reached, 7W-1L so far.", isRead: false, createdAt: daysAgo(0, 2) },
       { orderId: disputed.id, senderId: alex.id, content: "4 losses out of 5 placement games? This is not what I paid for.", isRead: true, createdAt: daysAgo(3) },
-      { orderId: disputed.id, senderId: shadowCarry.id, content: "Two of those games had AFK teammates, I attached the screenshots.", attachmentUrl: "/uploads/seed/afk-proof.png", isRead: false, createdAt: daysAgo(3) },
+      { orderId: disputed.id, senderId: shadowCarry.id, content: "Two of those games had AFK teammates, I can send screenshots.", isRead: false, createdAt: daysAgo(3) },
     ],
   });
 

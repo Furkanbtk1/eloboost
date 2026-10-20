@@ -2,6 +2,7 @@ import "server-only";
 
 import type { PaymentGateway } from "@/generated/prisma/enums";
 import { db } from "@/lib/db";
+import { broadcast, signal } from "@/lib/realtime/server";
 
 import { getProviderByGateway } from "./registry";
 import type { PaymentUpdate } from "./types";
@@ -26,7 +27,8 @@ export type ApplyResult =
 export async function applyPaymentUpdate(gateway: PaymentGateway, update: PaymentUpdate): Promise<ApplyResult> {
   if (update.outcome === "pending") return "ignored";
 
-  return db.$transaction(async (tx) => {
+  const paid: { orderNumber?: string; customerId?: string } = {};
+  const result = await db.$transaction(async (tx): Promise<ApplyResult> => {
     const payment = await tx.transaction.findUnique({
       where: { gateway_gatewayTransactionId: { gateway, gatewayTransactionId: update.reference } },
       include: { order: true },
@@ -95,8 +97,15 @@ export async function applyPaymentUpdate(gateway: PaymentGateway, update: Paymen
         link: `/dashboard/orders/${order.orderNumber}`,
       },
     });
+    paid.orderNumber = order.orderNumber;
+    paid.customerId = order.customerId;
     return "paid";
   });
+
+  if (result === "paid" && paid.orderNumber && paid.customerId) {
+    broadcast(signal.orderUpdated(paid.orderNumber), signal.poolChanged(), signal.notification(paid.customerId));
+  }
+  return result;
 }
 
 /**

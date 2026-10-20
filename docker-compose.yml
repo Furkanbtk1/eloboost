@@ -42,5 +42,52 @@ services:
     ports:
       - "6433:6432" # pooled connection (application runtime)
 
+  # Pusher-compatible WebSocket server for local development; production uses Pusher.
+  soketi:
+    image: quay.io/soketi/soketi:1.6-16-debian
+    restart: unless-stopped
+    environment:
+      SOKETI_DEFAULT_APP_ID: ${PUSHER_APP_ID:-eloboost}
+      SOKETI_DEFAULT_APP_KEY: ${PUSHER_KEY:-eloboost-key}
+      SOKETI_DEFAULT_APP_SECRET: ${PUSHER_SECRET:-eloboost-secret}
+    ports:
+      - "6001:6001"
+
+  # S3-compatible storage for chat attachments; production uses Cloudflare R2 or AWS S3.
+  rustfs:
+    image: rustfs/rustfs:1.0.1
+    restart: unless-stopped
+    environment:
+      RUSTFS_ACCESS_KEY: ${S3_ACCESS_KEY_ID:-eloboost}
+      RUSTFS_SECRET_KEY: ${S3_SECRET_ACCESS_KEY:-eloboost-secret}
+      RUSTFS_CONSOLE_ENABLE: "true"
+    ports:
+      - "9000:9000" # S3 API
+      - "9001:9001" # web console
+    volumes:
+      - rustfs-data:/data
+
+  # Creates the private bucket once RustFS answers (409 = it already exists).
+  storage-init:
+    image: curlimages/curl:8.22.0
+    restart: "no"
+    depends_on:
+      - rustfs
+    environment:
+      ACCESS_KEY: ${S3_ACCESS_KEY_ID:-eloboost}
+      SECRET_KEY: ${S3_SECRET_ACCESS_KEY:-eloboost-secret}
+      BUCKET: ${S3_BUCKET:-eloboost-uploads}
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        for attempt in $$(seq 1 30); do
+          code=$$(curl -s -o /dev/null -w "%{http_code}" -X PUT --aws-sigv4 "aws:amz:us-east-1:s3" \
+            --user "$$ACCESS_KEY:$$SECRET_KEY" "http://rustfs:9000/$$BUCKET")
+          case "$$code" in 200|409) echo "bucket $$BUCKET ready"; exit 0 ;; esac
+          sleep 1
+        done
+        echo "could not create bucket $$BUCKET (last status $$code)"; exit 1
+
 volumes:
   postgres-data:
+  rustfs-data:

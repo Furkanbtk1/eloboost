@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
+  experimental: {
+    // Chat screenshots go through a Server Action: 5 MB file plus multipart overhead.
+    serverActions: { bodySizeLimit: "6mb" },
+  },
   async headers() {
     return [
       {

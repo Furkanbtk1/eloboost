@@ -482,5 +482,61 @@
       "passwordRequired": "Gib das Passwort des Kontos ein.",
       "rateLimited": "Zu viele Änderungen. Bitte warte eine Weile."
     }
+  },
+  "Chat": {
+    "title": "Auftragschat",
+    "description": {
+      "customer": "Schreib hier direkt mit deinem Booster. Du kannst auch Screenshots senden.",
+      "booster": "Sprich mit dem Kunden über diesen Auftrag. Halte jeden Kontakt auf der Seite.",
+      "staff": "Nur-Lese-Ansicht des Chats zu diesem Auftrag."
+    },
+    "author": {
+      "me": "Du",
+      "customer": "Kunde",
+      "booster": "Booster",
+      "staff": "Support"
+    },
+    "empty": "Noch keine Nachrichten.",
+    "placeholder": "Nachricht schreiben…",
+    "send": "Senden",
+    "attach": "Screenshot anhängen",
+    "removeFile": "Datei entfernen",
+    "hint": "Enter sendet, Umschalt+Enter fügt eine Zeile hinzu. PNG, JPG oder WebP bis 5 MB.",
+    "hintNoUploads": "Enter sendet, Umschalt+Enter fügt eine Zeile hinzu.",
+    "filtered": "Einige Wörter wurden vom Chatfilter ausgeblendet.",
+    "seen": "Gesehen",
+    "attachmentAlt": "Screenshot",
+    "attachmentMissing": "Bild nicht verfügbar",
+    "closed": {
+      "waitingForBooster": "Der Chat öffnet sich, sobald ein Booster deinen Auftrag übernimmt.",
+      "closed": "Dieser Chat ist geschlossen. Den Verlauf kannst du weiterhin lesen."
+    },
+    "errors": {
+      "notFound": "Chat nicht gefunden.",
+      "closed": "Dieser Chat ist geschlossen.",
+      "empty": "Schreib eine Nachricht oder hänge einen Screenshot an.",
+      "tooLong": "Nachrichten dürfen höchstens 1000 Zeichen lang sein.",
+      "rateLimited": "Du sendest zu schnell. Bitte warte einen Moment.",
+      "uploadsDisabled": "Screenshots können gerade nicht hochgeladen werden.",
+      "uploadFailed": "Der Screenshot konnte nicht hochgeladen werden. Bitte versuch es erneut.",
+      "fileType": "Nur PNG-, JPG- oder WebP-Bilder können gesendet werden.",
+      "fileTooLarge": "Bilder dürfen höchstens 5 MB groß sein."
+    }
+  },
+  "Notifications": {
+    "title": "Benachrichtigungen",
+    "open": "Benachrichtigungen",
+    "unread": "{count, plural, =0 {nichts ungelesen} other {# ungelesen}}",
+    "markAllRead": "Alle als gelesen markieren",
+    "empty": "Du bist auf dem neuesten Stand.",
+    "loadFailed": "Benachrichtigungen konnten nicht geladen werden.",
+    "orderStatus": "{orderNumber}: {status}",
+    "orderUpdated": "{orderNumber} wurde aktualisiert",
+    "orderDetailsUpdated": "{orderNumber}: Der Kunde hat die Kontodaten aktualisiert",
+    "newMessageFrom": "{from} hat dir zu {orderNumber} geschrieben",
+    "newMessage": "Neue Nachricht zu {orderNumber}",
+    "dispute": "{orderNumber}: Streitfall {status, select, OPEN {eröffnet} RESOLVED {gelöst} other {aktualisiert}}",
+    "payout": "Auszahlung über {amount} {status, select, PENDING {beantragt} APPROVED {genehmigt} REJECTED {abgelehnt} PAID {ausgezahlt} other {aktualisiert}}",
+    "system": "Systemhinweis"
   }
 }

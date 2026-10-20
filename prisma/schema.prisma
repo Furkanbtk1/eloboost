@@ -490,7 +490,8 @@ model Message {
   orderId       String   @db.Uuid
   senderId      String   @db.Uuid
   content       String   @db.Text
-  attachmentUrl String?
+  /// Object key in the private bucket: orders/<order id>/<file id>.<ext>
+  attachmentKey String?
   isRead        Boolean  @default(false)
   /// Set when the toxicity filter matched.
   isFlagged     Boolean  @default(false)

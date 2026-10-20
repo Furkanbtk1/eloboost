@@ -25,6 +25,7 @@ import { needsTwoFactorSetup } from "@/lib/auth/policy";
 import { decrypt } from "@/lib/crypto";
 import { db } from "@/lib/db";
 import { rateLimit } from "@/lib/rate-limit";
+import { broadcast, signal } from "@/lib/realtime/server";
 import { clientIpFrom } from "@/lib/request";
 
 import { getBoosterContext, isEligible, type BoosterContext } from "./queries";
@@ -89,6 +90,7 @@ export async function claimOrderAction(rawLocale: string, orderNumber: string): 
     return count === 1;
   });
   if (!claimed) return fail(t("alreadyTaken"), 409);
+  broadcast(signal.orderUpdated(orderNumber), signal.poolChanged(), signal.notification(order.customerId));
 
   return ok({ redirectTo: getPathname({ href: `/booster/orders/${orderNumber}`, locale }) });
 }
@@ -187,7 +189,13 @@ export async function boosterTransitionAction(
     }
   });
 
-  return applied ? ok(undefined) : fail(t("invalidTransition"), 409);
+  if (!applied) return fail(t("invalidTransition"), 409);
+  broadcast(
+    signal.orderUpdated(orderNumber),
+    signal.notification(order.customerId),
+    ...(transition.data === "release" ? [signal.poolChanged()] : []),
+  );
+  return ok(undefined);
 }
 
 // ---------------------------------------------------------------------------
@@ -232,6 +240,7 @@ export async function reportProgressAction(rawLocale: string, orderNumber: strin
   }
 
   await db.order.update({ where: { id: order.id }, data: { currentRank } });
+  broadcast(signal.orderUpdated(orderNumber));
   return ok(undefined);
 }
 
@@ -278,6 +287,8 @@ export async function revealCredentialsAction(
       userAgent: requestHeaders.get("user-agent")?.slice(0, 300) ?? null,
     },
   });
+  // The customer's access log updates live.
+  broadcast(signal.orderUpdated(orderNumber));
 
   return ok({
     username: decrypt(order.accountUsername, order.id),

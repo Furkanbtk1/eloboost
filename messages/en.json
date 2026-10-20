@@ -482,5 +482,61 @@
       "passwordRequired": "Enter the account password.",
       "rateLimited": "Too many changes. Please wait a while."
     }
+  },
+  "Chat": {
+    "title": "Order chat",
+    "description": {
+      "customer": "Talk to your booster right here. You can send screenshots.",
+      "booster": "Talk to the customer about this order. Keep all contact on the site.",
+      "staff": "Read-only view of this order's chat."
+    },
+    "author": {
+      "me": "You",
+      "customer": "Customer",
+      "booster": "Booster",
+      "staff": "Support"
+    },
+    "empty": "No messages yet.",
+    "placeholder": "Write a message…",
+    "send": "Send",
+    "attach": "Attach a screenshot",
+    "removeFile": "Remove file",
+    "hint": "Enter sends, Shift+Enter adds a line. PNG, JPG or WebP up to 5 MB.",
+    "hintNoUploads": "Enter sends, Shift+Enter adds a line.",
+    "filtered": "Some words were hidden by the chat filter.",
+    "seen": "Seen",
+    "attachmentAlt": "Screenshot",
+    "attachmentMissing": "Image unavailable",
+    "closed": {
+      "waitingForBooster": "The chat opens as soon as a booster takes your order.",
+      "closed": "This chat is closed. You can still read the history."
+    },
+    "errors": {
+      "notFound": "Chat not found.",
+      "closed": "This chat is closed.",
+      "empty": "Write a message or attach a screenshot.",
+      "tooLong": "Messages can be up to 1000 characters.",
+      "rateLimited": "You're sending messages too fast. Please wait a moment.",
+      "uploadsDisabled": "Screenshots can't be uploaded right now.",
+      "uploadFailed": "The screenshot couldn't be uploaded. Please try again.",
+      "fileType": "Only PNG, JPG or WebP images can be sent.",
+      "fileTooLarge": "Images can be up to 5 MB."
+    }
+  },
+  "Notifications": {
+    "title": "Notifications",
+    "open": "Notifications",
+    "unread": "{count, plural, =0 {nothing unread} other {# unread}}",
+    "markAllRead": "Mark all read",
+    "empty": "You're all caught up.",
+    "loadFailed": "Notifications couldn't be loaded.",
+    "orderStatus": "{orderNumber}: {status}",
+    "orderUpdated": "{orderNumber} was updated",
+    "orderDetailsUpdated": "{orderNumber}: the customer updated the account details",
+    "newMessageFrom": "{from} sent you a message about {orderNumber}",
+    "newMessage": "New message about {orderNumber}",
+    "dispute": "{orderNumber}: dispute {status, select, OPEN {opened} RESOLVED {resolved} other {updated}}",
+    "payout": "Payout of {amount} {status, select, PENDING {requested} APPROVED {approved} REJECTED {rejected} PAID {paid} other {updated}}",
+    "system": "System notice"
   }
 }

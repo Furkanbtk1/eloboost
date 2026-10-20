@@ -482,5 +482,61 @@
       "passwordRequired": "Hesap şifresini gir.",
       "rateLimited": "Çok fazla değişiklik yapıldı. Lütfen biraz bekle."
     }
+  },
+  "Chat": {
+    "title": "Sipariş sohbeti",
+    "description": {
+      "customer": "Booster'ınla buradan konuş. Ekran görüntüsü de gönderebilirsin.",
+      "booster": "Bu sipariş hakkında müşteriyle konuş. Tüm iletişimi site içinde tut.",
+      "staff": "Bu siparişin sohbetini salt okunur olarak görüyorsun."
+    },
+    "author": {
+      "me": "Sen",
+      "customer": "Müşteri",
+      "booster": "Booster",
+      "staff": "Destek"
+    },
+    "empty": "Henüz mesaj yok.",
+    "placeholder": "Mesaj yaz…",
+    "send": "Gönder",
+    "attach": "Ekran görüntüsü ekle",
+    "removeFile": "Dosyayı kaldır",
+    "hint": "Enter gönderir, Shift+Enter yeni satır ekler. En fazla 5 MB PNG, JPG veya WebP.",
+    "hintNoUploads": "Enter gönderir, Shift+Enter yeni satır ekler.",
+    "filtered": "Bazı kelimeler sohbet filtresi tarafından gizlendi.",
+    "seen": "Görüldü",
+    "attachmentAlt": "Ekran görüntüsü",
+    "attachmentMissing": "Görsel açılamadı",
+    "closed": {
+      "waitingForBooster": "Siparişini bir booster aldığında sohbet açılır.",
+      "closed": "Bu sohbet kapandı. Geçmiş mesajları okumaya devam edebilirsin."
+    },
+    "errors": {
+      "notFound": "Sohbet bulunamadı.",
+      "closed": "Bu sohbet kapalı.",
+      "empty": "Bir mesaj yaz veya ekran görüntüsü ekle.",
+      "tooLong": "Mesajlar en fazla 1000 karakter olabilir.",
+      "rateLimited": "Çok hızlı mesaj gönderiyorsun. Lütfen biraz bekle.",
+      "uploadsDisabled": "Şu anda ekran görüntüsü yüklenemiyor.",
+      "uploadFailed": "Ekran görüntüsü yüklenemedi. Lütfen tekrar dene.",
+      "fileType": "Yalnızca PNG, JPG veya WebP görseller gönderilebilir.",
+      "fileTooLarge": "Görseller en fazla 5 MB olabilir."
+    }
+  },
+  "Notifications": {
+    "title": "Bildirimler",
+    "open": "Bildirimler",
+    "unread": "{count, plural, =0 {okunmamış yok} other {# okunmamış}}",
+    "markAllRead": "Tümünü okundu yap",
+    "empty": "Yeni bildirim yok.",
+    "loadFailed": "Bildirimler yüklenemedi.",
+    "orderStatus": "{orderNumber}: {status}",
+    "orderUpdated": "{orderNumber} güncellendi",
+    "orderDetailsUpdated": "{orderNumber}: müşteri hesap bilgilerini güncelledi",
+    "newMessageFrom": "{from}, {orderNumber} siparişi hakkında sana mesaj gönderdi",
+    "newMessage": "{orderNumber} siparişinde yeni mesaj",
+    "dispute": "{orderNumber}: anlaşmazlık {status, select, OPEN {açıldı} RESOLVED {çözüldü} other {güncellendi}}",
+    "payout": "{amount} tutarındaki ödeme talebin {status, select, PENDING {alındı} APPROVED {onaylandı} REJECTED {reddedildi} PAID {ödendi} other {güncellendi}}",
+    "system": "Sistem bildirimi"
   }
 }

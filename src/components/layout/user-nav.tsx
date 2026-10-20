@@ -2,6 +2,8 @@ import { getTranslations } from "next-intl/server";
 
 import { UserMenu } from "@/components/layout/user-menu";
 import { Button } from "@/components/ui/button";
+import { NotificationBell } from "@/features/notifications/components/notification-bell";
+import { countUnreadNotifications } from "@/features/notifications/queries";
 import { Link } from "@/i18n/navigation";
 import { homePathForRole } from "@/lib/auth/access";
 import { getCurrentUser } from "@/lib/auth/session";
@@ -26,12 +28,16 @@ export async function UserNav() {
     );
   }
 
+  const unread = await countUnreadNotifications(user.id);
   return (
-    <UserMenu
-      name={user.name ?? user.email}
-      email={user.email}
-      role={user.role}
-      panelHref={homePathForRole(user.role)}
-    />
+    <div className="flex items-center gap-1">
+      <NotificationBell userId={user.id} initialUnread={unread} />
+      <UserMenu
+        name={user.name ?? user.email}
+        email={user.email}
+        role={user.role}
+        panelHref={homePathForRole(user.role)}
+      />
+    </div>
   );
 }

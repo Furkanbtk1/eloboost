@@ -14,6 +14,8 @@ Müşteri, booster ve yönetim panelleri tek bir Next.js uygulamasında çalış
 | Veritabanı | PostgreSQL 17 + PgBouncer (transaction pooling), Prisma 7 (`@prisma/adapter-pg`) |
 | Kimlik doğrulama | Auth.js v5 (JWT), e-posta/şifre + Discord/Google/Twitch, TOTP 2FA |
 | Güvenlik | AES-256-GCM alan şifreleme, bcrypt, rate limit (Upstash / bellek), güvenlik başlıkları, Zod ile env doğrulama |
+| Gerçek zamanlı | Pusher Channels (yerelde Pusher uyumlu Soketi), pusher-js |
+| Dosya depolama | S3 uyumlu gizli bucket (yerelde RustFS, canlıda Cloudflare R2 veya AWS S3) |
 
 ## Kurulum
 
@@ -22,7 +24,7 @@ Gereksinimler: Node.js 24+, Docker Desktop.
 ```bash
 npm install            # postinstall: prisma generate
 cp .env.example .env   # ENCRYPTION_KEY ve AUTH_SECRET üret (komut dosyada)
-npm run db:up          # Postgres :5433 + PgBouncer :6433
+npm run db:up          # Postgres :5433, PgBouncer :6433, Soketi :6001, RustFS :9000/:9001
 npm run db:migrate     # migration'ları uygula
 npm run db:seed        # örnek veriler (tüm tabloları siler!)
 npm run dev            # http://localhost:3000
@@ -56,7 +58,7 @@ bildirimler ve audit log kayıtları da vardır.
 | --- | --- |
 | `npm run dev` / `build` / `start` | Geliştirme, production build, production sunucu |
 | `npm run lint` | ESLint (`any` yasak) |
-| `npm test` | Birim testleri (Vitest): fiyat motoru |
+| `npm test` | Birim testleri (Vitest): fiyat motoru, sipariş kuralları, sohbet erişimi, küfür filtresi, dosya türü tespiti |
 | `npm run typecheck` | Route tiplerini üretir ve `tsc` çalıştırır |
 | `npm run db:up` / `db:down` | Docker servislerini başlatır / durdurur |
 | `npm run db:migrate` | Şema değişikliğinden migration üretir ve uygular |
@@ -80,6 +82,8 @@ src/
   i18n/                  next-intl routing, request config, navigation
   lib/                   db (Prisma), env (Zod), crypto (AES-256-GCM), action-result, rate-limit
   lib/auth/              access (rota kuralları), session (DAL), policy (2FA), totp
+  lib/realtime/          Pusher kanal adları, sunucu yayını (after), istemci bağlantısı ve hook
+  lib/storage.ts         S3 uyumlu gizli bucket (yükleme, akış)
   stores/                Zustand store'ları
   auth.ts                Auth.js yapılandırması (sağlayıcılar, callback'ler)
   proxy.ts               Dil yönlendirmesi + rol bazlı rota koruması (Next 16'da middleware → proxy)
@@ -244,7 +248,65 @@ Kurallar `src/features/orders/workflow.ts` içinde saf fonksiyonlar olarak tutul
 - **Tamamlama:** Booster payı (`boosterCutAmount × exchangeRate`, USD) bakiyeye ve toplam kazanca eklenir, `EARNING`
   işlemi yazılır ve müşterinin giriş bilgileri silinir. Hepsi tek bir veritabanı işlemi içinde yapılır.
 
-Henüz yok: sipariş içi sohbet (Sprint 6), payout talebi ve onayı (Sprint 7), bahşiş ve yorumlar.
+## Sohbet ve gerçek zamanlı bildirimler
+
+**Nasıl çalışır:** Bir şey değiştiğinde sunucu Pusher üzerinden yalnızca bir sinyal yollar (`order-updated`,
+`chat-changed`, `notification`, `pool-changed`). Tarayıcı sinyali alınca güncel veriyi bir server action ile kendisi
+çeker. Bunun üç faydası var:
+- Sohbet içeriği ve kişisel veriler Pusher'dan hiç geçmez.
+- Yetki kontrolü tek yerde, sunucuda kalır.
+- Bağlantı koptuğunda kaçan sinyaller, yeniden bağlanınca veri tekrar çekilerek telafi edilir.
+
+Sinyaller yanıt gönderildikten sonra (`after()`) yollanır. Pusher yavaşsa veya kapalıysa işlem yine başarılı olur;
+karşı taraf değişikliği sayfayı yenileyince görür.
+
+Tüm kanallar private. `/api/realtime/auth` her abonelikte yetkiyi veritabanından kontrol eder ve yalnızca aynı
+origin'den gelen istekleri kabul eder:
+
+| Kanal | Kimler abone olabilir |
+| --- | --- |
+| `private-user-<id>` | Yalnızca kullanıcının kendisi (bildirim zili) |
+| `private-order-<no>` | Siparişin müşterisi, mevcut booster'ı, ADMIN ve SUPPORT |
+| `private-booster-pool` | Onaylı ve 2FA'sı açık booster'lar |
+
+WebSocket bağlantısı ilk abonelikte açılır. Giriş yapmamış ziyaretçiler hiç bağlanmaz, böylece Pusher'ın bağlantı
+kotası harcanmaz.
+
+**Sohbet** (müşteri ve booster sipariş sayfalarında):
+- Booster atanınca açılır. ASSIGNED, IN_PROGRESS, PAUSED ve DISPUTED durumlarında yazılabilir. Tamamlanan veya
+  iptal edilen siparişte geçmiş okunabilir ama yeni mesaj yazılamaz. Siparişi havuza bırakan booster erişimini kaybeder.
+- Booster müşteriyi yalnızca "Müşteri" olarak görür, adını görmez. Müşteri booster'ı adıyla görür.
+- **Küfür filtresi** (`src/features/chat/moderation.ts`, TR/EN/DE/ES):
+  - Eşleşen kelimeler `****` ile maskelenir ve mesaj `isFlagged` olarak işaretlenir. Veritabanına yalnızca maskelenmiş
+    metin yazılır.
+  - Leetspeak (`b1tch`) ve harf uzatmaları (`fuuuck`) yakalanır.
+  - "sık", "Scunthorpe", "Niger", "pic" gibi masum kelimelerin yakalanmadığı testlerle doğrulanır.
+- **Ekran görüntüsü:**
+  - PNG, JPG veya WebP, en fazla 5 MB. Dosya türü uzantıdan değil, dosyanın ilk baytlarından belirlenir.
+  - Dosyalar gizli bucket'ta `orders/<sipariş id>/<rastgele id>.<uzantı>` anahtarıyla saklanır.
+  - Yalnızca `/api/attachments/<mesaj id>` üzerinden ve sohbeti okuma yetkisi olanlara verilir. Yanıt `nosniff` ve
+    `sandbox` CSP başlıklarıyla döner.
+- **Okundu bilgisi:** Karşı taraf sohbeti ekranda açınca mesaj okundu sayılır ve gönderen "Görüldü" yazısını görür.
+- **Sınırlar:** Kullanıcı başına dakikada 30 mesaj ve saatte 20 ekran görüntüsü.
+
+**Bildirimler:**
+- Header'daki zil, okunmamış bildirim varken kırmızı nokta gösterir ve kullanıcının kanalından canlı güncellenir.
+- Şu olaylar bildirim üretir: booster atanması, durum değişiklikleri, ödeme onayı, hesap bilgisi güncellemesi ve yeni
+  mesaj.
+- Yeni mesaj bildirimleri sipariş başına tek kayıtta toplanır ve sohbet açılınca kendiliğinden okundu olur.
+
+**Canlı sayfalar:**
+- Sipariş detay sayfaları (müşteri ve booster) durum, ilerleme, VPN erişim kaydı ve hesap bilgisi değiştiğinde
+  kendini yeniler.
+- Booster havuzu, bir sipariş ödendiğinde, alındığında veya havuza bırakıldığında kendini yeniler.
+
+**Canlıya alırken:**
+- Bir Pusher Channels uygulaması açın ve `PUSHER_APP_ID`, `PUSHER_KEY`, `PUSHER_SECRET`, `PUSHER_CLUSTER`
+  değişkenlerini doldurun. `PUSHER_HOST` ve `PUSHER_PORT` boş kalmalı.
+- Dosyalar için public erişimi kapalı bir Cloudflare R2 (veya S3) bucket'ı açın ve `S3_*` değişkenlerini doldurun.
+  Örnekler `.env.example` dosyasında.
+
+Henüz yok: payout talebi ve onayı, bahşiş ve yorumlar (Sprint 7).
 
 ## Mimari notlar
 
@@ -271,8 +333,17 @@ Henüz yok: sipariş içi sohbet (Sprint 6), payout talebi ve onayı (Sprint 7),
 - Spesifikasyonda olmayan, ancak modüllerin ihtiyaç duyduğu ek modeller: `Account`, `VerificationToken` (Auth.js),
   `PayoutRequest`, `Dispute`, `CredentialAccessLog` ("Şifreyi Göster" logu + VPN raporu), `Notification`, `Setting`
   ve fiyat tabloları.
+- Pusher'ın yanında yerel geliştirme için Pusher protokolünü konuşan Soketi kullanılır. Uygulama kodu ikisinde de aynıdır.
+- Yerel S3 sunucusu olarak MinIO yerine RustFS kullanılır, çünkü MinIO 2025'te topluluk sürümünün Docker imajlarını
+  yayınlamayı bıraktı.
+- `Message.attachmentUrl` sütunu `attachmentKey` olarak yeniden adlandırıldı (migration `20261021011500_chat_attachment_key`).
+  Sütun artık bir URL değil, gizli bucket'taki nesne anahtarını tutar.
 
 ## Bilinen ortam notları
+
+- **Docker servisleri ve portları:** Postgres :5433, PgBouncer :6433, Soketi :6001, RustFS :9000 (S3 API) ve :9001
+  (konsol: http://localhost:9001/rustfs/console/, kullanıcı `eloboost`, şifre `eloboost-secret`). `storage-init` servisi
+  bucket'ı oluşturup kapanır; `docker compose ps -a` çıktısında "Exited (0)" görünmesi normaldir.
 
 - **`@swc/core` 1.16.2'ye sabitlendi** (`package.json` → `overrides`). next-intl plugin'i bu paketi yükler. 1.16.12 ve
   sonrası native binary'yi bir önbellek klasörüne açarken üst dizinlerin ACL'ini doğrular. Bu makinede `C:\` kökünde

@@ -31,6 +31,12 @@ const LIMITS = {
   revealCredentials: { requests: 10, windowSeconds: 60 * 60 },
   /** Per booster: claims, status changes and progress reports. */
   boosterAction: { requests: 60, windowSeconds: 10 * 60 },
+  /** Per user: chat messages sent. */
+  chatMessage: { requests: 30, windowSeconds: 60 },
+  /** Per user: screenshots uploaded to chat. */
+  chatAttachment: { requests: 20, windowSeconds: 60 * 60 },
+  /** Per user: chat / notification reloads triggered by realtime signals. */
+  realtimeSync: { requests: 240, windowSeconds: 60 },
 } as const;
 
 export type RateLimitName = keyof typeof LIMITS;

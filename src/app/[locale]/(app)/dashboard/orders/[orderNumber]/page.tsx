@@ -6,10 +6,13 @@ import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 import { PanelSkeleton } from "@/components/layout/panel";
+import { LiveRefresh } from "@/components/realtime/live-refresh";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { OrderChat } from "@/features/chat/components/order-chat";
+import { getChatState } from "@/features/chat/queries";
 import { CredentialsForm } from "@/features/orders/components/credentials-form";
 import { OrderStepper } from "@/features/orders/components/order-stepper";
 import { OrderStatusBadge } from "@/features/orders/components/status-badge";
@@ -19,6 +22,7 @@ import { EDITABLE_STATUSES } from "@/features/orders/workflow";
 import type { OrderStatus } from "@/generated/prisma/enums";
 import { Link } from "@/i18n/navigation";
 import { requireArea } from "@/lib/auth/session";
+import { channels, events } from "@/lib/realtime/channels";
 
 type Props = PageProps<"/[locale]/dashboard/orders/[orderNumber]">;
 
@@ -41,7 +45,8 @@ async function CustomerOrder({ params }: Pick<Props, "params">) {
   const order = await getCustomerOrderDetail(orderNumber, user.id);
   if (!order) notFound();
 
-  const [t, text] = await Promise.all([getTranslations("Orders"), getOrderText()]);
+  const [t, text, chat] = await Promise.all([getTranslations("Orders"), getOrderText(), getChatState(order.orderNumber)]);
+  const showChat = chat && (chat.messages.length > 0 || (order.status !== "AWAITING_PAYMENT" && order.status !== "CANCELLED"));
   const date = (value: Date) => text.format.dateTime(value, { dateStyle: "medium", timeStyle: "short" });
   const editable = (EDITABLE_STATUSES as readonly string[]).includes(order.status);
   const options = text.options([order.lpGain, ...order.addOns]);
@@ -63,6 +68,7 @@ async function CustomerOrder({ params }: Pick<Props, "params">) {
 
   return (
     <div className="grid gap-6">
+      <LiveRefresh channel={channels.order(order.orderNumber)} event={events.orderUpdated} />
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           {order.game.logoUrl && <Image src={order.game.logoUrl} alt="" width={52} height={52} className="rounded-xl" />}
@@ -100,6 +106,16 @@ async function CustomerOrder({ params }: Pick<Props, "params">) {
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="grid content-start gap-6">
+          {showChat && (
+            <OrderChat
+              orderNumber={chat.orderNumber}
+              role={chat.role}
+              closedReason={chat.closedReason}
+              uploadsEnabled={chat.uploadsEnabled}
+              initialMessages={chat.messages}
+            />
+          )}
+
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">

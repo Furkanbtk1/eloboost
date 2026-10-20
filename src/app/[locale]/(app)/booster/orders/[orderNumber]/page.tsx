@@ -5,18 +5,22 @@ import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 import { PanelSkeleton } from "@/components/layout/panel";
+import { LiveRefresh } from "@/components/realtime/live-refresh";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProgressForm } from "@/features/booster/components/progress-form";
 import { RevealCredentials } from "@/features/booster/components/reveal-credentials";
 import { StatusActions } from "@/features/booster/components/status-actions";
 import { getBoosterOrder, requireActiveBooster } from "@/features/booster/queries";
+import { OrderChat } from "@/features/chat/components/order-chat";
+import { getChatState } from "@/features/chat/queries";
 import { OrderStatusBadge } from "@/features/orders/components/status-badge";
 import { getOrderText } from "@/features/orders/describe";
 import { allowedTransitions, CREDENTIAL_STATUSES } from "@/features/orders/workflow";
 import { getPricingCatalog } from "@/features/pricing/catalog";
 import { maxRating, stepLabel } from "@/features/pricing/engine";
 import { Link } from "@/i18n/navigation";
+import { channels, events } from "@/lib/realtime/channels";
 
 type Props = PageProps<"/[locale]/booster/orders/[orderNumber]">;
 
@@ -39,10 +43,11 @@ async function BoosterOrder({ params }: Pick<Props, "params">) {
   const order = await getBoosterOrder(orderNumber, booster.userId);
   if (!order) notFound();
 
-  const [t, text, catalog] = await Promise.all([
+  const [t, text, catalog, chat] = await Promise.all([
     getTranslations("Booster.workspace"),
     getOrderText(),
     getPricingCatalog(order.game.slug),
+    getChatState(order.orderNumber),
   ]);
   const date = (value: Date) => text.format.dateTime(value, { dateStyle: "medium", timeStyle: "short" });
   const options = text.options([order.lpGain, ...order.addOns]);
@@ -78,6 +83,7 @@ async function BoosterOrder({ params }: Pick<Props, "params">) {
 
   return (
     <div className="grid gap-6">
+      <LiveRefresh channel={channels.order(order.orderNumber)} event={events.orderUpdated} />
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <Button asChild variant="link" className="h-auto p-0 text-muted-foreground">
@@ -110,6 +116,16 @@ async function BoosterOrder({ params }: Pick<Props, "params">) {
               )}
             </CardContent>
           </Card>
+
+          {chat && (
+            <OrderChat
+              orderNumber={chat.orderNumber}
+              role={chat.role}
+              closedReason={chat.closedReason}
+              uploadsEnabled={chat.uploadsEnabled}
+              initialMessages={chat.messages}
+            />
+          )}
 
           <Card>
             <CardHeader>

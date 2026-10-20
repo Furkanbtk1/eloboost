@@ -4,11 +4,13 @@ import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 import { PanelHeader, PanelSkeleton } from "@/components/layout/panel";
+import { LiveRefresh } from "@/components/realtime/live-refresh";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { ClaimButton } from "@/features/booster/components/claim-button";
 import { getOrderPool, requireActiveBooster } from "@/features/booster/queries";
 import { getOrderText } from "@/features/orders/describe";
+import { channels, events } from "@/lib/realtime/channels";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Booster.pool");
@@ -34,6 +36,7 @@ async function OrderPool() {
 
   return (
     <>
+      <LiveRefresh channel={channels.boosterPool} event={events.poolChanged} />
       <PanelHeader title={t("title")} subtitle={t("subtitle")} />
       {orders.length === 0 ? (
         <Card>

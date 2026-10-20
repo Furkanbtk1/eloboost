@@ -10,6 +10,7 @@ import { fail, failValidation, ok, type ActionResult } from "@/lib/action-result
 import { encrypt } from "@/lib/crypto";
 import { db } from "@/lib/db";
 import { rateLimit } from "@/lib/rate-limit";
+import { broadcast, signal } from "@/lib/realtime/server";
 
 import { EDITABLE_STATUSES } from "./workflow";
 
@@ -81,5 +82,6 @@ export async function saveOrderDetailsAction(
       },
     });
   }
+  broadcast(signal.orderUpdated(orderNumber), ...(order.boosterId ? [signal.notification(order.boosterId)] : []));
   return ok(undefined);
 }

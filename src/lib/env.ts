@@ -52,6 +52,26 @@ const serverEnvSchema = z
     COINBASE_COMMERCE_WEBHOOK_SECRET: optional,
     /** Simulated "test payment" method. Never offered when NODE_ENV is production. */
     PAYMENTS_SANDBOX: booleanFlag(true),
+
+    // Realtime (Pusher, or Soketi locally). Without it, chat and live updates need a page refresh.
+    PUSHER_APP_ID: optional,
+    PUSHER_KEY: optional,
+    PUSHER_SECRET: optional,
+    PUSHER_CLUSTER: z.string().default("mt1"),
+    /** Self-hosted (Soketi) only; leave empty for Pusher. Used by the server and the browser. */
+    PUSHER_HOST: optional,
+    PUSHER_PORT: optional.transform((value) => (value ? Number(value) : undefined)).pipe(z.number().int().positive().optional()),
+    PUSHER_USE_TLS: booleanFlag(true),
+
+    // S3-compatible storage for chat attachments (RustFS locally, R2 / S3 in production).
+    // Uploads are turned off when unset.
+    S3_ENDPOINT: optional,
+    S3_REGION: z.string().default("us-east-1"),
+    S3_BUCKET: optional,
+    S3_ACCESS_KEY_ID: optional,
+    S3_SECRET_ACCESS_KEY: optional,
+    /** Needed by RustFS / MinIO; R2 and S3 work with virtual-hosted URLs. */
+    S3_FORCE_PATH_STYLE: booleanFlag(false),
   });
 
 export type ServerEnv = z.infer<typeof serverEnvSchema>;
