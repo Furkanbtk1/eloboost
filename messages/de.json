@@ -1,0 +1,486 @@
+{
+  "Metadata": {
+    "siteName": "EloBoost",
+    "title": "EloBoost: Rank-Boosting und Coaching",
+    "description": "Rank-Boosting und Coaching für League of Legends, Valorant, TFT, CS2 und Overwatch 2 von verifizierten High-Elo-Spielern."
+  },
+  "Header": {
+    "games": "Spiele",
+    "language": "Sprache",
+    "toggleTheme": "Design wechseln",
+    "signIn": "Anmelden",
+    "signUp": "Registrieren",
+    "myPanel": "Mein Bereich",
+    "security": "Sicherheit",
+    "signOut": "Abmelden",
+    "account": "Konto"
+  },
+  "Locale": {
+    "en": "English",
+    "tr": "Türkçe",
+    "de": "Deutsch",
+    "es": "Español"
+  },
+  "Home": {
+    "badge": "LoL · Valorant · TFT · CS2 · Overwatch 2",
+    "title": "Erreiche den Rang, den du verdienst",
+    "subtitle": "Verifizierte High-Elo-Booster, verschlüsselte Kontodaten und Live-Auftragsverfolgung an einem Ort.",
+    "cta": "Wähle dein Spiel",
+    "features": {
+      "verified": {
+        "title": "Verifizierte Booster",
+        "body": "Jeder Booster ist ein manuell geprüfter High-Elo-Spieler."
+      },
+      "secure": {
+        "title": "Verschlüsselte Zugangsdaten",
+        "body": "Deine Logins werden mit AES-256 verschlüsselt und nur deinem Booster angezeigt."
+      },
+      "tracking": {
+        "title": "Live-Verfolgung",
+        "body": "Verfolge den Fortschritt und chatte in Echtzeit mit deinem Booster."
+      }
+    },
+    "gamesTitle": "Wähle dein Spiel",
+    "gamesSubtitle": "Boosting und Coaching für die kompetitivsten Spiele.",
+    "startingFrom": "Ab {price}",
+    "perDivision": "pro Division",
+    "per100Rating": "pro 100 Rating",
+    "noGames": "Derzeit sind keine Spiele verfügbar.",
+    "boostNow": "Jetzt boosten"
+  },
+  "OrderType": {
+    "DIVISION": "Division-Boost",
+    "WIN": "Sieg-Boost",
+    "PLACEMENT": "Platzierungsspiele",
+    "COACHING": "Coaching"
+  },
+  "Footer": {
+    "rights": "© EloBoost. Alle Rechte vorbehalten.",
+    "disclaimer": "EloBoost steht in keiner Verbindung zu Riot Games, Valve oder Blizzard."
+  },
+  "NotFound": {
+    "title": "Seite nicht gefunden",
+    "body": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+    "back": "Zur Startseite"
+  },
+  "Roles": {
+    "CUSTOMER": "Kunde",
+    "BOOSTER": "Booster",
+    "SUPPORT": "Support-Manager",
+    "FINANCE": "Finanz-Manager",
+    "ADMIN": "Super-Admin"
+  },
+  "Validation": {
+    "emailInvalid": "Gib eine gültige E-Mail-Adresse ein.",
+    "passwordRequired": "Gib dein Passwort ein.",
+    "passwordTooShort": "Das Passwort muss mindestens 8 Zeichen lang sein.",
+    "passwordTooLong": "Das Passwort darf höchstens 72 Zeichen lang sein.",
+    "passwordWeak": "Das Passwort muss einen Buchstaben und eine Zahl enthalten.",
+    "passwordsDontMatch": "Die Passwörter stimmen nicht überein.",
+    "nameTooShort": "Der Name muss mindestens 2 Zeichen lang sein.",
+    "nameTooLong": "Der Name darf höchstens 50 Zeichen lang sein.",
+    "codeInvalid": "Gib den 6-stelligen Code aus deiner Authenticator-App ein."
+  },
+  "Auth": {
+    "login": {
+      "title": "Willkommen zurück",
+      "subtitle": "Melde dich an, um deine Aufträge zu verfolgen.",
+      "submit": "Anmelden",
+      "noAccount": "Noch kein Konto?",
+      "registerLink": "Registrieren",
+      "twoFactorTitle": "Zwei-Faktor-Authentifizierung",
+      "twoFactorHint": "Gib den 6-stelligen Code aus deiner Authenticator-App ein.",
+      "verify": "Bestätigen",
+      "back": "Zurück"
+    },
+    "register": {
+      "title": "Konto erstellen",
+      "subtitle": "Bestelle Boosts und verfolge sie live.",
+      "submit": "Konto erstellen",
+      "haveAccount": "Schon ein Konto?",
+      "loginLink": "Anmelden"
+    },
+    "fields": {
+      "name": "Name",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "confirmPassword": "Passwort bestätigen",
+      "code": "Bestätigungscode"
+    },
+    "oauth": {
+      "divider": "oder weiter mit"
+    },
+    "errors": {
+      "invalidInput": "Bitte prüfe die markierten Felder.",
+      "invalidCredentials": "E-Mail oder Passwort ist falsch.",
+      "invalidTwoFactorCode": "Der Bestätigungscode ist falsch.",
+      "accountBanned": "Dieses Konto wurde gesperrt. Kontaktiere den Support.",
+      "rateLimited": "Zu viele Versuche. Versuche es in {minutes} Min. erneut.",
+      "emailTaken": "Es gibt bereits ein Konto mit dieser E-Mail.",
+      "generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+    },
+    "oauthErrors": {
+      "OAuthEmailUnverified": "Deine E-Mail ist bei diesem Anbieter nicht bestätigt.",
+      "OAuthAccountNotLinked": "Es gibt ein Konto mit dieser E-Mail. Melde dich mit deinem Passwort an.",
+      "OAuthStaff": "Team- und Booster-Konten müssen sich mit E-Mail, Passwort und 2FA anmelden.",
+      "OAuthTwoFactor": "Dein Konto nutzt 2FA. Melde dich mit deinem Passwort an.",
+      "AccountBanned": "Dieses Konto wurde gesperrt. Kontaktiere den Support.",
+      "default": "Anmeldung fehlgeschlagen. Bitte versuche es erneut."
+    }
+  },
+  "Security": {
+    "title": "Sicherheit",
+    "subtitle": "Schütze dein Konto mit Zwei-Faktor-Authentifizierung.",
+    "requiredNotice": "Deine Rolle erfordert Zwei-Faktor-Authentifizierung. Richte sie ein, um fortzufahren.",
+    "statusEnabled": "Aktiv",
+    "statusDisabled": "Inaktiv",
+    "twoFactorTitle": "Zwei-Faktor-Authentifizierung (2FA)",
+    "twoFactorDescription": "Bei jeder Anmeldung wird ein Code aus einer App wie Google Authenticator oder Authy abgefragt.",
+    "passwordOnly": "2FA schützt Anmeldungen mit Passwort. Konten, die nur Discord, Google oder Twitch nutzen, können es noch nicht aktivieren.",
+    "start": "2FA einrichten",
+    "scanHint": "Scanne den QR-Code mit deiner Authenticator-App und gib den angezeigten 6-stelligen Code ein.",
+    "manualHint": "Scannen klappt nicht? Gib diesen Schlüssel manuell ein:",
+    "enable": "2FA aktivieren",
+    "enabledToast": "Zwei-Faktor-Authentifizierung ist aktiv.",
+    "disable": "2FA deaktivieren",
+    "disableHint": "Gib einen aktuellen Code ein, um 2FA zu deaktivieren.",
+    "disabledToast": "Zwei-Faktor-Authentifizierung ist deaktiviert.",
+    "mandatoryHint": "Deine Rolle erfordert 2FA, daher kann es nicht deaktiviert werden.",
+    "errors": {
+      "unauthorized": "Deine Sitzung ist abgelaufen. Melde dich erneut an.",
+      "invalidCode": "Der Code ist falsch oder abgelaufen.",
+      "rateLimited": "Zu viele Versuche. Warte ein paar Minuten.",
+      "setupNotStarted": "Starte zuerst die Einrichtung.",
+      "alreadyEnabled": "2FA ist bereits aktiv.",
+      "notEnabled": "2FA ist nicht aktiv.",
+      "passwordRequired": "2FA erfordert eine Anmeldung mit Passwort.",
+      "mandatoryForRole": "Deine Rolle erfordert 2FA."
+    }
+  },
+  "Panel": {
+    "loading": "Wird geladen…",
+    "welcome": "Willkommen, {name}",
+    "signedInAs": "Angemeldet als {email}"
+  },
+  "Dashboard": {
+    "subtitle": "Deine Aufträge und ihr Live-Fortschritt."
+  },
+  "Booster": {
+    "subtitle": "Nimm Aufträge an und verfolge deine Einnahmen.",
+    "statusLabel": "Profilstatus",
+    "status": {
+      "PENDING_APPROVAL": "Wartet auf Freigabe",
+      "ACTIVE": "Aktiv",
+      "SUSPENDED": "Gesperrt"
+    },
+    "pendingNotice": "Unser Team prüft deine Bewerbung. Nach der Freigabe kannst du Aufträge annehmen.",
+    "suspendedNotice": "Dein Booster-Profil ist gesperrt. Kontaktiere den Support.",
+    "stats": {
+      "balance": "Guthaben",
+      "lifetime": "Gesamteinnahmen",
+      "completed": "Abgeschlossene Aufträge",
+      "rating": "Bewertung"
+    },
+    "myOrders": "Meine Aufträge",
+    "noOrders": "Du hast noch keine Aufträge übernommen.",
+    "openPool": "Auftragspool öffnen",
+    "pool": {
+      "title": "Auftragspool",
+      "subtitle": "Bezahlte Aufträge, die zu deinen Spielen und deinem Rang passen, älteste zuerst.",
+      "empty": "Aktuell passen keine offenen Aufträge zu deinen Spielen und deinem Rang.",
+      "claim": "Auftrag übernehmen",
+      "claimed": "Auftrag {orderNumber} gehört dir.",
+      "earn": "Du verdienst {amount}",
+      "server": "Server {server}"
+    },
+    "workspace": {
+      "back": "Meine Aufträge",
+      "details": "Auftragsdetails",
+      "notes": "Notizen des Kunden",
+      "noNotes": "Keine Notizen.",
+      "status": "Status",
+      "transitions": {
+        "start": "Starten",
+        "pause": "Pausieren",
+        "resume": "Fortsetzen",
+        "complete": "Als erledigt markieren",
+        "release": "Zurück in den Pool"
+      },
+      "transitionDone": {
+        "start": "Auftrag gestartet.",
+        "pause": "Auftrag pausiert.",
+        "resume": "Auftrag fortgesetzt.",
+        "complete": "Auftrag abgeschlossen. Deine Einnahmen wurden deinem Guthaben gutgeschrieben.",
+        "release": "Auftrag ist zurück im Pool."
+      },
+      "noActions": "In diesem Status sind keine Aktionen möglich.",
+      "progress": "Fortschritt melden",
+      "progressRank": "Aktueller Rang",
+      "progressRating": "Aktuelles Rating",
+      "progressDone": "Bisher erledigt",
+      "saveProgress": "Aktualisieren",
+      "progressSaved": "Fortschritt aktualisiert.",
+      "credentials": "Kundenkonto",
+      "credentialsMissing": "Der Kunde hat seine Zugangsdaten noch nicht hinzugefügt.",
+      "credentialsClosed": "Die Zugangsdaten sind nur verfügbar, während du am Auftrag arbeitest.",
+      "vpn": "VPN-Standort, über den du dich verbindest",
+      "vpnPlaceholder": "z. B. Frankfurt, DE",
+      "reveal": "Zugangsdaten anzeigen",
+      "hide": "Verbergen",
+      "username": "Benutzername",
+      "password": "Passwort",
+      "copy": "Kopieren",
+      "copied": "Kopiert",
+      "revealNote": "Jedes Öffnen wird protokolliert und dem Kunden angezeigt. Die Daten verbergen sich nach 60 Sekunden.",
+      "accessTitle": "Dein Zugriffsprotokoll",
+      "accessEntry": "{vpn} · {date}",
+      "cancel": "Abbrechen",
+      "confirm": {
+        "complete": "Diesen Auftrag als erledigt markieren? Die Zugangsdaten des Kunden werden gelöscht und deine Einnahmen deinem Guthaben gutgeschrieben.",
+        "release": "Diesen Auftrag zurück in den Pool geben? Ein anderer Booster kann ihn dann übernehmen."
+      }
+    },
+    "errors": {
+      "notActive": "Dein Booster-Profil ist nicht aktiv oder deine Sitzung ist abgelaufen.",
+      "notEligible": "Dein Rang reicht für diesen Auftrag nicht aus.",
+      "alreadyTaken": "Jemand anderes hat diesen Auftrag bereits übernommen.",
+      "tooManyActive": "Du kannst höchstens {max} Aufträge gleichzeitig bearbeiten.",
+      "notFound": "Auftrag nicht gefunden.",
+      "invalidTransition": "Das ist im aktuellen Status des Auftrags nicht möglich.",
+      "noCredentials": "Warte vor dem Start auf die Zugangsdaten des Kunden.",
+      "noCredentialsYet": "Der Kunde hat seine Zugangsdaten noch nicht hinzugefügt.",
+      "vpnRequired": "Gib den VPN-Standort ein, über den du dich verbindest.",
+      "invalidProgress": "Dieser Fortschrittswert ist für diesen Auftrag ungültig.",
+      "rateLimited": "Zu viele Aktionen. Bitte etwas langsamer.",
+      "generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+    }
+  },
+  "Admin": {
+    "subtitle": "Plattformverwaltung.",
+    "roleLabel": "Deine Rolle",
+    "permissionsTitle": "Deine Berechtigungen",
+    "permissions": {
+      "ADMIN": "Voller Zugriff: Nutzer, Preise, Aufträge, Streitfälle und Auszahlungen.",
+      "SUPPORT": "Support-Tickets, Auftrags-Chats und Streitfälle lesen.",
+      "FINANCE": "Auszahlungsanfragen von Boostern prüfen und freigeben."
+    }
+  },
+  "BoostPage": {
+    "title": "{game} Boost",
+    "subtitle": "Wähle deinen Service und deine Ränge. Der Preis aktualisiert sich sofort.",
+    "metaDescription": "{game} Boosting von verifizierten High-Elo-Spielern: Division-Boosts, Siege, Platzierungen und Coaching."
+  },
+  "Calculator": {
+    "currentRank": "Aktueller Rang",
+    "desiredRank": "Wunschrang",
+    "lastSeasonRank": "Rang der letzten Saison",
+    "currentRating": "Aktuelles Rating",
+    "desiredRating": "Wunsch-Rating",
+    "currentPoints": "LP / RR in deiner aktuellen Division",
+    "quantity": {
+      "WIN": "Anzahl der Siege",
+      "PLACEMENT": "Anzahl der Spiele",
+      "COACHING": "Coaching-Stunden"
+    },
+    "server": "Server",
+    "lpGain": "LP / RR pro Sieg",
+    "addOns": "Extras",
+    "free": "Gratis",
+    "modifierLabels": {
+      "priority": "Priorität / Express",
+      "offline_mode": "Offline erscheinen",
+      "specific_role": "Bestimmte Rollen / Champions",
+      "vpn": "VPN-Verbindung",
+      "live_stream": "Livestream",
+      "normal_lp": "Normal (+20 LP oder mehr)",
+      "low_lp": "Niedrig (+15 bis +19 LP)",
+      "very_low_lp": "Sehr niedrig (unter +15 LP)",
+      "smurf_queue": "Smurf-Queue (+25 LP oder mehr)",
+      "normal_rr": "Normal (+18 RR oder mehr)",
+      "low_rr": "Niedrig (unter +18 RR)"
+    },
+    "modifierDescriptions": {
+      "priority": "Dein Auftrag startet zuerst und wird länger gespielt.",
+      "offline_mode": "Dein Booster bleibt für deine Freunde unsichtbar.",
+      "specific_role": "Dein Booster spielt nur die gewählten Rollen oder Picks.",
+      "vpn": "Dein Booster verbindet sich per VPN aus deinem Land.",
+      "live_stream": "Sieh dir jedes Spiel live in einem privaten Stream an."
+    },
+    "summary": {
+      "title": "Bestellübersicht",
+      "service": "Service",
+      "flatFee": "Servicegebühr",
+      "server": "Server {server}",
+      "discount": "Rabatt ({code})",
+      "total": "Gesamt",
+      "currency": "Währung",
+      "verified": "Der Endpreis wird auf unseren Servern erneut geprüft."
+    },
+    "lines": {
+      "climb": "{from} → {to}",
+      "wins": "{count, plural, one {# Sieg} other {# Siege}} auf {rank}",
+      "games": "{count, plural, one {# Platzierungsspiel} other {# Platzierungsspiele}} ab {rank}",
+      "hours": "{count, plural, one {# Stunde} other {# Stunden}} Coaching"
+    },
+    "promo": {
+      "label": "Gutscheincode",
+      "placeholder": "Code eingeben",
+      "apply": "Einlösen",
+      "remove": "Entfernen",
+      "applied": "Code {code} eingelöst"
+    },
+    "checkout": "Weiter zur Kasse",
+    "signIn": "Zum Bestellen anmelden",
+    "errors": {
+      "invalidSelection": "Bitte prüfe deine Auswahl.",
+      "signInRequired": "Bitte melde dich an, um zu bestellen.",
+      "customersOnly": "Nur Kundenkonten können bestellen.",
+      "rateLimited": "Zu viele Anfragen. Bitte warte kurz.",
+      "gameUnavailable": "Dieses Spiel ist derzeit nicht verfügbar.",
+      "promoInvalid": "Dieser Gutscheincode ist ungültig oder abgelaufen.",
+      "promoMinAmount": "Dieser Code gilt ab einem Bestellwert von {amount}.",
+      "priceChanged": "Die Preise wurden gerade aktualisiert. Bitte prüfe den neuen Betrag und versuche es erneut.",
+      "generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+      "quote": {
+        "order_type_unsupported": "Dieser Service ist für dieses Spiel nicht verfügbar.",
+        "invalid_rank": "Bitte wähle einen gültigen Rang.",
+        "target_not_above_current": "Dein Wunschrang muss höher als dein aktueller Rang sein.",
+        "invalid_quantity": "Bitte wähle eine gültige Anzahl.",
+        "unknown_server": "Bitte wähle einen Server.",
+        "unknown_option": "Eine der gewählten Optionen ist nicht mehr verfügbar.",
+        "coaching_unavailable": "Für dieses Spiel gibt es kein Coaching."
+      },
+      "belowMinimum": "Der Bestellwert muss mindestens {amount} betragen."
+    }
+  },
+  "Checkout": {
+    "title": "Kasse",
+    "order": "Auftrag {number}",
+    "game": "Spiel",
+    "service": "Service",
+    "server": "Server",
+    "options": "Optionen",
+    "none": "Keine",
+    "subtotal": "Zwischensumme",
+    "discount": "Rabatt",
+    "total": "Gesamt",
+    "paymentTitle": "Zahlung",
+    "changeOrder": "Auftrag ändern"
+  },
+  "OrderStatus": {
+    "AWAITING_PAYMENT": "Zahlung ausstehend",
+    "PENDING": "Wartet auf Booster",
+    "ASSIGNED": "Booster zugewiesen",
+    "IN_PROGRESS": "In Bearbeitung",
+    "PAUSED": "Pausiert",
+    "COMPLETED": "Abgeschlossen",
+    "CANCELLED": "Storniert",
+    "DISPUTED": "Im Streitfall"
+  },
+  "Payments": {
+    "title": "Zahlungsmethode wählen",
+    "methods": {
+      "stripe": {
+        "name": "Karte",
+        "description": "Visa, Mastercard, Apple Pay und Google Pay, abgewickelt über Stripe."
+      },
+      "coinbase": {
+        "name": "Krypto",
+        "description": "Bitcoin, Ethereum, USDC und mehr über Coinbase Commerce."
+      },
+      "sandbox": {
+        "name": "Testzahlung",
+        "description": "Nur in der Entwicklung: simuliert eine Zahlung ohne echten Anbieter."
+      }
+    },
+    "none": "Für diese Währung ist noch keine Zahlungsmethode verfügbar. Wähle im Rechner eine andere Währung.",
+    "pay": "{amount} bezahlen",
+    "secure": "Du bezahlst auf der sicheren Seite des Anbieters. Wir sehen deine Karten- oder Wallet-Daten nie.",
+    "cancelled": "Die Zahlung wurde abgebrochen. Versuche es erneut oder wähle eine andere Methode.",
+    "failed": "Die Zahlung ist nicht durchgegangen. Versuche es erneut oder wähle eine andere Methode.",
+    "confirming": "Wir bestätigen deine Zahlung beim Anbieter. Diese Seite aktualisiert sich selbst.",
+    "confirmingSlow": "Das dauert länger als üblich. Du bekommst eine Benachrichtigung, sobald die Zahlung bestätigt ist.",
+    "paidTitle": "Zahlung erhalten",
+    "paidBody": "Danke! Dein Auftrag wartet jetzt auf einen Booster. Wir melden uns, sobald ihn jemand übernimmt.",
+    "toPanel": "Zu meinem Bereich",
+    "errors": {
+      "unauthorized": "Bitte melde dich mit dem Konto an, das diesen Auftrag erstellt hat.",
+      "notFound": "Auftrag nicht gefunden.",
+      "alreadyPaid": "Für diesen Auftrag ist keine Zahlung mehr nötig.",
+      "unavailable": "Diese Zahlungsmethode ist für diesen Auftrag nicht verfügbar.",
+      "rateLimited": "Zu viele Versuche. Bitte warte ein paar Minuten.",
+      "providerError": "Der Zahlungsanbieter ist nicht erreichbar. Versuche es erneut oder wähle eine andere Methode."
+    },
+    "sandbox": {
+      "title": "Testzahlung",
+      "body": "Diese Seite gibt es nur in der Entwicklung. Wähle, was der Zahlungsanbieter für Auftrag {orderNumber} meldet.",
+      "succeed": "Zahlung erfolgreich",
+      "fail": "Zahlung fehlgeschlagen",
+      "cancel": "Kunde bricht ab",
+      "done": "Diese Testzahlung ist bereits abgeschlossen."
+    }
+  },
+  "Errors": {
+    "title": "Etwas ist schiefgelaufen",
+    "body": "Bei uns ist ein unerwarteter Fehler aufgetreten. Bitte versuche es gleich noch einmal.",
+    "retry": "Erneut versuchen",
+    "reference": "Referenz: {digest}"
+  },
+  "Orders": {
+    "title": "Meine Aufträge",
+    "empty": "Du hast noch keine Aufträge.",
+    "browse": "Spiele ansehen",
+    "placedOn": "Erstellt am {date}",
+    "view": "Details",
+    "pay": "Zahlung abschließen",
+    "detail": {
+      "back": "Alle Aufträge",
+      "steps": {
+        "PENDING": "Wartet auf Booster",
+        "ASSIGNED": "Booster zugewiesen",
+        "IN_PROGRESS": "In Bearbeitung",
+        "COMPLETED": "Abgeschlossen"
+      },
+      "paused": "Dein Booster hat den Auftrag vorerst pausiert.",
+      "disputed": "Unser Team prüft diesen Auftrag.",
+      "cancelled": "Dieser Auftrag wurde storniert.",
+      "awaitingPayment": "Dieser Auftrag ist noch nicht bezahlt.",
+      "progress": "Fortschritt",
+      "progressRank": "Aktueller Rang: {rank}",
+      "progressDone": "{done} von {total} erledigt",
+      "booster": "Dein Booster",
+      "boosterStats": "{rating} ★ · {count} abgeschlossene Aufträge",
+      "noBooster": "Ein Booster übernimmt deinen Auftrag bald.",
+      "summary": "Auftragsdetails",
+      "service": "Service",
+      "server": "Server",
+      "options": "Optionen",
+      "none": "Keine",
+      "total": "Gesamt"
+    },
+    "vault": {
+      "title": "Spielkonto",
+      "description": "Dein Booster braucht deine Zugangsdaten zum Spielen. Sie sind verschlüsselt (AES-256), nur dein Booster kann sie öffnen, und jedes Öffnen wird unten protokolliert.",
+      "username": "Benutzername",
+      "password": "Passwort",
+      "passwordKeep": "Gespeichert. Leer lassen, um es zu behalten.",
+      "notes": "Notizen für deinen Booster",
+      "notesPlaceholder": "Lieblings-Champions, Spielzeiten, was vermieden werden soll…",
+      "save": "Speichern",
+      "saved": "Sicher gespeichert.",
+      "removed": "Deine Zugangsdaten wurden bei Auftragsende gelöscht.",
+      "notYet": "Du kannst deine Zugangsdaten nach der Zahlung hinzufügen.",
+      "accessTitle": "Zugriffsprotokoll",
+      "accessEntry": "Geöffnet per VPN in {vpn} · {date}",
+      "accessNone": "Dein Booster hat deine Zugangsdaten noch nicht geöffnet."
+    },
+    "errors": {
+      "unauthorized": "Bitte melde dich mit dem Konto an, das diesen Auftrag erstellt hat.",
+      "invalid": "Bitte prüfe die markierten Felder.",
+      "notFound": "Auftrag nicht gefunden.",
+      "notEditable": "Dieser Auftrag kann nicht mehr geändert werden.",
+      "passwordRequired": "Gib das Passwort des Kontos ein.",
+      "rateLimited": "Zu viele Änderungen. Bitte warte eine Weile."
+    }
+  }
+}

@@ -1,0 +1,486 @@
+{
+  "Metadata": {
+    "siteName": "EloBoost",
+    "title": "EloBoost: lig yükseltme ve koçluk",
+    "description": "League of Legends, Valorant, TFT, CS2 ve Overwatch 2 için onaylı yüksek elo oyunculardan lig yükseltme ve koçluk."
+  },
+  "Header": {
+    "games": "Oyunlar",
+    "language": "Dil",
+    "toggleTheme": "Temayı değiştir",
+    "signIn": "Giriş yap",
+    "signUp": "Kayıt ol",
+    "myPanel": "Panelim",
+    "security": "Güvenlik",
+    "signOut": "Çıkış yap",
+    "account": "Hesap"
+  },
+  "Locale": {
+    "en": "English",
+    "tr": "Türkçe",
+    "de": "Deutsch",
+    "es": "Español"
+  },
+  "Home": {
+    "badge": "LoL · Valorant · TFT · CS2 · Overwatch 2",
+    "title": "Hak ettiğin lige ulaş",
+    "subtitle": "Onaylı yüksek elo boosterlar, şifrelenmiş hesap bilgileri ve canlı sipariş takibi tek bir yerde.",
+    "cta": "Oyununu seç",
+    "features": {
+      "verified": {
+        "title": "Onaylı boosterlar",
+        "body": "Her booster, manuel olarak onaylanmış yüksek elo bir oyuncudur."
+      },
+      "secure": {
+        "title": "Şifrelenmiş hesap bilgileri",
+        "body": "Giriş bilgilerin AES-256 ile şifrelenir ve yalnızca booster'ına gösterilir."
+      },
+      "tracking": {
+        "title": "Canlı takip",
+        "body": "İlerlemeni takip et ve booster'ınla anlık olarak sohbet et."
+      }
+    },
+    "gamesTitle": "Oyununu seç",
+    "gamesSubtitle": "En rekabetçi oyunlar için boost ve koçluk.",
+    "startingFrom": "Başlangıç: {price}",
+    "perDivision": "küme başına",
+    "per100Rating": "100 puan başına",
+    "noGames": "Şu anda uygun oyun yok.",
+    "boostNow": "Boost al"
+  },
+  "OrderType": {
+    "DIVISION": "Lig yükseltme",
+    "WIN": "Galibiyet boost",
+    "PLACEMENT": "Yerleştirme maçları",
+    "COACHING": "Koçluk"
+  },
+  "Footer": {
+    "rights": "© EloBoost. Tüm hakları saklıdır.",
+    "disclaimer": "EloBoost; Riot Games, Valve veya Blizzard ile bağlantılı değildir."
+  },
+  "NotFound": {
+    "title": "Sayfa bulunamadı",
+    "body": "Aradığın sayfa mevcut değil veya taşınmış.",
+    "back": "Ana sayfaya dön"
+  },
+  "Roles": {
+    "CUSTOMER": "Müşteri",
+    "BOOSTER": "Booster",
+    "SUPPORT": "Destek yöneticisi",
+    "FINANCE": "Finans yöneticisi",
+    "ADMIN": "Süper admin"
+  },
+  "Validation": {
+    "emailInvalid": "Geçerli bir e-posta adresi gir.",
+    "passwordRequired": "Şifreni gir.",
+    "passwordTooShort": "Şifre en az 8 karakter olmalı.",
+    "passwordTooLong": "Şifre en fazla 72 karakter olabilir.",
+    "passwordWeak": "Şifre en az bir harf ve bir rakam içermeli.",
+    "passwordsDontMatch": "Şifreler eşleşmiyor.",
+    "nameTooShort": "İsim en az 2 karakter olmalı.",
+    "nameTooLong": "İsim en fazla 50 karakter olabilir.",
+    "codeInvalid": "Doğrulama uygulamandaki 6 haneli kodu gir."
+  },
+  "Auth": {
+    "login": {
+      "title": "Tekrar hoş geldin",
+      "subtitle": "Siparişlerini takip etmek için giriş yap.",
+      "submit": "Giriş yap",
+      "noAccount": "Hesabın yok mu?",
+      "registerLink": "Kayıt ol",
+      "twoFactorTitle": "İki adımlı doğrulama",
+      "twoFactorHint": "Doğrulama uygulamandaki 6 haneli kodu gir.",
+      "verify": "Doğrula",
+      "back": "Geri"
+    },
+    "register": {
+      "title": "Hesabını oluştur",
+      "subtitle": "Boost siparişi ver ve canlı takip et.",
+      "submit": "Hesap oluştur",
+      "haveAccount": "Zaten hesabın var mı?",
+      "loginLink": "Giriş yap"
+    },
+    "fields": {
+      "name": "İsim",
+      "email": "E-posta",
+      "password": "Şifre",
+      "confirmPassword": "Şifre (tekrar)",
+      "code": "Doğrulama kodu"
+    },
+    "oauth": {
+      "divider": "veya şununla devam et"
+    },
+    "errors": {
+      "invalidInput": "Lütfen işaretli alanları kontrol et.",
+      "invalidCredentials": "E-posta veya şifre hatalı.",
+      "invalidTwoFactorCode": "Doğrulama kodu hatalı.",
+      "accountBanned": "Bu hesap askıya alındı. Destek ekibiyle iletişime geç.",
+      "rateLimited": "Çok fazla deneme yapıldı. {minutes} dakika sonra tekrar dene.",
+      "emailTaken": "Bu e-posta ile kayıtlı bir hesap zaten var.",
+      "generic": "Bir şeyler ters gitti. Lütfen tekrar dene."
+    },
+    "oauthErrors": {
+      "OAuthEmailUnverified": "E-posta adresin bu sağlayıcıda doğrulanmamış.",
+      "OAuthAccountNotLinked": "Bu e-posta ile bir hesap var. Şifrenle giriş yap.",
+      "OAuthStaff": "Yönetici ve booster hesapları e-posta, şifre ve 2FA ile giriş yapmalı.",
+      "OAuthTwoFactor": "Hesabında 2FA açık. Şifrenle giriş yap.",
+      "AccountBanned": "Bu hesap askıya alındı. Destek ekibiyle iletişime geç.",
+      "default": "Giriş başarısız oldu. Lütfen tekrar dene."
+    }
+  },
+  "Security": {
+    "title": "Güvenlik",
+    "subtitle": "Hesabını iki adımlı doğrulamayla koru.",
+    "requiredNotice": "Rolün iki adımlı doğrulama gerektiriyor. Paneline devam etmek için kurulumu tamamla.",
+    "statusEnabled": "Açık",
+    "statusDisabled": "Kapalı",
+    "twoFactorTitle": "İki adımlı doğrulama (2FA)",
+    "twoFactorDescription": "Her girişte Google Authenticator veya Authy gibi bir uygulamadan kod istenir.",
+    "passwordOnly": "2FA şifreyle yapılan girişleri korur. Yalnızca Discord, Google veya Twitch ile giren hesaplar şimdilik açamaz.",
+    "start": "2FA'yı kur",
+    "scanHint": "QR kodu doğrulama uygulamanla tara, ardından uygulamanın gösterdiği 6 haneli kodu gir.",
+    "manualHint": "Tarayamıyor musun? Bu anahtarı elle gir:",
+    "enable": "2FA'yı aç",
+    "enabledToast": "İki adımlı doğrulama açıldı.",
+    "disable": "2FA'yı kapat",
+    "disableHint": "2FA'yı kapatmak için güncel bir kod gir.",
+    "disabledToast": "İki adımlı doğrulama kapatıldı.",
+    "mandatoryHint": "Rolün 2FA gerektirdiği için kapatılamaz.",
+    "errors": {
+      "unauthorized": "Oturumun sona erdi. Tekrar giriş yap.",
+      "invalidCode": "Kod hatalı veya süresi dolmuş.",
+      "rateLimited": "Çok fazla deneme yapıldı. Birkaç dakika bekleyip tekrar dene.",
+      "setupNotStarted": "Önce kurulumu başlat.",
+      "alreadyEnabled": "2FA zaten açık.",
+      "notEnabled": "2FA açık değil.",
+      "passwordRequired": "2FA için şifreyle giriş gerekir.",
+      "mandatoryForRole": "Rolün 2FA gerektiriyor."
+    }
+  },
+  "Panel": {
+    "loading": "Yükleniyor…",
+    "welcome": "Hoş geldin, {name}",
+    "signedInAs": "{email} olarak giriş yapıldı"
+  },
+  "Dashboard": {
+    "subtitle": "Siparişlerin ve canlı ilerlemeleri."
+  },
+  "Booster": {
+    "subtitle": "Sipariş al ve kazancını takip et.",
+    "statusLabel": "Profil durumu",
+    "status": {
+      "PENDING_APPROVAL": "Onay bekliyor",
+      "ACTIVE": "Aktif",
+      "SUSPENDED": "Askıya alındı"
+    },
+    "pendingNotice": "Başvurun ekibimiz tarafından inceleniyor. Onaylandıktan sonra sipariş alabilirsin.",
+    "suspendedNotice": "Booster profilin askıya alındı. Destek ekibiyle iletişime geç.",
+    "stats": {
+      "balance": "Bakiye",
+      "lifetime": "Toplam kazanç",
+      "completed": "Tamamlanan sipariş",
+      "rating": "Puan"
+    },
+    "myOrders": "Siparişlerim",
+    "noOrders": "Henüz sipariş almadın.",
+    "openPool": "Sipariş havuzunu aç",
+    "pool": {
+      "title": "Sipariş havuzu",
+      "subtitle": "Oyunlarına ve rankına uyan ödenmiş siparişler, en eskiden yeniye.",
+      "empty": "Şu anda oyunlarına ve rankına uyan açık sipariş yok.",
+      "claim": "Siparişi al",
+      "claimed": "{orderNumber} siparişi artık senin.",
+      "earn": "Kazancın {amount}",
+      "server": "Sunucu {server}"
+    },
+    "workspace": {
+      "back": "Siparişlerim",
+      "details": "Sipariş detayları",
+      "notes": "Müşteri notları",
+      "noNotes": "Not yok.",
+      "status": "Durum",
+      "transitions": {
+        "start": "Başlat",
+        "pause": "Duraklat",
+        "resume": "Devam et",
+        "complete": "Tamamlandı olarak işaretle",
+        "release": "Havuza geri bırak"
+      },
+      "transitionDone": {
+        "start": "Sipariş başladı.",
+        "pause": "Sipariş duraklatıldı.",
+        "resume": "Siparişe devam ediliyor.",
+        "complete": "Sipariş tamamlandı. Kazancın bakiyene eklendi.",
+        "release": "Sipariş havuza geri döndü."
+      },
+      "noActions": "Bu durumda yapılabilecek bir işlem yok.",
+      "progress": "İlerleme bildir",
+      "progressRank": "Mevcut rank",
+      "progressRating": "Mevcut puan",
+      "progressDone": "Şu ana kadar tamamlanan",
+      "saveProgress": "Güncelle",
+      "progressSaved": "İlerleme güncellendi.",
+      "credentials": "Müşteri hesabı",
+      "credentialsMissing": "Müşteri henüz giriş bilgilerini eklemedi.",
+      "credentialsClosed": "Giriş bilgileri yalnızca sipariş üzerinde çalışırken görüntülenebilir.",
+      "vpn": "Bağlandığın VPN konumu",
+      "vpnPlaceholder": "örn. Frankfurt, DE",
+      "reveal": "Giriş bilgilerini göster",
+      "hide": "Gizle",
+      "username": "Kullanıcı adı",
+      "password": "Şifre",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı",
+      "revealNote": "Her açılış kaydedilir ve müşteriye gösterilir. Bilgiler 60 saniye sonra kendiliğinden gizlenir.",
+      "accessTitle": "Erişim kaydın",
+      "accessEntry": "{vpn} · {date}",
+      "cancel": "Vazgeç",
+      "confirm": {
+        "complete": "Bu sipariş tamamlandı olarak işaretlensin mi? Müşterinin giriş bilgileri silinecek ve kazancın bakiyene eklenecek.",
+        "release": "Bu sipariş havuza geri bırakılsın mı? Başka bir booster alabilecek."
+      }
+    },
+    "errors": {
+      "notActive": "Booster profilin aktif değil ya da oturumun sona erdi.",
+      "notEligible": "Rankın bu sipariş için yeterli değil.",
+      "alreadyTaken": "Bu siparişi başka bir booster aldı.",
+      "tooManyActive": "Aynı anda en fazla {max} sipariş üzerinde çalışabilirsin.",
+      "notFound": "Sipariş bulunamadı.",
+      "invalidTransition": "Siparişin şu anki durumunda bu işlem yapılamaz.",
+      "noCredentials": "Başlamadan önce müşterinin giriş bilgilerini eklemesini bekle.",
+      "noCredentialsYet": "Müşteri henüz giriş bilgilerini eklemedi.",
+      "vpnRequired": "Bağlandığın VPN konumunu gir.",
+      "invalidProgress": "Bu ilerleme değeri bu sipariş için geçerli değil.",
+      "rateLimited": "Çok fazla işlem yapıldı. Lütfen yavaşla.",
+      "generic": "Bir şeyler ters gitti. Lütfen tekrar dene."
+    }
+  },
+  "Admin": {
+    "subtitle": "Platform yönetimi.",
+    "roleLabel": "Rolün",
+    "permissionsTitle": "Yetkilerin",
+    "permissions": {
+      "ADMIN": "Tam erişim: kullanıcılar, fiyatlar, siparişler, anlaşmazlıklar ve ödemeler.",
+      "SUPPORT": "Destek taleplerini, sipariş sohbetlerini ve anlaşmazlıkları okuma.",
+      "FINANCE": "Booster ödeme taleplerini inceleme ve onaylama."
+    }
+  },
+  "BoostPage": {
+    "title": "{game} boost",
+    "subtitle": "Hizmetini ve ranklarını seç. Fiyat anında güncellenir.",
+    "metaDescription": "Onaylı yüksek elo oyunculardan {game} boost: lig yükseltme, galibiyet, yerleştirme maçları ve koçluk."
+  },
+  "Calculator": {
+    "currentRank": "Mevcut rank",
+    "desiredRank": "Hedef rank",
+    "lastSeasonRank": "Geçen sezon rankın",
+    "currentRating": "Mevcut puan",
+    "desiredRating": "Hedef puan",
+    "currentPoints": "Mevcut kümedeki LP / RR",
+    "quantity": {
+      "WIN": "Galibiyet sayısı",
+      "PLACEMENT": "Maç sayısı",
+      "COACHING": "Koçluk saati"
+    },
+    "server": "Sunucu",
+    "lpGain": "Galibiyet başına LP / RR",
+    "addOns": "Ekstra seçenekler",
+    "free": "Ücretsiz",
+    "modifierLabels": {
+      "priority": "Öncelikli / ekspres",
+      "offline_mode": "Çevrimdışı görün",
+      "specific_role": "Belirli rol / şampiyon",
+      "vpn": "VPN ile bağlantı",
+      "live_stream": "Canlı yayın",
+      "normal_lp": "Normal (+20 LP ve üzeri)",
+      "low_lp": "Düşük (+15 – +19 LP)",
+      "very_low_lp": "Çok düşük (+15 LP altı)",
+      "smurf_queue": "Smurf sırası (+25 LP ve üzeri)",
+      "normal_rr": "Normal (+18 RR ve üzeri)",
+      "low_rr": "Düşük (+18 RR altı)"
+    },
+    "modifierDescriptions": {
+      "priority": "Siparişin ilk sırada başlar ve daha fazla oynanır.",
+      "offline_mode": "Booster arkadaş listende görünmez.",
+      "specific_role": "Booster yalnızca seçtiğin rolleri veya şampiyonları oynar.",
+      "vpn": "Booster senin ülkendeki bir VPN üzerinden bağlanır.",
+      "live_stream": "Tüm maçları özel bir yayında canlı izle."
+    },
+    "summary": {
+      "title": "Sipariş özeti",
+      "service": "Hizmet",
+      "flatFee": "Hizmet bedeli",
+      "server": "Sunucu {server}",
+      "discount": "İndirim ({code})",
+      "total": "Toplam",
+      "currency": "Para birimi",
+      "verified": "Son fiyat sunucularımızda tekrar doğrulanır."
+    },
+    "lines": {
+      "climb": "{from} → {to}",
+      "wins": "{rank} seviyesinde {count} galibiyet",
+      "games": "{rank} rankından {count} yerleştirme maçı",
+      "hours": "{count} saat koçluk"
+    },
+    "promo": {
+      "label": "Promosyon kodu",
+      "placeholder": "Kodu gir",
+      "apply": "Uygula",
+      "remove": "Kaldır",
+      "applied": "{code} kodu uygulandı"
+    },
+    "checkout": "Ödemeye geç",
+    "signIn": "Sipariş için giriş yap",
+    "errors": {
+      "invalidSelection": "Lütfen seçimini kontrol et.",
+      "signInRequired": "Sipariş vermek için giriş yapmalısın.",
+      "customersOnly": "Yalnızca müşteri hesapları sipariş verebilir.",
+      "rateLimited": "Çok fazla istek yapıldı. Lütfen biraz bekle.",
+      "gameUnavailable": "Bu oyun şu anda sunulmuyor.",
+      "promoInvalid": "Bu promosyon kodu geçersiz veya süresi dolmuş.",
+      "promoMinAmount": "Bu kod en az {amount} tutarındaki siparişlerde geçerli.",
+      "priceChanged": "Fiyatlar az önce güncellendi. Yeni toplamı kontrol edip tekrar dene.",
+      "generic": "Bir şeyler ters gitti. Lütfen tekrar dene.",
+      "quote": {
+        "order_type_unsupported": "Bu hizmet bu oyun için sunulmuyor.",
+        "invalid_rank": "Lütfen geçerli bir rank seç.",
+        "target_not_above_current": "Hedef rank, mevcut rankından yüksek olmalı.",
+        "invalid_quantity": "Lütfen geçerli bir miktar seç.",
+        "unknown_server": "Lütfen bir sunucu seç.",
+        "unknown_option": "Seçtiğin seçeneklerden biri artık mevcut değil.",
+        "coaching_unavailable": "Bu oyun için koçluk sunulmuyor."
+      },
+      "belowMinimum": "Sipariş tutarı en az {amount} olmalı."
+    }
+  },
+  "Checkout": {
+    "title": "Ödeme",
+    "order": "Sipariş {number}",
+    "game": "Oyun",
+    "service": "Hizmet",
+    "server": "Sunucu",
+    "options": "Seçenekler",
+    "none": "Yok",
+    "subtotal": "Ara toplam",
+    "discount": "İndirim",
+    "total": "Toplam",
+    "paymentTitle": "Ödeme",
+    "changeOrder": "Siparişi değiştir"
+  },
+  "OrderStatus": {
+    "AWAITING_PAYMENT": "Ödeme bekleniyor",
+    "PENDING": "Booster bekleniyor",
+    "ASSIGNED": "Booster atandı",
+    "IN_PROGRESS": "Oynanıyor",
+    "PAUSED": "Duraklatıldı",
+    "COMPLETED": "Tamamlandı",
+    "CANCELLED": "İptal edildi",
+    "DISPUTED": "Anlaşmazlıkta"
+  },
+  "Payments": {
+    "title": "Ödeme yöntemi seç",
+    "methods": {
+      "stripe": {
+        "name": "Kart",
+        "description": "Visa, Mastercard, Apple Pay ve Google Pay; Stripe altyapısıyla."
+      },
+      "coinbase": {
+        "name": "Kripto",
+        "description": "Bitcoin, Ethereum, USDC ve daha fazlası; Coinbase Commerce ile."
+      },
+      "sandbox": {
+        "name": "Test ödemesi",
+        "description": "Yalnızca geliştirme ortamı: gerçek bir sağlayıcı olmadan ödemeyi simüle et."
+      }
+    },
+    "none": "Bu para birimi için henüz bir ödeme yöntemi yok. Hesaplayıcıya dönüp başka bir para birimi seç.",
+    "pay": "{amount} öde",
+    "secure": "Ödemeyi sağlayıcının güvenli sayfasında yaparsın. Kart veya cüzdan bilgilerini hiçbir zaman görmeyiz.",
+    "cancelled": "Ödeme iptal edildi. Tekrar deneyebilir ya da başka bir yöntem seçebilirsin.",
+    "failed": "Ödeme gerçekleşmedi. Tekrar deneyebilir ya da başka bir yöntem seçebilirsin.",
+    "confirming": "Ödemeni sağlayıcıyla doğruluyoruz. Bu sayfa kendiliğinden güncellenecek.",
+    "confirmingSlow": "Bu işlem normalden uzun sürüyor. Ödeme onaylanır onaylanmaz bildirim alacaksın.",
+    "paidTitle": "Ödeme alındı",
+    "paidBody": "Teşekkürler! Siparişin artık bir booster bekliyor. Biri üstlendiğinde haber vereceğiz.",
+    "toPanel": "Panelime git",
+    "errors": {
+      "unauthorized": "Lütfen bu siparişi veren hesapla giriş yap.",
+      "notFound": "Sipariş bulunamadı.",
+      "alreadyPaid": "Bu sipariş için artık ödeme gerekmiyor.",
+      "unavailable": "Bu ödeme yöntemi bu sipariş için kullanılamıyor.",
+      "rateLimited": "Çok fazla deneme yapıldı. Lütfen birkaç dakika bekle.",
+      "providerError": "Ödeme sağlayıcısına ulaşılamadı. Tekrar dene ya da başka bir yöntem seç."
+    },
+    "sandbox": {
+      "title": "Test ödemesi",
+      "body": "Bu sayfa yalnızca geliştirme ortamında var. {orderNumber} siparişi için ödeme sağlayıcısının ne bildireceğini seç.",
+      "succeed": "Ödeme başarılı",
+      "fail": "Ödeme başarısız",
+      "cancel": "Müşteri iptal etti",
+      "done": "Bu test ödemesi zaten tamamlandı."
+    }
+  },
+  "Errors": {
+    "title": "Bir şeyler ters gitti",
+    "body": "Bizim tarafımızda beklenmedik bir hata oluştu. Lütfen birazdan tekrar dene.",
+    "retry": "Tekrar dene",
+    "reference": "Referans: {digest}"
+  },
+  "Orders": {
+    "title": "Siparişlerim",
+    "empty": "Henüz siparişin yok.",
+    "browse": "Oyunlara göz at",
+    "placedOn": "{date} tarihinde verildi",
+    "view": "Detaylar",
+    "pay": "Ödemeyi tamamla",
+    "detail": {
+      "back": "Tüm siparişler",
+      "steps": {
+        "PENDING": "Booster bekleniyor",
+        "ASSIGNED": "Booster atandı",
+        "IN_PROGRESS": "Oynanıyor",
+        "COMPLETED": "Tamamlandı"
+      },
+      "paused": "Booster siparişi şimdilik duraklattı.",
+      "disputed": "Ekibimiz bu siparişi inceliyor.",
+      "cancelled": "Bu sipariş iptal edildi.",
+      "awaitingPayment": "Bu siparişin ödemesi henüz yapılmadı.",
+      "progress": "İlerleme",
+      "progressRank": "Mevcut rank: {rank}",
+      "progressDone": "{total} üzerinden {done} tamamlandı",
+      "booster": "Booster'ın",
+      "boosterStats": "{rating} ★ · {count} tamamlanan sipariş",
+      "noBooster": "Siparişini yakında bir booster üstlenecek.",
+      "summary": "Sipariş detayları",
+      "service": "Hizmet",
+      "server": "Sunucu",
+      "options": "Seçenekler",
+      "none": "Yok",
+      "total": "Toplam"
+    },
+    "vault": {
+      "title": "Oyun hesabı",
+      "description": "Booster'ın oynayabilmek için giriş bilgilerine ihtiyaç duyar. Bilgiler AES-256 ile şifrelenir, yalnızca booster'ın açabilir ve her açılış aşağıda kayıt altına alınır.",
+      "username": "Hesap kullanıcı adı",
+      "password": "Hesap şifresi",
+      "passwordKeep": "Kayıtlı. Değiştirmek istemiyorsan boş bırak.",
+      "notes": "Booster'a notların",
+      "notesPlaceholder": "Tercih ettiğin şampiyonlar, oynama saatleri, kaçınılacak şeyler…",
+      "save": "Kaydet",
+      "saved": "Güvenli şekilde kaydedildi.",
+      "removed": "Sipariş bittiğinde giriş bilgilerin silindi.",
+      "notYet": "Ödeme tamamlandıktan sonra giriş bilgilerini ekleyebilirsin.",
+      "accessTitle": "Erişim kaydı",
+      "accessEntry": "{vpn} konumundaki VPN ile açıldı · {date}",
+      "accessNone": "Booster'ın giriş bilgilerini henüz açmadı."
+    },
+    "errors": {
+      "unauthorized": "Lütfen bu siparişi veren hesapla giriş yap.",
+      "invalid": "Lütfen işaretli alanları kontrol et.",
+      "notFound": "Sipariş bulunamadı.",
+      "notEditable": "Bu sipariş artık değiştirilemez.",
+      "passwordRequired": "Hesap şifresini gir.",
+      "rateLimited": "Çok fazla değişiklik yapıldı. Lütfen biraz bekle."
+    }
+  }
+}

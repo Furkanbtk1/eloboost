@@ -1,0 +1,486 @@
+{
+  "Metadata": {
+    "siteName": "EloBoost",
+    "title": "EloBoost: rank boosting and coaching",
+    "description": "Rank boosting and coaching for League of Legends, Valorant, TFT, CS2 and Overwatch 2 by verified high-elo players."
+  },
+  "Header": {
+    "games": "Games",
+    "language": "Language",
+    "toggleTheme": "Toggle theme",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "myPanel": "My panel",
+    "security": "Security",
+    "signOut": "Sign out",
+    "account": "Account"
+  },
+  "Locale": {
+    "en": "English",
+    "tr": "Türkçe",
+    "de": "Deutsch",
+    "es": "Español"
+  },
+  "Home": {
+    "badge": "LoL · Valorant · TFT · CS2 · Overwatch 2",
+    "title": "Reach the rank you deserve",
+    "subtitle": "Verified high-elo boosters, encrypted account details and live order tracking, all in one place.",
+    "cta": "Choose your game",
+    "features": {
+      "verified": {
+        "title": "Verified boosters",
+        "body": "Every booster is a manually approved high-elo player."
+      },
+      "secure": {
+        "title": "Encrypted credentials",
+        "body": "Account logins are encrypted with AES-256 and only revealed to your booster."
+      },
+      "tracking": {
+        "title": "Live tracking",
+        "body": "Follow your progress and chat with your booster in real time."
+      }
+    },
+    "gamesTitle": "Pick your game",
+    "gamesSubtitle": "Boosting and coaching for the most competitive games.",
+    "startingFrom": "From {price}",
+    "perDivision": "per division",
+    "per100Rating": "per 100 rating",
+    "noGames": "No games are available right now.",
+    "boostNow": "Boost now"
+  },
+  "OrderType": {
+    "DIVISION": "Division boost",
+    "WIN": "Win boost",
+    "PLACEMENT": "Placements",
+    "COACHING": "Coaching"
+  },
+  "Footer": {
+    "rights": "© EloBoost. All rights reserved.",
+    "disclaimer": "EloBoost is not affiliated with Riot Games, Valve or Blizzard."
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "body": "The page you are looking for doesn't exist or has been moved.",
+    "back": "Back to home"
+  },
+  "Roles": {
+    "CUSTOMER": "Customer",
+    "BOOSTER": "Booster",
+    "SUPPORT": "Support manager",
+    "FINANCE": "Finance manager",
+    "ADMIN": "Super admin"
+  },
+  "Validation": {
+    "emailInvalid": "Enter a valid email address.",
+    "passwordRequired": "Enter your password.",
+    "passwordTooShort": "Password must be at least 8 characters.",
+    "passwordTooLong": "Password can be at most 72 characters.",
+    "passwordWeak": "Password must contain a letter and a number.",
+    "passwordsDontMatch": "Passwords don't match.",
+    "nameTooShort": "Name must be at least 2 characters.",
+    "nameTooLong": "Name can be at most 50 characters.",
+    "codeInvalid": "Enter the 6-digit code from your authenticator app."
+  },
+  "Auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to track your orders.",
+      "submit": "Sign in",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Sign up",
+      "twoFactorTitle": "Two-factor authentication",
+      "twoFactorHint": "Enter the 6-digit code from your authenticator app.",
+      "verify": "Verify",
+      "back": "Back"
+    },
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Order boosts and follow them live.",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "loginLink": "Sign in"
+    },
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "code": "Authentication code"
+    },
+    "oauth": {
+      "divider": "or continue with"
+    },
+    "errors": {
+      "invalidInput": "Please check the highlighted fields.",
+      "invalidCredentials": "Email or password is incorrect.",
+      "invalidTwoFactorCode": "The authentication code is incorrect.",
+      "accountBanned": "This account has been suspended. Contact support.",
+      "rateLimited": "Too many attempts. Try again in {minutes} min.",
+      "emailTaken": "An account with this email already exists.",
+      "generic": "Something went wrong. Please try again."
+    },
+    "oauthErrors": {
+      "OAuthEmailUnverified": "Your email isn't verified with that provider.",
+      "OAuthAccountNotLinked": "An account with this email exists. Sign in with your password.",
+      "OAuthStaff": "Staff and booster accounts must sign in with email, password and 2FA.",
+      "OAuthTwoFactor": "Your account uses 2FA. Sign in with your password.",
+      "AccountBanned": "This account has been suspended. Contact support.",
+      "default": "Sign-in failed. Please try again."
+    }
+  },
+  "Security": {
+    "title": "Security",
+    "subtitle": "Protect your account with two-factor authentication.",
+    "requiredNotice": "Your role requires two-factor authentication. Set it up to continue to your panel.",
+    "statusEnabled": "Enabled",
+    "statusDisabled": "Disabled",
+    "twoFactorTitle": "Two-factor authentication (2FA)",
+    "twoFactorDescription": "Each sign-in asks for a code from an authenticator app such as Google Authenticator or Authy.",
+    "passwordOnly": "2FA protects password sign-ins. Accounts that only use Discord, Google or Twitch can't enable it yet.",
+    "start": "Set up 2FA",
+    "scanHint": "Scan the QR code with your authenticator app, then enter the 6-digit code it shows.",
+    "manualHint": "Can't scan? Enter this key manually:",
+    "enable": "Enable 2FA",
+    "enabledToast": "Two-factor authentication is on.",
+    "disable": "Disable 2FA",
+    "disableHint": "Enter a current code to turn 2FA off.",
+    "disabledToast": "Two-factor authentication is off.",
+    "mandatoryHint": "Your role requires 2FA, so it can't be turned off.",
+    "errors": {
+      "unauthorized": "Your session has expired. Sign in again.",
+      "invalidCode": "The code is incorrect or expired.",
+      "rateLimited": "Too many attempts. Wait a few minutes and try again.",
+      "setupNotStarted": "Start the setup first.",
+      "alreadyEnabled": "2FA is already enabled.",
+      "notEnabled": "2FA is not enabled.",
+      "passwordRequired": "2FA requires a password sign-in.",
+      "mandatoryForRole": "Your role requires 2FA."
+    }
+  },
+  "Panel": {
+    "loading": "Loading…",
+    "welcome": "Welcome, {name}",
+    "signedInAs": "Signed in as {email}"
+  },
+  "Dashboard": {
+    "subtitle": "Your orders and their live progress."
+  },
+  "Booster": {
+    "subtitle": "Claim orders and track your earnings.",
+    "statusLabel": "Profile status",
+    "status": {
+      "PENDING_APPROVAL": "Pending approval",
+      "ACTIVE": "Active",
+      "SUSPENDED": "Suspended"
+    },
+    "pendingNotice": "Our team is reviewing your application. You can claim orders once it's approved.",
+    "suspendedNotice": "Your booster profile is suspended. Contact support.",
+    "stats": {
+      "balance": "Balance",
+      "lifetime": "Lifetime earnings",
+      "completed": "Completed orders",
+      "rating": "Rating"
+    },
+    "myOrders": "My orders",
+    "noOrders": "You haven't taken any orders yet.",
+    "openPool": "Open the order pool",
+    "pool": {
+      "title": "Order pool",
+      "subtitle": "Paid orders that match your games and rank, oldest first.",
+      "empty": "No open orders match your games and rank right now.",
+      "claim": "Take order",
+      "claimed": "Order {orderNumber} is yours.",
+      "earn": "You earn {amount}",
+      "server": "Server {server}"
+    },
+    "workspace": {
+      "back": "My orders",
+      "details": "Order details",
+      "notes": "Customer notes",
+      "noNotes": "No notes.",
+      "status": "Status",
+      "transitions": {
+        "start": "Start",
+        "pause": "Pause",
+        "resume": "Resume",
+        "complete": "Mark completed",
+        "release": "Give back to pool"
+      },
+      "transitionDone": {
+        "start": "Order started.",
+        "pause": "Order paused.",
+        "resume": "Order resumed.",
+        "complete": "Order completed. Your earnings were added to your balance.",
+        "release": "Order returned to the pool."
+      },
+      "noActions": "No actions available in this state.",
+      "progress": "Report progress",
+      "progressRank": "Current rank",
+      "progressRating": "Current rating",
+      "progressDone": "Done so far",
+      "saveProgress": "Update",
+      "progressSaved": "Progress updated.",
+      "credentials": "Customer account",
+      "credentialsMissing": "The customer hasn't added their login yet.",
+      "credentialsClosed": "The login is only available while you work on the order.",
+      "vpn": "VPN location you connect from",
+      "vpnPlaceholder": "e.g. Frankfurt, DE",
+      "reveal": "Show login",
+      "hide": "Hide",
+      "username": "Username",
+      "password": "Password",
+      "copy": "Copy",
+      "copied": "Copied",
+      "revealNote": "Every opening is logged and shown to the customer. The login hides itself after 60 seconds.",
+      "accessTitle": "Your access log",
+      "accessEntry": "{vpn} · {date}",
+      "cancel": "Cancel",
+      "confirm": {
+        "complete": "Mark this order as completed? The customer's login will be deleted and your earnings added to your balance.",
+        "release": "Give this order back to the pool? Another booster will be able to take it."
+      }
+    },
+    "errors": {
+      "notActive": "Your booster profile isn't active, or your session expired.",
+      "notEligible": "Your rank is too low for this order.",
+      "alreadyTaken": "Someone else already took this order.",
+      "tooManyActive": "You can work on at most {max} orders at once.",
+      "notFound": "Order not found.",
+      "invalidTransition": "That isn't possible in the order's current state.",
+      "noCredentials": "Wait for the customer's login before starting.",
+      "noCredentialsYet": "The customer hasn't added their login yet.",
+      "vpnRequired": "Enter the VPN location you're connecting from.",
+      "invalidProgress": "That progress value isn't valid for this order.",
+      "rateLimited": "Too many actions. Please slow down.",
+      "generic": "Something went wrong. Please try again."
+    }
+  },
+  "Admin": {
+    "subtitle": "Platform management.",
+    "roleLabel": "Your role",
+    "permissionsTitle": "What you can do",
+    "permissions": {
+      "ADMIN": "Full access: users, pricing, orders, disputes and payouts.",
+      "SUPPORT": "Read support tickets, order chats and disputes.",
+      "FINANCE": "Review and approve booster payout requests."
+    }
+  },
+  "BoostPage": {
+    "title": "{game} boost",
+    "subtitle": "Choose your service and ranks. The price updates instantly.",
+    "metaDescription": "{game} boosting by verified high-elo players: division boosts, wins, placements and coaching."
+  },
+  "Calculator": {
+    "currentRank": "Current rank",
+    "desiredRank": "Desired rank",
+    "lastSeasonRank": "Last season's rank",
+    "currentRating": "Current rating",
+    "desiredRating": "Desired rating",
+    "currentPoints": "LP / RR in your current division",
+    "quantity": {
+      "WIN": "Number of wins",
+      "PLACEMENT": "Number of games",
+      "COACHING": "Coaching hours"
+    },
+    "server": "Server",
+    "lpGain": "LP / RR gain per win",
+    "addOns": "Extra options",
+    "free": "Free",
+    "modifierLabels": {
+      "priority": "Priority / express",
+      "offline_mode": "Appear offline",
+      "specific_role": "Specific roles / champions",
+      "vpn": "VPN connection",
+      "live_stream": "Live stream",
+      "normal_lp": "Normal (+20 LP or more)",
+      "low_lp": "Low (+15 to +19 LP)",
+      "very_low_lp": "Very low (below +15 LP)",
+      "smurf_queue": "Smurf queue (+25 LP or more)",
+      "normal_rr": "Normal (+18 RR or more)",
+      "low_rr": "Low (below +18 RR)"
+    },
+    "modifierDescriptions": {
+      "priority": "Your order starts first and gets extra play time.",
+      "offline_mode": "Your booster stays invisible to your friends.",
+      "specific_role": "Your booster only plays the roles or picks you choose.",
+      "vpn": "Your booster connects through a VPN in your country.",
+      "live_stream": "Watch every game live on a private stream."
+    },
+    "summary": {
+      "title": "Order summary",
+      "service": "Service",
+      "flatFee": "Service fee",
+      "server": "Server {server}",
+      "discount": "Discount ({code})",
+      "total": "Total",
+      "currency": "Currency",
+      "verified": "The final price is re-checked on our servers."
+    },
+    "lines": {
+      "climb": "{from} → {to}",
+      "wins": "{count, plural, one {# win} other {# wins}} at {rank}",
+      "games": "{count, plural, one {# placement game} other {# placement games}} from {rank}",
+      "hours": "{count, plural, one {# hour} other {# hours}} of coaching"
+    },
+    "promo": {
+      "label": "Promo code",
+      "placeholder": "Enter code",
+      "apply": "Apply",
+      "remove": "Remove",
+      "applied": "Code {code} applied"
+    },
+    "checkout": "Continue to checkout",
+    "signIn": "Sign in to order",
+    "errors": {
+      "invalidSelection": "Please check your selection.",
+      "signInRequired": "Please sign in to place an order.",
+      "customersOnly": "Only customer accounts can place orders.",
+      "rateLimited": "Too many requests. Please wait a moment.",
+      "gameUnavailable": "This game is not available right now.",
+      "promoInvalid": "This promo code is invalid or expired.",
+      "promoMinAmount": "This code requires an order of at least {amount}.",
+      "priceChanged": "Prices were just updated. Please review the new total and try again.",
+      "generic": "Something went wrong. Please try again.",
+      "quote": {
+        "order_type_unsupported": "This service isn't available for this game.",
+        "invalid_rank": "Please pick a valid rank.",
+        "target_not_above_current": "Your desired rank must be higher than your current rank.",
+        "invalid_quantity": "Please pick a valid amount.",
+        "unknown_server": "Please pick a server.",
+        "unknown_option": "One of the selected options is no longer available.",
+        "coaching_unavailable": "Coaching isn't available for this game."
+      },
+      "belowMinimum": "The order total must be at least {amount}."
+    }
+  },
+  "Checkout": {
+    "title": "Checkout",
+    "order": "Order {number}",
+    "game": "Game",
+    "service": "Service",
+    "server": "Server",
+    "options": "Options",
+    "none": "None",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "total": "Total",
+    "paymentTitle": "Payment",
+    "changeOrder": "Change order"
+  },
+  "OrderStatus": {
+    "AWAITING_PAYMENT": "Awaiting payment",
+    "PENDING": "Waiting for a booster",
+    "ASSIGNED": "Booster assigned",
+    "IN_PROGRESS": "In progress",
+    "PAUSED": "Paused",
+    "COMPLETED": "Completed",
+    "CANCELLED": "Cancelled",
+    "DISPUTED": "Disputed"
+  },
+  "Payments": {
+    "title": "Choose a payment method",
+    "methods": {
+      "stripe": {
+        "name": "Card",
+        "description": "Visa, Mastercard, Apple Pay and Google Pay, processed by Stripe."
+      },
+      "coinbase": {
+        "name": "Crypto",
+        "description": "Bitcoin, Ethereum, USDC and more, via Coinbase Commerce."
+      },
+      "sandbox": {
+        "name": "Test payment",
+        "description": "Development only: simulate a payment without a real provider."
+      }
+    },
+    "none": "No payment method is available for this currency yet. Go back to the calculator and pick another currency.",
+    "pay": "Pay {amount}",
+    "secure": "You pay on the provider's secure page. We never see your card or wallet details.",
+    "cancelled": "The payment was cancelled. You can try again or pick another method.",
+    "failed": "The payment didn't go through. You can try again or pick another method.",
+    "confirming": "We're confirming your payment with the provider. This page updates by itself.",
+    "confirmingSlow": "This is taking longer than usual. You'll get a notification as soon as the payment is confirmed.",
+    "paidTitle": "Payment received",
+    "paidBody": "Thank you! Your order is now waiting for a booster. You'll be notified when someone takes it.",
+    "toPanel": "Go to my panel",
+    "errors": {
+      "unauthorized": "Please sign in with the account that placed this order.",
+      "notFound": "Order not found.",
+      "alreadyPaid": "This order doesn't need a payment any more.",
+      "unavailable": "This payment method isn't available for this order.",
+      "rateLimited": "Too many attempts. Please wait a few minutes.",
+      "providerError": "The payment provider couldn't be reached. Please try again or pick another method."
+    },
+    "sandbox": {
+      "title": "Test payment",
+      "body": "This page only exists in development. Choose what the payment provider should report for order {orderNumber}.",
+      "succeed": "Payment succeeds",
+      "fail": "Payment fails",
+      "cancel": "Customer cancels",
+      "done": "This test payment is already finished."
+    }
+  },
+  "Errors": {
+    "title": "Something went wrong",
+    "body": "An unexpected error occurred on our side. Please try again in a moment.",
+    "retry": "Try again",
+    "reference": "Reference: {digest}"
+  },
+  "Orders": {
+    "title": "My orders",
+    "empty": "You have no orders yet.",
+    "browse": "Browse games",
+    "placedOn": "Placed {date}",
+    "view": "Details",
+    "pay": "Complete payment",
+    "detail": {
+      "back": "All orders",
+      "steps": {
+        "PENDING": "Waiting for booster",
+        "ASSIGNED": "Booster assigned",
+        "IN_PROGRESS": "In progress",
+        "COMPLETED": "Completed"
+      },
+      "paused": "Your booster paused the order for now.",
+      "disputed": "Our team is reviewing this order.",
+      "cancelled": "This order was cancelled.",
+      "awaitingPayment": "This order hasn't been paid yet.",
+      "progress": "Progress",
+      "progressRank": "Current rank: {rank}",
+      "progressDone": "{done} of {total} done",
+      "booster": "Your booster",
+      "boosterStats": "{rating} ★ · {count} orders completed",
+      "noBooster": "A booster will pick up your order soon.",
+      "summary": "Order details",
+      "service": "Service",
+      "server": "Server",
+      "options": "Options",
+      "none": "None",
+      "total": "Total"
+    },
+    "vault": {
+      "title": "Game account",
+      "description": "Your booster needs your login to play. It is encrypted (AES-256), only your booster can open it, and every opening is logged below.",
+      "username": "Account username",
+      "password": "Account password",
+      "passwordKeep": "Saved. Leave empty to keep it.",
+      "notes": "Notes for your booster",
+      "notesPlaceholder": "Preferred champions, play times, things to avoid…",
+      "save": "Save",
+      "saved": "Saved securely.",
+      "removed": "Your login was deleted when the order ended.",
+      "notYet": "You can add your login once the order is paid.",
+      "accessTitle": "Access log",
+      "accessEntry": "Opened via VPN in {vpn} · {date}",
+      "accessNone": "Your booster hasn't opened your login yet."
+    },
+    "errors": {
+      "unauthorized": "Please sign in with the account that placed this order.",
+      "invalid": "Please check the highlighted fields.",
+      "notFound": "Order not found.",
+      "notEditable": "This order can't be changed any more.",
+      "passwordRequired": "Enter the account password.",
+      "rateLimited": "Too many changes. Please wait a while."
+    }
+  }
+}

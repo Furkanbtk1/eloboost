@@ -1,0 +1,46 @@
+name: eloboost
+
+services:
+  postgres:
+    image: postgres:17.11-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-eloboost}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-eloboost}
+      POSTGRES_DB: ${POSTGRES_DB:-eloboost}
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
+    ports:
+      - "5433:5432" # direct connection (migrations, Prisma Studio)
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Connection pooler in front of Postgres. The app talks to PgBouncer,
+  # migrations talk to Postgres directly (see DIRECT_URL).
+  pgbouncer:
+    image: edoburu/pgbouncer:v1.26.0-p0
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: ${POSTGRES_USER:-eloboost}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-eloboost}
+      DB_NAME: ${POSTGRES_DB:-eloboost}
+      LISTEN_PORT: 6432
+      AUTH_TYPE: scram-sha-256
+      POOL_MODE: transaction
+      MAX_CLIENT_CONN: 500
+      DEFAULT_POOL_SIZE: 20
+      MAX_PREPARED_STATEMENTS: 200
+    ports:
+      - "6433:6432" # pooled connection (application runtime)
+
+volumes:
+  postgres-data:
