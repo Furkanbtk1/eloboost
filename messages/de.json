@@ -46,7 +46,14 @@
     "perDivision": "pro Division",
     "per100Rating": "pro 100 Rating",
     "noGames": "Derzeit sind keine Spiele verfügbar.",
-    "boostNow": "Jetzt boosten"
+    "boostNow": "Jetzt boosten",
+    "reviews": {
+      "title": "Das sagen Spieler",
+      "subtitle": "Aktuelle Bewertungen abgeschlossener Aufträge.",
+      "stars": "{count, plural, one {# Stern} other {# Sterne}}",
+      "byline": "{reviewer} · {game} mit {booster}",
+      "anonymous": "Verifizierter Kunde"
+    }
   },
   "OrderType": {
     "DIVISION": "Division-Boost",
@@ -238,7 +245,8 @@
       "confirm": {
         "complete": "Diesen Auftrag als erledigt markieren? Die Zugangsdaten des Kunden werden gelöscht und deine Einnahmen deinem Guthaben gutgeschrieben.",
         "release": "Diesen Auftrag zurück in den Pool geben? Ein anderer Booster kann ihn dann übernehmen."
-      }
+      },
+      "disputed": "Dieser Auftrag ist eingefroren, während der Support ein gemeldetes Problem prüft. Bis zur Klärung kannst du nicht spielen und die Zugangsdaten nicht öffnen."
     },
     "errors": {
       "notActive": "Dein Booster-Profil ist nicht aktiv oder deine Sitzung ist abgelaufen.",
@@ -253,16 +261,387 @@
       "invalidProgress": "Dieser Fortschrittswert ist für diesen Auftrag ungültig.",
       "rateLimited": "Zu viele Aktionen. Bitte etwas langsamer.",
       "generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
-    }
+    },
+    "payouts": "Auszahlungen"
   },
   "Admin": {
-    "subtitle": "Plattformverwaltung.",
-    "roleLabel": "Deine Rolle",
-    "permissionsTitle": "Deine Berechtigungen",
-    "permissions": {
-      "ADMIN": "Voller Zugriff: Nutzer, Preise, Aufträge, Streitfälle und Auszahlungen.",
-      "SUPPORT": "Support-Tickets, Auftrags-Chats und Streitfälle lesen.",
-      "FINANCE": "Auszahlungsanfragen von Boostern prüfen und freigeben."
+    "title": "Verwaltung",
+    "nav": {
+      "label": "Verwaltungsbereiche",
+      "overview": "Übersicht",
+      "orders": "Aufträge",
+      "disputes": "Streitfälle",
+      "users": "Nutzer",
+      "payouts": "Auszahlungen",
+      "pricing": "Preise",
+      "promos": "Gutscheine",
+      "reviews": "Bewertungen",
+      "audit": "Protokoll"
+    },
+    "pagination": {
+      "page": "Seite {page} von {pages} · {total} Ergebnisse",
+      "previous": "Zurück",
+      "next": "Weiter"
+    },
+    "errors": {
+      "forbidden": "Dazu fehlt dir die Berechtigung.",
+      "notFound": "Nicht gefunden.",
+      "invalid": "Bitte prüfe die eingegebenen Werte.",
+      "self": "Das kannst du nicht mit deinem eigenen Konto tun.",
+      "hasActiveOrders": "Dieser Booster hat noch aktive Aufträge. Weise sie zuerst neu zu.",
+      "notBooster": "Dieser Nutzer ist kein Booster.",
+      "rankRequired": "Wähle für jedes ausgewählte Spiel einen gültigen Rang.",
+      "gamesRequired": "Ein aktiver Booster braucht mindestens ein Spiel.",
+      "stale": "Jemand anderes hat das inzwischen geändert. Lade neu und versuch es erneut.",
+      "noteRequired": "Gib dem Booster eine Begründung.",
+      "referenceRequired": "Gib die Überweisungsreferenz ein (3–120 Zeichen).",
+      "duplicateReference": "Diese Referenz wurde schon für eine andere Auszahlung verwendet.",
+      "refundRange": "Die Teilerstattung muss größer als 0 und kleiner als der Auftragsbetrag sein.",
+      "pastDate": "Das Ablaufdatum muss in der Zukunft liegen.",
+      "codeExists": "Einen Gutschein mit diesem Namen gibt es schon.",
+      "needServer": "Mindestens ein Server muss aktiv bleiben.",
+      "defaultModifier": "Die Standard-LP-Option kann nicht deaktiviert werden."
+    },
+    "transactionType": {
+      "DEPOSIT": "Einzahlung",
+      "PAYMENT": "Zahlung",
+      "EARNING": "Verdienst",
+      "TIP": "Trinkgeld",
+      "PAYOUT": "Auszahlung",
+      "REFUND": "Erstattung"
+    },
+    "overview": {
+      "subtitle": {
+        "ADMIN": "Der Zustand der Plattform auf einen Blick.",
+        "SUPPORT": "Streitfälle, aktive Aufträge und Chat-Moderation.",
+        "FINANCE": "Booster-Auszahlungen und Guthaben."
+      },
+      "revenue": "Umsatz",
+      "platform": "Plattformanteil",
+      "paidOrders": "Bezahlte Aufträge",
+      "newCustomers": "Neue Kunden",
+      "openDisputes": "Offene Streitfälle",
+      "activeOrders": "Aktive Aufträge",
+      "activeOrdersHint": "Zugewiesen, in Arbeit oder pausiert",
+      "pool": "Im Pool wartend",
+      "flagged": "Gefilterte Nachrichten",
+      "boosters": "Aktive Booster",
+      "pendingBoosters": "{count, plural, =0 {Keine Bewerbungen} one {# Bewerbung wartet} other {# Bewerbungen warten}}",
+      "pendingPayouts": "Zu prüfende Auszahlungen",
+      "approvedPayouts": "Genehmigt, noch nicht bezahlt",
+      "requests": "{count, plural, =0 {Keine Anträge} one {# Antrag} other {# Anträge}}",
+      "paidOut": "Ausgezahlt",
+      "balances": "Booster-Guthaben",
+      "balancesHint": "Booster geschuldet, noch nicht beantragt",
+      "last30": "Letzte 30 Tage",
+      "last7": "Letzte 7 Tage",
+      "byStatus": "Aufträge nach Status",
+      "recentAudit": "Letzte Admin-Aktionen",
+      "allAudit": "Ganzes Protokoll",
+      "noAudit": "Noch keine Admin-Aktionen.",
+      "chart": {
+        "title": "Tagesumsatz (USD)",
+        "description": "Bezahlte Aufträge der letzten 14 Tage, nach Zahlungstag (UTC).",
+        "bar": "{day}: {amount}, {orders} Aufträge",
+        "orders": "{count, plural, =0 {keine Aufträge} one {# Auftrag} other {# Aufträge}}",
+        "table": "Als Tabelle anzeigen",
+        "day": "Tag",
+        "revenue": "Umsatz",
+        "ordersColumn": "Aufträge"
+      }
+    },
+    "users": {
+      "title": "Nutzer",
+      "subtitle": "Kunden-, Booster- und Mitarbeiterkonten.",
+      "applications": "{count, plural, one {# Booster-Bewerbung} other {# Booster-Bewerbungen}}",
+      "search": "Nach E-Mail oder Name suchen",
+      "role": "Rolle",
+      "allRoles": "Alle Rollen",
+      "filter": "Filtern",
+      "empty": "Keine Nutzer passen zu diesen Filtern.",
+      "user": "Nutzer",
+      "state": "Status",
+      "joined": "Registriert",
+      "manage": "Verwalten",
+      "banned": "Gesperrt",
+      "back": "Alle Nutzer",
+      "booster": {
+        "title": "Booster-Profil",
+        "stats": "{completed} abgeschlossen · {rating} ★ aus {reviews} Bewertungen · {earnings} verdient",
+        "status": "Freigabe",
+        "games": "Spiele und geprüfte Ränge",
+        "rankFor": "Rang in {game}",
+        "pickRank": "Rang wählen",
+        "rating": "Rating",
+        "hint": "Der Auftragspool zeigt nur Aufträge unter diesen Rängen. Freigegebene Booster können Aufträge übernehmen.",
+        "save": "Booster-Profil speichern",
+        "saved": "Booster-Profil gespeichert."
+      },
+      "orders": "Aufträge",
+      "noOrders": "Noch keine Aufträge.",
+      "orderRole": {
+        "customer": "als Kunde",
+        "booster": "als Booster"
+      },
+      "transactions": "Transaktionen",
+      "noTransactions": "Noch keine Transaktionen.",
+      "account": "Konto",
+      "lastLogin": "Letzte Anmeldung",
+      "balance": "Guthaben",
+      "twoFactor": "Zwei-Faktor",
+      "on": "An",
+      "off": "Aus",
+      "signIn": "Meldet sich an mit",
+      "password": "E-Mail und Passwort",
+      "oauth": "Nur Social Login",
+      "manageTitle": "Konto verwalten",
+      "actions": {
+        "self": "Deine eigene Rolle, Sperre oder 2FA kannst du hier nicht ändern.",
+        "role": "Rolle",
+        "saveRole": "Rolle ändern",
+        "roleTitle": "Rolle ändern?",
+        "roleBody": "Der Nutzer wird {role}. Mitarbeiter- und Booster-Rollen müssen 2FA einrichten, bevor sie ihr Panel nutzen.",
+        "roleHint": "Wer Booster wird, bekommt ein nicht freigegebenes Profil; trag Spiele und Ränge ein und gib es dann frei.",
+        "roleSaved": "Rolle geändert.",
+        "ban": "Nutzer sperren",
+        "unban": "Sperre aufheben",
+        "banBody": "Der Nutzer wird überall abgemeldet und kann sich erst nach Aufheben der Sperre wieder anmelden.",
+        "unbanBody": "Der Nutzer kann sich wieder anmelden.",
+        "bannedDone": "Nutzer gesperrt.",
+        "unbanned": "Sperre aufgehoben.",
+        "reset2fa": "2FA zurücksetzen",
+        "reset2faBody": "Für den Fall, dass die Authenticator-App verloren ging. Bei der nächsten Anmeldung wird 2FA neu eingerichtet.",
+        "reset2faDone": "2FA zurückgesetzt.",
+        "cancel": "Abbrechen"
+      }
+    },
+    "payouts": {
+      "title": "Auszahlungen",
+      "subtitle": "Genehmige Auszahlungsanträge der Booster und erfasse danach die Überweisung.",
+      "views": {
+        "open": "Zu erledigen",
+        "done": "Verlauf"
+      },
+      "empty": "Hier ist nichts.",
+      "requested": "Beantragt am {date}",
+      "reviewed": "geprüft am {date}",
+      "actions": {
+        "approve": "Genehmigen",
+        "approved": "Auszahlung genehmigt.",
+        "markPaid": "Als bezahlt markieren",
+        "paid": "Auszahlung als bezahlt erfasst.",
+        "reject": "Ablehnen",
+        "rejected": "Auszahlung abgelehnt; der Betrag ist zurück im Guthaben des Boosters.",
+        "reasonPlaceholder": "Begründung für den Booster",
+        "referencePlaceholder": "Bank- oder Transaktionsreferenz",
+        "confirmReject": "Auszahlung ablehnen",
+        "confirmPaid": "Als bezahlt speichern",
+        "cancel": "Abbrechen"
+      }
+    },
+    "orders": {
+      "title": "Aufträge",
+      "subtitle": "Alle Aufträge mit Chat, Zahlungen und Zugriffsprotokoll.",
+      "search": "Auftragsnummer oder E-Mail",
+      "status": "Status",
+      "allStatuses": "Alle Status",
+      "filter": "Filtern",
+      "empty": "Keine Aufträge passen zu diesen Filtern.",
+      "order": "Auftrag",
+      "customer": "Kunde",
+      "booster": "Booster",
+      "total": "Betrag",
+      "open": "{orderNumber} öffnen",
+      "detail": {
+        "back": "Alle Aufträge",
+        "transactions": "Transaktionen",
+        "noTransactions": "Noch keine Transaktionen.",
+        "people": "Beteiligte",
+        "customer": "Kunde",
+        "booster": "Booster",
+        "noBooster": "Kein Booster zugewiesen.",
+        "money": "Beträge",
+        "total": "Gesamt",
+        "boosterCut": "Booster-Anteil",
+        "platformCut": "Plattformanteil",
+        "rate": "Wechselkurs",
+        "timeline": "Zeitverlauf",
+        "events": {
+          "createdAt": "Erstellt",
+          "paidAt": "Bezahlt",
+          "assignedAt": "Zugewiesen",
+          "startedAt": "Gestartet",
+          "completedAt": "Abgeschlossen",
+          "cancelledAt": "Storniert"
+        },
+        "access": "Zugriff auf Zugangsdaten",
+        "credentialsStored": "Die Spiel-Zugangsdaten des Kunden sind gespeichert (verschlüsselt).",
+        "credentialsNone": "Keine Spiel-Zugangsdaten gespeichert.",
+        "noAccess": "Die Zugangsdaten wurden nie angezeigt."
+      }
+    },
+    "disputes": {
+      "title": "Streitfälle",
+      "subtitle": "Eingefrorene Aufträge, die auf eine Entscheidung warten.",
+      "views": {
+        "OPEN": "Offen",
+        "RESOLVED": "Gelöst"
+      },
+      "empty": "Hier gibt es keine Streitfälle.",
+      "openedBy": "Eröffnet von {name} ({role}) am {date}",
+      "openTitle": "Offener Streitfall: Auftrag eingefroren",
+      "adminOnly": "Nur ein Super-Admin kann Streitfälle lösen. Den Chat unten kannst du lesen.",
+      "history": "Frühere Streitfälle",
+      "resolutions": {
+        "REFUNDED": "Erstattet",
+        "PARTIAL_REFUND": "Teilerstattung",
+        "REASSIGNED": "Neu zugewiesen",
+        "CONTINUED": "Fortgesetzt"
+      },
+      "resolve": {
+        "decision": "Entscheidung",
+        "options": {
+          "REFUNDED": {
+            "title": "Vollständig erstatten",
+            "body": "Storniert den Auftrag und schreibt {total} dem Guthaben des Kunden gut. Der Booster wird nicht bezahlt."
+          },
+          "PARTIAL_REFUND": {
+            "title": "Teilerstattung",
+            "body": "Erstattet einen Teil von {total} ins Guthaben, schließt den Auftrag ab und bezahlt den Booster für den Rest."
+          },
+          "REASSIGNED": {
+            "title": "Anderem Booster geben",
+            "body": "Entfernt den aktuellen Booster und legt den Auftrag zurück in den Pool."
+          },
+          "CONTINUED": {
+            "title": "Auftrag fortsetzen",
+            "body": "Hebt das Einfrieren auf, der Auftrag geht weiter, wo er stand."
+          }
+        },
+        "refundAmount": "Erstattungsbetrag ({currency})",
+        "boosterShare": "Der Booster erhält für den Rest etwa {amount}.",
+        "note": "Begründung",
+        "noteHint": "Wird mit dem Streitfall und im Protokoll gespeichert.",
+        "submit": "Streitfall lösen",
+        "done": "Streitfall gelöst."
+      }
+    },
+    "reviews": {
+      "title": "Bewertungen",
+      "subtitle": "Blende Bewertungen aus, die nicht öffentlich sein sollen. Sie zählen weiter zur Booster-Bewertung.",
+      "empty": "Noch keine Bewertungen.",
+      "stars": "{count, plural, one {# Stern} other {# Sterne}}",
+      "public": "Öffentlich",
+      "private": "Ausgeblendet",
+      "noComment": "Kein Kommentar.",
+      "meta": "{customer} über {booster} · {game} · {date}",
+      "hide": "Ausblenden",
+      "show": "Anzeigen",
+      "hidden": "Bewertung ausgeblendet.",
+      "shown": "Bewertung wieder sichtbar."
+    },
+    "promos": {
+      "title": "Gutscheine",
+      "subtitle": "Prozentuale oder feste Rabatte mit Nutzungslimit und Ablaufdatum.",
+      "new": "Neuer Gutschein",
+      "empty": "Noch keine Gutscheine.",
+      "code": "Code",
+      "discount": "Rabatt",
+      "uses": "Nutzungen",
+      "expires": "Läuft ab",
+      "minOrder": "Mindestbestellwert",
+      "active": "Aktiv",
+      "usedUp": "Aufgebraucht",
+      "expired": "Abgelaufen",
+      "toggle": "{code} aktivieren oder deaktivieren",
+      "form": {
+        "code": "Code",
+        "type": "Art",
+        "percentage": "Prozent",
+        "fixed": "Fester Betrag (USD)",
+        "valuePercent": "Rabatt (%)",
+        "valueFixed": "Rabatt (USD)",
+        "maxUses": "Nutzungslimit",
+        "unlimited": "Unbegrenzt",
+        "expiresOn": "Gültig bis",
+        "minOrder": "Mindestbestellwert (USD)",
+        "none": "Keiner",
+        "create": "Gutschein erstellen",
+        "created": "Gutschein erstellt."
+      }
+    },
+    "pricing": {
+      "title": "Preise",
+      "subtitle": "Preise ändern, ohne den Code anzufassen. Neue Aufträge nutzen sie sofort.",
+      "games": "Spiele",
+      "saved": "Gespeichert. Neue Aufträge nutzen diese Preise.",
+      "save": "Speichern",
+      "note": "Bestehende Aufträge behalten den Preis vom Checkout.",
+      "game": {
+        "title": "Spiel",
+        "description": "Pauschale für jeden Auftrag, Coaching-Stundensatz und ob das Spiel angeboten wird.",
+        "basePrice": "Grundpreis (USD)",
+        "hourly": "Coaching pro Stunde (USD)",
+        "status": "Sichtbarkeit",
+        "active": "Angeboten",
+        "inactive": "Ausgeblendet"
+      },
+      "steps": {
+        "title": "Rangpreise",
+        "description": "USD. Division: Aufstieg von diesem Rang zum nächsten. Sieg und Platzierung: Preis pro Spiel auf diesem Rang.",
+        "rank": "Rang",
+        "division": "Nächste Division",
+        "win": "Pro Sieg",
+        "placement": "Pro Platzierung",
+        "top": "Höchster Rang"
+      },
+      "brackets": {
+        "title": "Rating-Preise",
+        "description": "USD pro 100 gewonnenen Ratingpunkten in jedem Bereich und pro Sieg.",
+        "range": "Rating-Bereich",
+        "per100": "Pro 100",
+        "win": "Pro Sieg"
+      },
+      "servers": {
+        "title": "Server",
+        "description": "Aufschlag pro Server in Prozent (z. B. 10 = +10 %). Ausgeblendete Server sind nicht wählbar.",
+        "server": "Server",
+        "region": "Region",
+        "percent": "Aufschlag %",
+        "active": "Angeboten"
+      },
+      "modifiers": {
+        "title": "Optionen und Extras",
+        "description": "Preisänderung in Prozent (z. B. 20 = +20 %, -10 = -10 %).",
+        "option": "Option",
+        "category": "Art",
+        "percent": "Änderung %",
+        "active": "Angeboten",
+        "default": "Standard",
+        "categories": {
+          "LP_GAIN": "LP-Gewinn",
+          "ADD_ON": "Extra"
+        }
+      },
+      "settings": {
+        "title": "Plattform-Einstellungen",
+        "description": "Gelten für neue Aufträge und Auszahlungsanträge.",
+        "share": "Booster-Anteil (%)",
+        "platform": "Die Plattform behält {percent} %",
+        "minPayout": "Mindestauszahlung (USD)"
+      }
+    },
+    "audit": {
+      "title": "Protokoll",
+      "subtitle": "Alle Admin-Aktionen, neueste zuerst.",
+      "filter": "Aktion beginnt mit, z. B. payout.",
+      "apply": "Filtern",
+      "empty": "Keine Einträge.",
+      "when": "Wann",
+      "who": "Wer",
+      "action": "Aktion",
+      "target": "Ziel",
+      "details": "Details"
     }
   },
   "BoostPage": {
@@ -409,7 +788,8 @@
       "alreadyPaid": "Für diesen Auftrag ist keine Zahlung mehr nötig.",
       "unavailable": "Diese Zahlungsmethode ist für diesen Auftrag nicht verfügbar.",
       "rateLimited": "Zu viele Versuche. Bitte warte ein paar Minuten.",
-      "providerError": "Der Zahlungsanbieter ist nicht erreichbar. Versuche es erneut oder wähle eine andere Methode."
+      "providerError": "Der Zahlungsanbieter ist nicht erreichbar. Versuche es erneut oder wähle eine andere Methode.",
+      "walletInsufficient": "Dein Guthaben reicht für diesen Auftrag nicht."
     },
     "sandbox": {
       "title": "Testzahlung",
@@ -418,6 +798,11 @@
       "fail": "Zahlung fehlgeschlagen",
       "cancel": "Kunde bricht ab",
       "done": "Diese Testzahlung ist bereits abgeschlossen."
+    },
+    "wallet": {
+      "name": "Guthaben",
+      "balance": "Sofort aus deinem Guthaben von {balance} bezahlen.",
+      "insufficient": "Dein Guthaben von {balance} reicht für diesen Auftrag nicht."
     }
   },
   "Errors": {
@@ -481,7 +866,9 @@
       "notEditable": "Dieser Auftrag kann nicht mehr geändert werden.",
       "passwordRequired": "Gib das Passwort des Kontos ein.",
       "rateLimited": "Zu viele Änderungen. Bitte warte eine Weile."
-    }
+    },
+    "wallet": "Guthaben: {balance}",
+    "walletHint": "Erstattungen landen hier. Damit kannst du Aufträge oder Trinkgeld bezahlen."
   },
   "Chat": {
     "title": "Auftragschat",
@@ -509,7 +896,8 @@
     "attachmentMissing": "Bild nicht verfügbar",
     "closed": {
       "waitingForBooster": "Der Chat öffnet sich, sobald ein Booster deinen Auftrag übernimmt.",
-      "closed": "Dieser Chat ist geschlossen. Den Verlauf kannst du weiterhin lesen."
+      "closed": "Dieser Chat ist geschlossen. Den Verlauf kannst du weiterhin lesen.",
+      "readOnly": "Nur lesen: Mitarbeiter können nicht in Auftragschats schreiben."
     },
     "errors": {
       "notFound": "Chat nicht gefunden.",
@@ -537,6 +925,132 @@
     "newMessage": "Neue Nachricht zu {orderNumber}",
     "dispute": "{orderNumber}: Streitfall {status, select, OPEN {eröffnet} RESOLVED {gelöst} other {aktualisiert}}",
     "payout": "Auszahlung über {amount} {status, select, PENDING {beantragt} APPROVED {genehmigt} REJECTED {abgelehnt} PAID {ausgezahlt} other {aktualisiert}}",
-    "system": "Systemhinweis"
+    "system": "Systemhinweis",
+    "tipReceived": "{orderNumber}: Du hast {amount} Trinkgeld erhalten",
+    "reviewReceived": "{orderNumber}: Der Kunde hat dich mit {rating}/5 bewertet",
+    "refunded": "{orderNumber}: {amount} wurden deinem Guthaben erstattet",
+    "boosterStatus": "Dein Booster-Konto ist {status, select, ACTIVE {freigegeben} SUSPENDED {gesperrt} other {in Prüfung}}"
+  },
+  "Payouts": {
+    "title": "Auszahlungen",
+    "subtitle": "Lass dir deinen Verdienst per Krypto oder Banküberweisung auszahlen.",
+    "back": "Booster-Panel",
+    "balance": "Verfügbares Guthaben",
+    "minimum": "Mindestauszahlung",
+    "history": "Auszahlungsverlauf",
+    "noHistory": "Noch keine Auszahlungsanträge.",
+    "date": "Datum",
+    "amount": "Betrag",
+    "method": "Methode",
+    "status": "Status",
+    "statuses": {
+      "PENDING": "Wartet auf Prüfung",
+      "APPROVED": "Genehmigt",
+      "REJECTED": "Abgelehnt",
+      "PAID": "Bezahlt"
+    },
+    "request": {
+      "title": "Auszahlung beantragen",
+      "to": "An {destination}",
+      "alreadyOpen": "Du hast schon eine laufende Auszahlung. Eine neue kannst du beantragen, sobald sie bezahlt oder abgelehnt ist.",
+      "needDetails": "Hinterlege zuerst deine Auszahlungsdaten.",
+      "belowMinimum": "Auszahlungen sind ab {min} möglich. Dein Guthaben beträgt {balance}.",
+      "amount": "Betrag (USD)",
+      "hint": "Mindestens {min} USD. Der Betrag wird bis zur Prüfung durch das Finanzteam von deinem Guthaben zurückgehalten.",
+      "submit": "Auszahlung beantragen",
+      "sent": "Auszahlung beantragt.",
+      "cancel": "Zurückziehen",
+      "cancelled": "Antrag zurückgezogen; der Betrag ist wieder in deinem Guthaben."
+    },
+    "details": {
+      "title": "Auszahlungsdaten",
+      "current": "Aktuell: {destination}",
+      "none": "Noch nicht hinterlegt.",
+      "method": "Auszahlungsmethode",
+      "methods": {
+        "CRYPTO": "Krypto",
+        "BANK_TRANSFER": "Banküberweisung"
+      },
+      "network": "Netzwerk",
+      "networks": {
+        "USDT_TRC20": "USDT (TRC20)",
+        "USDT_ERC20": "USDT (ERC20)",
+        "BTC": "Bitcoin",
+        "ETH": "Ethereum"
+      },
+      "address": "Wallet-Adresse",
+      "accountHolder": "Kontoinhaber",
+      "iban": "IBAN",
+      "hint": "Wird verschlüsselt gespeichert. Jeder Antrag behält die Daten, mit denen er gestellt wurde.",
+      "save": "Daten speichern",
+      "saved": "Auszahlungsdaten gespeichert."
+    },
+    "errors": {
+      "notActive": "Nur freigegebene Booster mit 2FA können Auszahlungen beantragen.",
+      "invalidDetails": "Prüfe deine Auszahlungsdaten.",
+      "rateLimited": "Zu viele Änderungen. Bitte warte einen Moment.",
+      "invalidAmount": "Gib einen USD-Betrag mit höchstens zwei Nachkommastellen ein.",
+      "belowMinimum": "Die Mindestauszahlung beträgt {min} USD.",
+      "noDetails": "Hinterlege zuerst deine Auszahlungsdaten.",
+      "alreadyOpen": "Du hast schon eine laufende Auszahlung.",
+      "insufficient": "Dein Guthaben ist niedriger als dieser Betrag.",
+      "notCancellable": "Dieser Antrag kann nicht mehr zurückgezogen werden."
+    }
+  },
+  "Disputes": {
+    "open": {
+      "button": "Problem melden",
+      "title": "Problem mit diesem Auftrag melden",
+      "body": "Der Auftrag wird eingefroren, bis der Support entscheidet: Der Booster kann nicht spielen und die Zugangsdaten bleiben verborgen. Im Chat könnt ihr weiter schreiben.",
+      "reason": "Was ist passiert?",
+      "placeholder": "Z. B. das Konto wurde bestraft, der Booster ist nicht erreichbar …",
+      "hint": "Mindestens 20 Zeichen. Der Support liest auch den Auftragschat.",
+      "cancel": "Abbrechen",
+      "submit": "Auftrag einfrieren und melden",
+      "opened": "Gemeldet. Der Support prüft den Auftrag."
+    },
+    "errors": {
+      "notFound": "Auftrag nicht gefunden.",
+      "reason": "Beschreibe das Problem in mindestens 20 Zeichen.",
+      "rateLimited": "Zu viele Meldungen. Bitte warte eine Weile.",
+      "notDisputable": "Für diesen Auftrag kann in seinem aktuellen Status kein Streitfall eröffnet werden."
+    }
+  },
+  "Feedback": {
+    "tip": {
+      "title": "Trinkgeld für deinen Booster",
+      "description": "Zufrieden mit dem Ergebnis? Das ganze Trinkgeld geht an deinen Booster.",
+      "amount": "Trinkgeld",
+      "fromWallet": "Guthaben ({balance})",
+      "hint": "Bei Zahlung per Karte oder Krypto geht es zur Seite des Anbieters und zurück hierher.",
+      "thanks": "Danke! Dein Booster hat das Trinkgeld erhalten.",
+      "sent": "Du hast {amount} Trinkgeld gegeben. Danke!",
+      "return": {
+        "success": "Danke! Das Trinkgeld erreicht deinen Booster, sobald die Zahlung bestätigt ist.",
+        "cancelled": "Die Trinkgeldzahlung wurde abgebrochen.",
+        "failed": "Die Trinkgeldzahlung ist fehlgeschlagen. Du kannst es erneut versuchen."
+      }
+    },
+    "review": {
+      "title": "Bewerte deinen Booster",
+      "description": "Deine Bewertung hilft anderen Spielern bei der Wahl.",
+      "rating": "Bewertung",
+      "stars": "{count, plural, one {# Stern} other {# Sterne}}",
+      "comment": "Kommentar (optional)",
+      "placeholder": "Wie lief es?",
+      "public": "Meine Bewertung auf der Seite zeigen (nur Vorname und Initiale)",
+      "submit": "Bewertung senden",
+      "thanks": "Danke für deine Bewertung!"
+    },
+    "errors": {
+      "notFound": "Nur abgeschlossene Aufträge können bewertet oder mit Trinkgeld bedacht werden.",
+      "invalid": "Bitte prüfe deine Eingaben.",
+      "rateLimited": "Zu viele Versuche. Bitte warte eine Weile.",
+      "alreadyTipped": "Für diesen Auftrag hast du schon Trinkgeld gegeben.",
+      "walletInsufficient": "Dein Guthaben reicht für dieses Trinkgeld nicht.",
+      "unavailable": "Diese Zahlungsmethode ist nicht verfügbar.",
+      "providerError": "Der Zahlungsanbieter hat nicht geantwortet. Bitte versuch es erneut.",
+      "alreadyReviewed": "Diesen Auftrag hast du schon bewertet."
+    }
   }
 }

@@ -46,7 +46,14 @@
     "perDivision": "per division",
     "per100Rating": "per 100 rating",
     "noGames": "No games are available right now.",
-    "boostNow": "Boost now"
+    "boostNow": "Boost now",
+    "reviews": {
+      "title": "What players say",
+      "subtitle": "Recent reviews from finished orders.",
+      "stars": "{count, plural, one {# star} other {# stars}}",
+      "byline": "{reviewer} · {game} with {booster}",
+      "anonymous": "Verified customer"
+    }
   },
   "OrderType": {
     "DIVISION": "Division boost",
@@ -238,7 +245,8 @@
       "confirm": {
         "complete": "Mark this order as completed? The customer's login will be deleted and your earnings added to your balance.",
         "release": "Give this order back to the pool? Another booster will be able to take it."
-      }
+      },
+      "disputed": "This order is frozen while support reviews a reported problem. You can't play it or open the login until it is resolved."
     },
     "errors": {
       "notActive": "Your booster profile isn't active, or your session expired.",
@@ -253,16 +261,387 @@
       "invalidProgress": "That progress value isn't valid for this order.",
       "rateLimited": "Too many actions. Please slow down.",
       "generic": "Something went wrong. Please try again."
-    }
+    },
+    "payouts": "Payouts"
   },
   "Admin": {
-    "subtitle": "Platform management.",
-    "roleLabel": "Your role",
-    "permissionsTitle": "What you can do",
-    "permissions": {
-      "ADMIN": "Full access: users, pricing, orders, disputes and payouts.",
-      "SUPPORT": "Read support tickets, order chats and disputes.",
-      "FINANCE": "Review and approve booster payout requests."
+    "title": "Admin",
+    "nav": {
+      "label": "Admin sections",
+      "overview": "Overview",
+      "orders": "Orders",
+      "disputes": "Disputes",
+      "users": "Users",
+      "payouts": "Payouts",
+      "pricing": "Pricing",
+      "promos": "Promo codes",
+      "reviews": "Reviews",
+      "audit": "Audit log"
+    },
+    "pagination": {
+      "page": "Page {page} of {pages} · {total} results",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "errors": {
+      "forbidden": "You don't have permission to do that.",
+      "notFound": "Not found.",
+      "invalid": "Please check the values you entered.",
+      "self": "You can't do this to your own account.",
+      "hasActiveOrders": "This booster still has active orders. Reassign them first.",
+      "notBooster": "This user is not a booster.",
+      "rankRequired": "Pick a valid rank for every selected game.",
+      "gamesRequired": "An active booster needs at least one game.",
+      "stale": "Someone else changed this in the meantime. Reload and try again.",
+      "noteRequired": "Write a reason for the booster.",
+      "referenceRequired": "Enter the transfer reference (3–120 characters).",
+      "duplicateReference": "This reference was already used for another payout.",
+      "refundRange": "The partial refund must be more than 0 and less than the order total.",
+      "pastDate": "The expiry date must be in the future.",
+      "codeExists": "A promo code with this name already exists.",
+      "needServer": "At least one server must stay active.",
+      "defaultModifier": "The default LP option can't be turned off."
+    },
+    "transactionType": {
+      "DEPOSIT": "Deposit",
+      "PAYMENT": "Payment",
+      "EARNING": "Earning",
+      "TIP": "Tip",
+      "PAYOUT": "Payout",
+      "REFUND": "Refund"
+    },
+    "overview": {
+      "subtitle": {
+        "ADMIN": "Platform health at a glance.",
+        "SUPPORT": "Disputes, active orders and chat moderation.",
+        "FINANCE": "Booster payouts and balances."
+      },
+      "revenue": "Revenue",
+      "platform": "Platform earnings",
+      "paidOrders": "Paid orders",
+      "newCustomers": "New customers",
+      "openDisputes": "Open disputes",
+      "activeOrders": "Active orders",
+      "activeOrdersHint": "Assigned, in progress or paused",
+      "pool": "Waiting in the pool",
+      "flagged": "Filtered messages",
+      "boosters": "Active boosters",
+      "pendingBoosters": "{count, plural, =0 {No applications} one {# application waiting} other {# applications waiting}}",
+      "pendingPayouts": "Payouts to review",
+      "approvedPayouts": "Approved, not yet paid",
+      "requests": "{count, plural, =0 {No requests} one {# request} other {# requests}}",
+      "paidOut": "Paid out",
+      "balances": "Booster balances",
+      "balancesHint": "Owed to boosters, not yet requested",
+      "last30": "Last 30 days",
+      "last7": "Last 7 days",
+      "byStatus": "Orders by status",
+      "recentAudit": "Recent admin activity",
+      "allAudit": "Full audit log",
+      "noAudit": "No admin activity yet.",
+      "chart": {
+        "title": "Daily revenue (USD)",
+        "description": "Paid orders over the last 14 days, by payment day (UTC).",
+        "bar": "{day}: {amount}, {orders} orders",
+        "orders": "{count, plural, =0 {no orders} one {# order} other {# orders}}",
+        "table": "Show as table",
+        "day": "Day",
+        "revenue": "Revenue",
+        "ordersColumn": "Orders"
+      }
+    },
+    "users": {
+      "title": "Users",
+      "subtitle": "Customers, boosters and staff accounts.",
+      "applications": "{count, plural, one {# booster application} other {# booster applications}}",
+      "search": "Search by email or name",
+      "role": "Role",
+      "allRoles": "All roles",
+      "filter": "Filter",
+      "empty": "No users match these filters.",
+      "user": "User",
+      "state": "State",
+      "joined": "Joined",
+      "manage": "Manage",
+      "banned": "Banned",
+      "back": "All users",
+      "booster": {
+        "title": "Booster profile",
+        "stats": "{completed} completed · {rating} ★ from {reviews} reviews · {earnings} earned",
+        "status": "Approval",
+        "games": "Games and verified ranks",
+        "rankFor": "Rank in {game}",
+        "pickRank": "Pick a rank",
+        "rating": "Rating",
+        "hint": "The order pool only shows orders below these ranks. Approving a booster lets them claim orders.",
+        "save": "Save booster profile",
+        "saved": "Booster profile saved."
+      },
+      "orders": "Orders",
+      "noOrders": "No orders yet.",
+      "orderRole": {
+        "customer": "as customer",
+        "booster": "as booster"
+      },
+      "transactions": "Transactions",
+      "noTransactions": "No transactions yet.",
+      "account": "Account",
+      "lastLogin": "Last sign-in",
+      "balance": "Wallet",
+      "twoFactor": "Two-factor",
+      "on": "On",
+      "off": "Off",
+      "signIn": "Signs in with",
+      "password": "Email and password",
+      "oauth": "Social login only",
+      "manageTitle": "Manage account",
+      "actions": {
+        "self": "You can't change your own role, ban or 2FA here.",
+        "role": "Role",
+        "saveRole": "Change role",
+        "roleTitle": "Change role?",
+        "roleBody": "The user becomes {role}. Staff and booster roles must set up 2FA before they can use their panel.",
+        "roleHint": "Making someone a booster creates an unapproved profile; set their games and ranks, then approve it.",
+        "roleSaved": "Role changed.",
+        "ban": "Ban user",
+        "unban": "Lift ban",
+        "banBody": "They are signed out of every page and can't sign in again until the ban is lifted.",
+        "unbanBody": "They can sign in again.",
+        "bannedDone": "User banned.",
+        "unbanned": "Ban lifted.",
+        "reset2fa": "Reset 2FA",
+        "reset2faBody": "Use this when they lost their authenticator. They set up 2FA again at their next sign-in.",
+        "reset2faDone": "2FA reset.",
+        "cancel": "Cancel"
+      }
+    },
+    "payouts": {
+      "title": "Payouts",
+      "subtitle": "Approve booster withdrawal requests, then record the transfer.",
+      "views": {
+        "open": "To do",
+        "done": "History"
+      },
+      "empty": "Nothing here.",
+      "requested": "Requested {date}",
+      "reviewed": "reviewed {date}",
+      "actions": {
+        "approve": "Approve",
+        "approved": "Payout approved.",
+        "markPaid": "Mark as paid",
+        "paid": "Payout recorded as paid.",
+        "reject": "Reject",
+        "rejected": "Payout rejected; the amount went back to the booster's wallet.",
+        "reasonPlaceholder": "Reason shown to the booster",
+        "referencePlaceholder": "Bank or transaction reference",
+        "confirmReject": "Reject payout",
+        "confirmPaid": "Save as paid",
+        "cancel": "Cancel"
+      }
+    },
+    "orders": {
+      "title": "Orders",
+      "subtitle": "Every order, with its chat, payments and access log.",
+      "search": "Order number or email",
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "filter": "Filter",
+      "empty": "No orders match these filters.",
+      "order": "Order",
+      "customer": "Customer",
+      "booster": "Booster",
+      "total": "Total",
+      "open": "Open {orderNumber}",
+      "detail": {
+        "back": "All orders",
+        "transactions": "Transactions",
+        "noTransactions": "No transactions yet.",
+        "people": "People",
+        "customer": "Customer",
+        "booster": "Booster",
+        "noBooster": "No booster assigned.",
+        "money": "Money",
+        "total": "Total",
+        "boosterCut": "Booster share",
+        "platformCut": "Platform share",
+        "rate": "Exchange rate",
+        "timeline": "Timeline",
+        "events": {
+          "createdAt": "Created",
+          "paidAt": "Paid",
+          "assignedAt": "Assigned",
+          "startedAt": "Started",
+          "completedAt": "Completed",
+          "cancelledAt": "Cancelled"
+        },
+        "access": "Credential access",
+        "credentialsStored": "The customer's game login is stored (encrypted).",
+        "credentialsNone": "No game login stored.",
+        "noAccess": "The login was never revealed."
+      }
+    },
+    "disputes": {
+      "title": "Disputes",
+      "subtitle": "Frozen orders waiting for a decision.",
+      "views": {
+        "OPEN": "Open",
+        "RESOLVED": "Resolved"
+      },
+      "empty": "No disputes here.",
+      "openedBy": "Opened by {name} ({role}) on {date}",
+      "openTitle": "Open dispute: the order is frozen",
+      "adminOnly": "Only a super admin can resolve disputes. You can read the chat below.",
+      "history": "Past disputes",
+      "resolutions": {
+        "REFUNDED": "Refunded",
+        "PARTIAL_REFUND": "Partial refund",
+        "REASSIGNED": "Reassigned",
+        "CONTINUED": "Continued"
+      },
+      "resolve": {
+        "decision": "Decision",
+        "options": {
+          "REFUNDED": {
+            "title": "Refund in full",
+            "body": "Cancels the order and puts {total} in the customer's wallet. The booster isn't paid."
+          },
+          "PARTIAL_REFUND": {
+            "title": "Partial refund",
+            "body": "Refunds part of {total} to the wallet, closes the order and pays the booster for the rest."
+          },
+          "REASSIGNED": {
+            "title": "Give to another booster",
+            "body": "Removes the current booster and puts the order back in the pool."
+          },
+          "CONTINUED": {
+            "title": "Continue the order",
+            "body": "Unfreezes the order where it stopped."
+          }
+        },
+        "refundAmount": "Refund amount ({currency})",
+        "boosterShare": "The booster receives about {amount} for the rest.",
+        "note": "Decision note",
+        "noteHint": "Stored with the dispute and the audit log.",
+        "submit": "Resolve dispute",
+        "done": "Dispute resolved."
+      }
+    },
+    "reviews": {
+      "title": "Reviews",
+      "subtitle": "Hide reviews that shouldn't be public. They still count towards the booster's rating.",
+      "empty": "No reviews yet.",
+      "stars": "{count, plural, one {# star} other {# stars}}",
+      "public": "Public",
+      "private": "Hidden",
+      "noComment": "No comment.",
+      "meta": "{customer} about {booster} · {game} · {date}",
+      "hide": "Hide",
+      "show": "Show",
+      "hidden": "Review hidden.",
+      "shown": "Review visible again."
+    },
+    "promos": {
+      "title": "Promo codes",
+      "subtitle": "Percentage or fixed discounts with usage limits and expiry dates.",
+      "new": "New promo code",
+      "empty": "No promo codes yet.",
+      "code": "Code",
+      "discount": "Discount",
+      "uses": "Uses",
+      "expires": "Expires",
+      "minOrder": "Min. order",
+      "active": "Active",
+      "usedUp": "Used up",
+      "expired": "Expired",
+      "toggle": "Enable or disable {code}",
+      "form": {
+        "code": "Code",
+        "type": "Type",
+        "percentage": "Percentage",
+        "fixed": "Fixed amount (USD)",
+        "valuePercent": "Discount (%)",
+        "valueFixed": "Discount (USD)",
+        "maxUses": "Usage limit",
+        "unlimited": "Unlimited",
+        "expiresOn": "Valid until",
+        "minOrder": "Minimum order (USD)",
+        "none": "None",
+        "create": "Create code",
+        "created": "Promo code created."
+      }
+    },
+    "pricing": {
+      "title": "Pricing",
+      "subtitle": "Change prices without touching the code. New orders use them right away.",
+      "games": "Games",
+      "saved": "Saved. New orders use these prices.",
+      "save": "Save",
+      "note": "Orders already placed keep the price they were checked out with.",
+      "game": {
+        "title": "Game",
+        "description": "Flat fee added to every order, coaching rate, and whether the game is offered.",
+        "basePrice": "Base price (USD)",
+        "hourly": "Coaching per hour (USD)",
+        "status": "Visibility",
+        "active": "Offered",
+        "inactive": "Hidden"
+      },
+      "steps": {
+        "title": "Rank prices",
+        "description": "USD. Division: climbing from this rank to the next. Win and placement: price per game at this rank.",
+        "rank": "Rank",
+        "division": "Next division",
+        "win": "Per win",
+        "placement": "Per placement",
+        "top": "Top rank"
+      },
+      "brackets": {
+        "title": "Rating prices",
+        "description": "USD per 100 rating points gained inside each band, and per win.",
+        "range": "Rating band",
+        "per100": "Per 100",
+        "win": "Per win"
+      },
+      "servers": {
+        "title": "Servers",
+        "description": "Surcharge per server in percent (e.g. 10 = +10%). Hidden servers can't be picked.",
+        "server": "Server",
+        "region": "Region",
+        "percent": "Surcharge %",
+        "active": "Offered"
+      },
+      "modifiers": {
+        "title": "Options and add-ons",
+        "description": "Price change in percent (e.g. 20 = +20%, -10 = -10%).",
+        "option": "Option",
+        "category": "Type",
+        "percent": "Change %",
+        "active": "Offered",
+        "default": "default",
+        "categories": {
+          "LP_GAIN": "LP gain",
+          "ADD_ON": "Add-on"
+        }
+      },
+      "settings": {
+        "title": "Platform settings",
+        "description": "Apply to new orders and payout requests.",
+        "share": "Booster share (%)",
+        "platform": "Platform keeps {percent}%",
+        "minPayout": "Minimum payout (USD)"
+      }
+    },
+    "audit": {
+      "title": "Audit log",
+      "subtitle": "Every admin action, newest first.",
+      "filter": "Action starts with, e.g. payout.",
+      "apply": "Filter",
+      "empty": "No entries.",
+      "when": "When",
+      "who": "Who",
+      "action": "Action",
+      "target": "Target",
+      "details": "Details"
     }
   },
   "BoostPage": {
@@ -409,7 +788,8 @@
       "alreadyPaid": "This order doesn't need a payment any more.",
       "unavailable": "This payment method isn't available for this order.",
       "rateLimited": "Too many attempts. Please wait a few minutes.",
-      "providerError": "The payment provider couldn't be reached. Please try again or pick another method."
+      "providerError": "The payment provider couldn't be reached. Please try again or pick another method.",
+      "walletInsufficient": "Your wallet balance isn't enough for this order."
     },
     "sandbox": {
       "title": "Test payment",
@@ -418,6 +798,11 @@
       "fail": "Payment fails",
       "cancel": "Customer cancels",
       "done": "This test payment is already finished."
+    },
+    "wallet": {
+      "name": "Wallet balance",
+      "balance": "Pay instantly from your balance of {balance}.",
+      "insufficient": "Your balance of {balance} isn't enough for this order."
     }
   },
   "Errors": {
@@ -481,7 +866,9 @@
       "notEditable": "This order can't be changed any more.",
       "passwordRequired": "Enter the account password.",
       "rateLimited": "Too many changes. Please wait a while."
-    }
+    },
+    "wallet": "Wallet: {balance}",
+    "walletHint": "Refunds land here. Use it to pay for orders or tips."
   },
   "Chat": {
     "title": "Order chat",
@@ -509,7 +896,8 @@
     "attachmentMissing": "Image unavailable",
     "closed": {
       "waitingForBooster": "The chat opens as soon as a booster takes your order.",
-      "closed": "This chat is closed. You can still read the history."
+      "closed": "This chat is closed. You can still read the history.",
+      "readOnly": "Read only: staff can't write in order chats."
     },
     "errors": {
       "notFound": "Chat not found.",
@@ -537,6 +925,132 @@
     "newMessage": "New message about {orderNumber}",
     "dispute": "{orderNumber}: dispute {status, select, OPEN {opened} RESOLVED {resolved} other {updated}}",
     "payout": "Payout of {amount} {status, select, PENDING {requested} APPROVED {approved} REJECTED {rejected} PAID {paid} other {updated}}",
-    "system": "System notice"
+    "system": "System notice",
+    "tipReceived": "{orderNumber}: you received a {amount} tip",
+    "reviewReceived": "{orderNumber}: the customer rated you {rating}/5",
+    "refunded": "{orderNumber}: {amount} was refunded to your wallet",
+    "boosterStatus": "Your booster account is {status, select, ACTIVE {approved} SUSPENDED {suspended} other {under review}}"
+  },
+  "Payouts": {
+    "title": "Payouts",
+    "subtitle": "Withdraw your earnings by crypto or bank transfer.",
+    "back": "Booster panel",
+    "balance": "Available balance",
+    "minimum": "Minimum payout",
+    "history": "Payout history",
+    "noHistory": "No payout requests yet.",
+    "date": "Date",
+    "amount": "Amount",
+    "method": "Method",
+    "status": "Status",
+    "statuses": {
+      "PENDING": "Waiting for review",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected",
+      "PAID": "Paid"
+    },
+    "request": {
+      "title": "Request a payout",
+      "to": "To {destination}",
+      "alreadyOpen": "You already have a payout in progress. You can request another one after it is paid or rejected.",
+      "needDetails": "Add your payout details first.",
+      "belowMinimum": "You can request a payout from {min}. Your balance is {balance}.",
+      "amount": "Amount (USD)",
+      "hint": "Minimum {min} USD. The amount is held from your balance until finance reviews it.",
+      "submit": "Request payout",
+      "sent": "Payout requested.",
+      "cancel": "Withdraw",
+      "cancelled": "Request withdrawn; the amount is back in your balance."
+    },
+    "details": {
+      "title": "Payout details",
+      "current": "Current: {destination}",
+      "none": "Not set yet.",
+      "method": "Payout method",
+      "methods": {
+        "CRYPTO": "Crypto",
+        "BANK_TRANSFER": "Bank transfer"
+      },
+      "network": "Network",
+      "networks": {
+        "USDT_TRC20": "USDT (TRC20)",
+        "USDT_ERC20": "USDT (ERC20)",
+        "BTC": "Bitcoin",
+        "ETH": "Ethereum"
+      },
+      "address": "Wallet address",
+      "accountHolder": "Account holder",
+      "iban": "IBAN",
+      "hint": "Stored encrypted. Each request keeps the details it was made with.",
+      "save": "Save details",
+      "saved": "Payout details saved."
+    },
+    "errors": {
+      "notActive": "Only approved boosters with 2FA can request payouts.",
+      "invalidDetails": "Check your payout details.",
+      "rateLimited": "Too many changes. Please wait a moment.",
+      "invalidAmount": "Enter an amount in USD with up to two decimals.",
+      "belowMinimum": "The minimum payout is {min} USD.",
+      "noDetails": "Add your payout details first.",
+      "alreadyOpen": "You already have a payout in progress.",
+      "insufficient": "Your balance is lower than this amount.",
+      "notCancellable": "This request can no longer be withdrawn."
+    }
+  },
+  "Disputes": {
+    "open": {
+      "button": "Report a problem",
+      "title": "Report a problem with this order",
+      "body": "The order is frozen until support decides: the booster can't play and the login stays hidden. Keep using the chat to talk to each other.",
+      "reason": "What happened?",
+      "placeholder": "E.g. the account got a penalty, the booster is unreachable…",
+      "hint": "At least 20 characters. Support reads the order chat too.",
+      "cancel": "Cancel",
+      "submit": "Freeze order and report",
+      "opened": "Reported. Support will review the order."
+    },
+    "errors": {
+      "notFound": "Order not found.",
+      "reason": "Describe the problem in at least 20 characters.",
+      "rateLimited": "Too many reports. Please wait a while.",
+      "notDisputable": "This order can't be disputed in its current state."
+    }
+  },
+  "Feedback": {
+    "tip": {
+      "title": "Tip your booster",
+      "description": "Happy with the result? The whole tip goes to your booster.",
+      "amount": "Tip amount",
+      "fromWallet": "Wallet ({balance})",
+      "hint": "Paying by card or crypto takes you to the provider's page and back here.",
+      "thanks": "Thank you! Your booster got the tip.",
+      "sent": "You tipped {amount}. Thank you!",
+      "return": {
+        "success": "Thanks! The tip reaches your booster as soon as the payment is confirmed.",
+        "cancelled": "The tip payment was cancelled.",
+        "failed": "The tip payment failed. You can try again."
+      }
+    },
+    "review": {
+      "title": "Rate your booster",
+      "description": "Your rating helps other players choose.",
+      "rating": "Rating",
+      "stars": "{count, plural, one {# star} other {# stars}}",
+      "comment": "Comment (optional)",
+      "placeholder": "How did it go?",
+      "public": "Show my review on the site (first name and initial only)",
+      "submit": "Send review",
+      "thanks": "Thanks for your review!"
+    },
+    "errors": {
+      "notFound": "Only finished orders can be tipped or reviewed.",
+      "invalid": "Please check your input.",
+      "rateLimited": "Too many attempts. Please wait a while.",
+      "alreadyTipped": "You already tipped for this order.",
+      "walletInsufficient": "Your wallet balance is too low for this tip.",
+      "unavailable": "This payment method isn't available.",
+      "providerError": "The payment provider didn't respond. Please try again.",
+      "alreadyReviewed": "You already reviewed this order."
+    }
   }
 }

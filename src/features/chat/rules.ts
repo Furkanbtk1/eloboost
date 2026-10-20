@@ -31,11 +31,11 @@ export function chatRole(viewer: ChatViewer, order: Pick<ChatOrder, "customerId"
   return null;
 }
 
-export type ChatClosedReason = "waitingForBooster" | "closed";
+export type ChatClosedReason = "waitingForBooster" | "closed" | "readOnly";
 
 /** Why the viewer can't write right now, or null when they can. */
 export function chatClosedReason(role: ChatRole, order: ChatOrder): ChatClosedReason | null {
-  if (role === "staff") return "closed";
+  if (role === "staff") return "readOnly";
   if (!order.boosterId) return "waitingForBooster";
   return (CHAT_STATUSES as readonly OrderStatus[]).includes(order.status) ? null : "closed";
 }

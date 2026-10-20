@@ -1,13 +1,18 @@
 import { ActivityIcon, ArrowDownIcon, LockKeyholeIcon, ShieldCheckIcon } from "lucide-react";
+import type { Metadata } from "next";
+import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PublicReviews } from "@/features/feedback/components/public-reviews";
 import { GameCard } from "@/features/games/game-card";
 import { getActiveGames } from "@/features/games/queries";
 import { Link } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
+import { absoluteUrl, jsonLd, publicPageMetadata } from "@/lib/seo";
 
 const FEATURES = [
   { key: "verified", icon: ShieldCheckIcon },
@@ -15,12 +20,37 @@ const FEATURES = [
   { key: "tracking", icon: ActivityIcon },
 ] as const;
 
+export async function generateMetadata({ params }: PageProps<"/[locale]">): Promise<Metadata> {
+  const { locale: raw } = await params;
+  const locale = hasLocale(routing.locales, raw) ? raw : routing.defaultLocale;
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+  return {
+    ...publicPageMetadata({ href: "/", locale, title: t("title"), description: t("description"), siteName: t("siteName") }),
+    // The layout's title template would add the site name twice.
+    title: { absolute: t("title") },
+  };
+}
+
 export default async function HomePage() {
-  const [t, games] = await Promise.all([getTranslations("Home"), getActiveGames()]);
+  const [t, tMeta, games] = await Promise.all([getTranslations("Home"), getTranslations("Metadata"), getActiveGames()]);
+  const structuredData = jsonLd({
+    "@graph": [
+      { "@type": "Organization", "@id": absoluteUrl("/#organization"), name: tMeta("siteName"), url: absoluteUrl("/") },
+      {
+        "@type": "WebSite",
+        "@id": absoluteUrl("/#website"),
+        name: tMeta("siteName"),
+        url: absoluteUrl("/"),
+        description: tMeta("description"),
+        publisher: { "@id": absoluteUrl("/#organization") },
+      },
+    ],
+  });
 
   return (
     <>
       <SiteHeader />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: structuredData }} />
 
       <main className="flex-1">
         <section className="relative overflow-hidden">
@@ -71,6 +101,8 @@ export default async function HomePage() {
             </div>
           )}
         </section>
+
+        <PublicReviews />
       </main>
 
       <SiteFooter />

@@ -58,7 +58,7 @@ bildirimler ve audit log kayıtları da vardır.
 | --- | --- |
 | `npm run dev` / `build` / `start` | Geliştirme, production build, production sunucu |
 | `npm run lint` | ESLint (`any` yasak) |
-| `npm test` | Birim testleri (Vitest): fiyat motoru, sipariş kuralları, sohbet erişimi, küfür filtresi, dosya türü tespiti |
+| `npm test` | Birim testleri (Vitest): fiyat motoru, sipariş, sohbet, anlaşmazlık, payout, bahşiş ve RBAC kuralları |
 | `npm run typecheck` | Route tiplerini üretir ve `tsc` çalıştırır |
 | `npm run db:up` / `db:down` | Docker servislerini başlatır / durdurur |
 | `npm run db:migrate` | Şema değişikliğinden migration üretir ve uygular |
@@ -97,6 +97,16 @@ src/
 | `/booster` | BOOSTER | Evet |
 | `/admin` | ADMIN, SUPPORT, FINANCE | Evet |
 | `/account/*` | Tüm giriş yapmış kullanıcılar | Hayır |
+
+Admin paneli bölümleri de aynı kurallarla korunur (`ADMIN_SECTIONS`, `src/lib/auth/access.ts`). Yetkisi olmayan rol
+`/admin` genel bakışa yönlendirilir; server action'lar rolü ayrıca kendileri de kontrol eder.
+
+| Bölüm | ADMIN | SUPPORT | FINANCE |
+| --- | --- | --- | --- |
+| Genel bakış (`/admin`) | Tüm metrikler | Anlaşmazlık ve sohbet metrikleri | Payout metrikleri |
+| Siparişler, anlaşmazlıklar | Okur ve karar verir | Yalnızca okur | – |
+| Payout'lar | Evet | – | Evet |
+| Kullanıcılar, fiyatlar, kuponlar, yorumlar, denetim kaydı | Evet | – | – |
 
 - **İki katmanlı kontrol:** `src/proxy.ts`, JWT'ye bakarak hızlı bir ön kontrol ve yönlendirme yapar. Her korumalı sayfa
   ise `requireArea()` (`src/lib/auth/session.ts`) ile rolü, yasak durumunu ve 2FA'yı **veritabanından** yeniden doğrular.
@@ -189,6 +199,13 @@ yeniden kontrol edilir) → sağlayıcının sayfası → webhook ve/veya dönü
   `needsRefund` ile işaretlenir.
 - Promosyon kullanımını **ödeme anında** ve limiti aşmadan atomik olarak artırır.
 - Müşteriye bildirim oluşturur.
+
+**Bahşişler de aynı yoldan geçer:** `TIP` türündeki bir işlem ödendiğinde `applyPaymentUpdate` tutarı booster'ın cüzdanına
+aktarır. Dönüş adresi `kind=tip` ile müşteriyi ödeme sayfası yerine sipariş sayfasına götürür.
+
+**Cüzdan:** Kullanıcı bakiyesi USD'dir. Anlaşmazlık iadeleri buraya yatar. Müşteri bakiyesiyle sipariş ödeyebilir
+(`payWithWalletAction`) veya bahşiş verebilir. Bakiye kontrolü ve düşümü tek bir koşullu güncellemedir; sipariş o arada
+değiştiyse düşüm de geri alınır.
 
 **Sağlayıcı seçimi:** Bir yöntem, env değerleri doluysa ve siparişin para birimini destekliyorsa gösterilir. Ülke bilgisi
 `x-vercel-ip-country` / `cf-ipcountry` başlıklarından gelir; yerelde bilinmez. Coinbase TRY ile fiyatlama yapamadığı için
@@ -306,7 +323,85 @@ kotası harcanmaz.
 - Dosyalar için public erişimi kapalı bir Cloudflare R2 (veya S3) bucket'ı açın ve `S3_*` değişkenlerini doldurun.
   Örnekler `.env.example` dosyasında.
 
-Henüz yok: payout talebi ve onayı, bahşiş ve yorumlar (Sprint 7).
+## Admin paneli
+
+Her admin işlemi aynı veritabanı işlemi içinde `AuditLog`'a yazılır: kim, ne, hangi kayıt, IP ve değişen değerler.
+Kayıtlar `/admin/audit` sayfasında eylem önekine göre (ör. `payout.`) filtrelenebilir.
+
+- **Genel bakış:** Rol bazlı metrik kartları. ADMIN için ayrıca son 14 günün günlük gelir grafiği (tablo görünümüyle)
+  ve son yönetici işlemleri gösterilir. Tutarlar, siparişlerin ödeme anındaki kuruyla USD'ye çevrilir.
+- **Kullanıcılar:** E-posta veya adla arama ve rol filtresi. Detay sayfasında şunlar yapılabilir:
+  - Ban / ban kaldırma.
+  - Rol değiştirme. Aktif siparişi olan booster'ın rolü değiştirilemez.
+  - 2FA sıfırlama (telefonunu kaybeden kullanıcı için).
+  - Booster profili: kabul edilen oyunlar, oyun başına doğrulanmış rank, onaylama ve askıya alma. Booster başvuruları
+    listenin başında görünür.
+
+  Yönetici kendi hesabında bu işlemleri yapamaz.
+- **Siparişler:** Arama ve durum filtresi. Detay sayfasında salt okunur sohbet (filtrelenen mesajlar işaretli), işlem
+  defteri, tutarlar, zaman çizelgesi ve tüm VPN erişim kaydı bulunur.
+- **Fiyatlar:** Oyunun taban fiyatı, koçluk saat ücreti ve görünürlüğü; rank basamakları veya rating aralıkları; sunucu
+  farkları; LP ve ek hizmet yüzdeleri. Ayrıca booster payı ve minimum payout tutarı. Kayıtlarda:
+  - Önbellek etiketleri (`pricing`, `games`, `settings`) `updateTag` ile yenilenir.
+  - Verilmiş siparişler ödeme anındaki fiyatlarını korur.
+  - Varsayılan LP seçeneği kapatılamaz ve en az bir sunucu açık kalmalıdır. Geçersiz bir kayıtta transaction
+    tamamen geri alınır.
+- **Kuponlar:** Yüzdelik (en fazla %90) veya sabit indirim, kullanım limiti, son kullanma günü ve minimum tutar.
+  Kuponlar açılıp kapatılabilir.
+- **Yorumlar:** Herkese açık yorumları gizleme ve gösterme. Gizlenen yorum booster'ın puanına sayılmaya devam eder.
+
+## Booster ödemeleri (payout)
+
+`/booster/payouts`:
+- **Ödeme bilgisi:** Kripto (USDT TRC20/ERC20, BTC, ETH) veya IBAN (mod-97 kontrolü). AES-256-GCM ile booster ID'sine
+  bağlı olarak şifrelenir; ekranda maskelenir (`TR33 **** 1326`).
+- **Talep:** Tutar en az `min_payout_amount_usd` (varsayılan 50 USD) ve en fazla bakiye kadar olabilir. Tutar talep anında
+  bakiyeden düşülür; böylece aynı anda gönderilen iki talep bakiyeyi aşamaz. Aynı anda tek açık talep olabilir. Bekleyen
+  talep geri çekilebilir.
+- **Finans akışı:** Bekliyor → Onaylandı → Ödendi. Ödendi adımında banka veya blokzincir referansıyla bir `PAYOUT` işlemi
+  yazılır; aynı referans ikinci kez kullanılamaz. Reddedilen talebin tutarı bakiyeye geri döner. Her adımda booster'a
+  bildirim gider, talep oluşunca finans ekibine de.
+
+## Anlaşmazlıklar
+
+- Siparişin müşterisi veya booster'ı, sipariş ASSIGNED / IN_PROGRESS / PAUSED durumundayken "Sorun bildir" ile anlaşmazlık
+  açabilir. Gerekçe en az 20 karakter olmalı ve küfür filtresinden geçer.
+- Açılan anlaşmazlıkta sipariş `DISPUTED` (dondurulmuş) olur: booster işlem yapamaz ve giriş bilgilerini açamaz, sohbet
+  açık kalır. Karşı taraf ile ADMIN/SUPPORT bildirim alır.
+- Kararı yalnızca ADMIN verir (kurallar: `src/features/disputes/rules.ts`):
+
+| Karar | Sipariş | Para |
+| --- | --- | --- |
+| Tam iade | `CANCELLED`, giriş bilgileri silinir | Toplam tutar müşterinin cüzdanına (`REFUND`) |
+| Kısmi iade | `COMPLETED`, giriş bilgileri silinir | Seçilen tutar cüzdana; booster payı × (kalan / toplam) booster'a (`EARNING`) |
+| Başka booster'a ver | `PENDING`, booster çıkarılır, havuza döner | – |
+| Devam | Dondurulmadan önceki durum | – |
+
+## Bahşiş ve yorumlar
+
+Tamamlanan siparişin sayfasında iki kart görünür:
+- **Bahşiş:** Sipariş tutarının %5, %10 veya %20'si. Cüzdandan (anında) ya da sağlayıcı üzerinden (sandbox, Stripe,
+  Coinbase) ödenebilir. Bahşişin tamamı booster'a gider. Sipariş başına bir bahşiş verilebilir.
+- **Yorum:** 1–5 yıldız, isteğe bağlı yorum (küfür filtresinden geçer) ve "sitede göster" seçeneği. Sipariş başına bir
+  yorum yazılabilir; booster'ın ortalama puanı aynı işlemde yeniden hesaplanır.
+
+Herkese açık yorumlar ana sayfada yalnızca ad ve soyadın baş harfiyle ("Alex C.") gösterilir. Bu bölüm önbellektedir ve
+`reviews` etiketiyle yenilenir.
+
+## SEO
+
+- **Meta etiketleri:** Her herkese açık sayfa (ana sayfa ve oyun sayfaları) dört dilde `hreflang` + `x-default`,
+  canonical, OpenGraph ve Twitter etiketleri içerir (`src/lib/seo.ts`). Paneller, ödeme ve giriş sayfaları `noindex`'tir.
+- **OpenGraph görselleri:** `next/og` ile dile ve oyuna göre üretilir (`opengraph-image.tsx`). Başlangıç fiyatı gösterilir.
+- **`/sitemap.xml`:** Ana sayfa ve her aktif oyun, dil alternatifleriyle.
+- **`/robots.txt`:** `/api/` ile panel, ödeme ve giriş yolları her dil önekiyle engellenir.
+- **JSON-LD:** Ana sayfada `Organization` + `WebSite`, oyun sayfalarında başlangıç fiyatlı `Service`.
+- Taban adres `NEXT_PUBLIC_APP_URL`'den gelir; canlıda gerçek alan adı girilmelidir.
+
+## Canlı destek
+
+`NEXT_PUBLIC_CRISP_WEBSITE_ID` doluysa Crisp sohbet balonu, sayfa yüklendikten sonra kullanıcının diliyle yüklenir. Boşsa
+hiçbir harici script yüklenmez.
 
 ## Mimari notlar
 
@@ -338,6 +433,13 @@ Henüz yok: payout talebi ve onayı, bahşiş ve yorumlar (Sprint 7).
   yayınlamayı bıraktı.
 - `Message.attachmentUrl` sütunu `attachmentKey` olarak yeniden adlandırıldı (migration `20261021011500_chat_attachment_key`).
   Sütun artık bir URL değil, gizli bucket'taki nesne anahtarını tutar.
+- **İadeler müşterinin cüzdanına yapılır,** karta yapılmaz. Müşteri bu bakiyeyle yeni sipariş veya bahşiş ödeyebilir.
+  Karta iade gerekiyorsa finans ekibi sağlayıcının panelinden yapar; bu işlem otomatik değildir.
+- Spesifikasyondaki SupportManager "biletleri", ayrı bir destek bileti sistemi olarak değil, anlaşmazlıklar ve sipariş
+  sohbetleri olarak karşılanır. Genel sorular için canlı destek (Crisp) kullanılır.
+- Payout ödeme bilgileri seed'deki eski biçimden yeni biçime geçti (`method` + alanlar, booster ID'sine bağlı şifreleme).
+  Seed'i daha önce çalıştırılmış bir veritabanında seed booster'larının ödeme bilgisi "yok" görünür; yeniden girilmesi
+  yeterlidir.
 
 ## Bilinen ortam notları
 

@@ -13,15 +13,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { OrderChat } from "@/features/chat/components/order-chat";
 import { getChatState } from "@/features/chat/queries";
+import { OpenDispute } from "@/features/disputes/components/open-dispute";
+import { getOpenDispute } from "@/features/disputes/queries";
+import { canOpenDispute } from "@/features/disputes/rules";
+import { ReviewForm, SubmittedReview, TipForm, TipThanks } from "@/features/feedback/components/feedback-cards";
+import { getFeedbackState } from "@/features/feedback/queries";
 import { CredentialsForm } from "@/features/orders/components/credentials-form";
 import { OrderStepper } from "@/features/orders/components/order-stepper";
 import { OrderStatusBadge } from "@/features/orders/components/status-badge";
 import { getOrderText } from "@/features/orders/describe";
 import { getCustomerOrderDetail } from "@/features/orders/queries";
 import { EDITABLE_STATUSES } from "@/features/orders/workflow";
+import { availableProviders } from "@/features/payments/registry";
 import type { OrderStatus } from "@/generated/prisma/enums";
 import { Link } from "@/i18n/navigation";
 import { requireArea } from "@/lib/auth/session";
+import { getRequestCountry } from "@/lib/geo";
 import { channels, events } from "@/lib/realtime/channels";
 
 type Props = PageProps<"/[locale]/dashboard/orders/[orderNumber]">;
@@ -31,21 +38,32 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: orderNumber, robots: { index: false } };
 }
 
-export default function CustomerOrderPage({ params }: Props) {
+export default function CustomerOrderPage({ params, searchParams }: Props) {
   return (
     <Suspense fallback={<PanelSkeleton />}>
-      <CustomerOrder params={params} />
+      <CustomerOrder params={params} searchParams={searchParams} />
     </Suspense>
   );
 }
 
-async function CustomerOrder({ params }: Pick<Props, "params">) {
+async function CustomerOrder({ params, searchParams }: Pick<Props, "params" | "searchParams">) {
   const user = await requireArea("/dashboard");
-  const { orderNumber } = await params;
+  const [{ orderNumber }, query] = await Promise.all([params, searchParams]);
   const order = await getCustomerOrderDetail(orderNumber, user.id);
   if (!order) notFound();
+  /** Back from a tip payment: "success" | "cancelled" | "failed". */
+  const tipReturn = typeof query.tip === "string" ? query.tip : null;
 
-  const [t, text, chat] = await Promise.all([getTranslations("Orders"), getOrderText(), getChatState(order.orderNumber)]);
+  const [t, tFeedback, text, chat, dispute, feedback] = await Promise.all([
+    getTranslations("Orders"),
+    getTranslations("Feedback"),
+    getOrderText(),
+    getChatState(order.orderNumber),
+    order.status === "DISPUTED" ? getOpenDispute(order.orderNumber) : Promise.resolve(null),
+    order.status === "COMPLETED" ? getFeedbackState(order.orderNumber, user.id) : Promise.resolve(null),
+  ]);
+  const tipProviders = feedback && !feedback.tip ? availableProviders(order.currency, await getRequestCountry()) : [];
+  const money = (value: number, currency = order.currency) => text.format.number(value, { style: "currency", currency });
   const showChat = chat && (chat.messages.length > 0 || (order.status !== "AWAITING_PAYMENT" && order.status !== "CANCELLED"));
   const date = (value: Date) => text.format.dateTime(value, { dateStyle: "medium", timeStyle: "short" });
   const editable = (EDITABLE_STATUSES as readonly string[]).includes(order.status);
@@ -85,15 +103,27 @@ async function CustomerOrder({ params }: Pick<Props, "params">) {
             <p className="text-muted-foreground">{text.service(order)}</p>
           </div>
         </div>
-        <OrderStatusBadge status={order.status} />
+        <div className="flex flex-wrap items-center gap-2">
+          {canOpenDispute(order.status) && <OpenDispute orderNumber={order.orderNumber} />}
+          <OrderStatusBadge status={order.status} />
+        </div>
       </div>
+
+      {tipReturn && (
+        <Alert variant={tipReturn === "failed" ? "destructive" : "default"}>
+          <AlertDescription>{tFeedback(`tip.return.${tipReturn === "success" ? "success" : tipReturn === "failed" ? "failed" : "cancelled"}`)}</AlertDescription>
+        </Alert>
+      )}
 
       <Card>
         <CardContent className="grid gap-4 pt-6">
           <OrderStepper status={order.status} />
           {notice && (
             <Alert variant={order.status === "CANCELLED" || order.status === "DISPUTED" ? "destructive" : "default"}>
-              <AlertDescription>{notice}</AlertDescription>
+              <AlertDescription>
+                {notice}
+                {dispute && <span className="mt-1 block text-xs whitespace-pre-wrap opacity-90">“{dispute.reason}”</span>}
+              </AlertDescription>
             </Alert>
           )}
           {progress && (
@@ -180,6 +210,52 @@ async function CustomerOrder({ params }: Pick<Props, "params">) {
               )}
             </CardContent>
           </Card>
+
+          {feedback && (
+            <>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">{tFeedback("review.title")}</CardTitle>
+                  {!feedback.review && <CardDescription>{tFeedback("review.description")}</CardDescription>}
+                </CardHeader>
+                <CardContent>
+                  {feedback.review ? (
+                    <SubmittedReview
+                      rating={feedback.review.rating}
+                      comment={feedback.review.comment}
+                      label={tFeedback("review.stars", { count: feedback.review.rating })}
+                    />
+                  ) : (
+                    <ReviewForm orderNumber={order.orderNumber} />
+                  )}
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">{tFeedback("tip.title")}</CardTitle>
+                  {!feedback.tip && <CardDescription>{tFeedback("tip.description")}</CardDescription>}
+                </CardHeader>
+                <CardContent>
+                  {feedback.tip ? (
+                    <TipThanks label={tFeedback("tip.sent", { amount: money(feedback.tip.amount, feedback.tip.currency) })} />
+                  ) : (
+                    <TipForm
+                      orderNumber={order.orderNumber}
+                      options={feedback.tipOptions.map((option) => ({
+                        percent: option.percent,
+                        label: money(option.amount),
+                        usd: Math.round(option.amount * feedback.exchangeRate * 100) / 100,
+                      }))}
+                      providers={tipProviders}
+                      walletUsd={feedback.walletUsd}
+                      walletLabel={money(feedback.walletUsd, "USD")}
+                    />
+                  )}
+                </CardContent>
+              </Card>
+            </>
+          )}
 
           <Card>
             <CardHeader>

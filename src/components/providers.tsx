@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState, type ReactNode } from "react";
 import { Toaster } from "sonner";
 
+import { LiveSupport } from "@/components/live-support";
 import type { RealtimeClientConfig } from "@/lib/realtime/channels";
 import { RealtimeProvider } from "@/lib/realtime/client";
 import { useUIStore, type Theme } from "@/stores/ui-store";
@@ -53,6 +54,7 @@ export function Providers({ realtime, children }: { realtime: RealtimeClientConf
         <ThemeSync />
         {children}
         <AppToaster />
+        <LiveSupport />
       </RealtimeProvider>
     </QueryClientProvider>
   );

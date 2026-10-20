@@ -116,9 +116,13 @@ function NotificationList({ items, onRead }: { items: NotificationItem[]; onRead
 
   const describe = (item: NotificationItem): string => {
     const orderNumber = item.orderNumber ?? "";
+    const usd = (value: number | null) => format.number(value ?? 0, { style: "currency", currency: "USD" });
     switch (item.type) {
       case "ORDER_UPDATE":
         if (item.event === "details_updated") return t("orderDetailsUpdated", { orderNumber });
+        if (item.event === "tip_received") return t("tipReceived", { orderNumber, amount: usd(item.amount) });
+        if (item.event === "review_received") return t("reviewReceived", { orderNumber, rating: item.rating ?? 0 });
+        if (item.event === "refunded") return t("refunded", { orderNumber, amount: usd(item.amount) });
         return item.orderStatus
           ? t("orderStatus", { orderNumber, status: tStatus(item.orderStatus) })
           : t("orderUpdated", { orderNumber });
@@ -127,12 +131,9 @@ function NotificationList({ items, onRead }: { items: NotificationItem[]; onRead
       case "DISPUTE_UPDATE":
         return t("dispute", { orderNumber, status: item.status ?? "other" });
       case "PAYOUT_UPDATE":
-        return t("payout", {
-          amount: format.number(item.amount ?? 0, { style: "currency", currency: "USD" }),
-          status: item.status ?? "other",
-        });
+        return t("payout", { amount: usd(item.amount), status: item.status ?? "other" });
       case "SYSTEM":
-        return t("system");
+        return item.event === "booster_status" ? t("boosterStatus", { status: item.status ?? "other" }) : t("system");
     }
   };
 

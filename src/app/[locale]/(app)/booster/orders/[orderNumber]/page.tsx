@@ -6,6 +6,7 @@ import { Suspense } from "react";
 
 import { PanelSkeleton } from "@/components/layout/panel";
 import { LiveRefresh } from "@/components/realtime/live-refresh";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProgressForm } from "@/features/booster/components/progress-form";
@@ -14,6 +15,9 @@ import { StatusActions } from "@/features/booster/components/status-actions";
 import { getBoosterOrder, requireActiveBooster } from "@/features/booster/queries";
 import { OrderChat } from "@/features/chat/components/order-chat";
 import { getChatState } from "@/features/chat/queries";
+import { OpenDispute } from "@/features/disputes/components/open-dispute";
+import { getOpenDispute } from "@/features/disputes/queries";
+import { canOpenDispute } from "@/features/disputes/rules";
 import { OrderStatusBadge } from "@/features/orders/components/status-badge";
 import { getOrderText } from "@/features/orders/describe";
 import { allowedTransitions, CREDENTIAL_STATUSES } from "@/features/orders/workflow";
@@ -43,11 +47,12 @@ async function BoosterOrder({ params }: Pick<Props, "params">) {
   const order = await getBoosterOrder(orderNumber, booster.userId);
   if (!order) notFound();
 
-  const [t, text, catalog, chat] = await Promise.all([
+  const [t, text, catalog, chat, dispute] = await Promise.all([
     getTranslations("Booster.workspace"),
     getOrderText(),
     getPricingCatalog(order.game.slug),
     getChatState(order.orderNumber),
+    order.status === "DISPUTED" ? getOpenDispute(order.orderNumber) : Promise.resolve(null),
   ]);
   const date = (value: Date) => text.format.dateTime(value, { dateStyle: "medium", timeStyle: "short" });
   const options = text.options([order.lpGain, ...order.addOns]);
@@ -97,8 +102,20 @@ async function BoosterOrder({ params }: Pick<Props, "params">) {
             {order.game.name} · {order.server} · <span className="font-mono">{order.orderNumber}</span>
           </p>
         </div>
-        <OrderStatusBadge status={order.status} />
+        <div className="flex flex-wrap items-center gap-2">
+          {canOpenDispute(order.status) && <OpenDispute orderNumber={order.orderNumber} />}
+          <OrderStatusBadge status={order.status} />
+        </div>
       </div>
+
+      {order.status === "DISPUTED" && (
+        <Alert variant="destructive">
+          <AlertDescription>
+            {t("disputed")}
+            {dispute && <span className="mt-1 block text-xs whitespace-pre-wrap opacity-90">“{dispute.reason}”</span>}
+          </AlertDescription>
+        </Alert>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="grid content-start gap-6">

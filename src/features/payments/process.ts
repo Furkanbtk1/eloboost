@@ -1,5 +1,6 @@
 import "server-only";
 
+import type { Prisma } from "@/generated/prisma/client";
 import type { PaymentGateway } from "@/generated/prisma/enums";
 import { db } from "@/lib/db";
 import { broadcast, signal } from "@/lib/realtime/server";
@@ -10,6 +11,8 @@ import type { PaymentUpdate } from "./types";
 export type ApplyResult =
   /** Order moved to PENDING (booster pool). */
   | "paid"
+  /** Tip credited to the booster. */
+  | "tip_paid"
   /** Failure / expiry recorded on the transaction. */
   | "recorded"
   /** Nothing to do: still pending, or this update was already applied. */
@@ -19,21 +22,92 @@ export type ApplyResult =
   /** Money arrived but the order can't take it (amount mismatch, already paid, cancelled): manual review/refund. */
   | "needs_review";
 
+type PaidOrder = { id: string; orderNumber: string; customerId: string; promoCodeId: string | null };
+
+/**
+ * Moves an unpaid order into the booster pool: counts the promo code use and
+ * tells the customer. False when the order was no longer waiting for payment.
+ */
+export async function markOrderPaid(tx: Prisma.TransactionClient, order: PaidOrder): Promise<boolean> {
+  const moved = await tx.order.updateMany({
+    where: { id: order.id, status: "AWAITING_PAYMENT" },
+    data: { status: "PENDING", paidAt: new Date() },
+  });
+  if (moved.count === 0) return false;
+
+  // Usage counts at payment time. If the limit was reached meanwhile, the
+  // customer has still paid the discounted price, so the order stands.
+  if (order.promoCodeId) {
+    await tx.$executeRaw`
+      UPDATE "PromoCode" SET "currentUses" = "currentUses" + 1
+      WHERE "id" = ${order.promoCodeId}::uuid AND ("maxUses" IS NULL OR "currentUses" < "maxUses")`;
+  }
+
+  await tx.notification.create({
+    data: {
+      userId: order.customerId,
+      type: "ORDER_UPDATE",
+      data: { orderNumber: order.orderNumber, status: "PENDING" },
+      link: `/dashboard/orders/${order.orderNumber}`,
+    },
+  });
+  return true;
+}
+
+export const orderPaidSignals = (order: { orderNumber: string; customerId: string }) => [
+  signal.orderUpdated(order.orderNumber),
+  signal.poolChanged(),
+  signal.notification(order.customerId),
+];
+
+/** Tips go to the booster in full, in USD (wallet currency). Returns who was credited. */
+export async function creditTip(
+  tx: Prisma.TransactionClient,
+  order: { id: string; orderNumber: string; boosterId: string | null },
+  amountUsd: Prisma.Decimal,
+  sourceTransactionId: string,
+): Promise<string | null> {
+  if (!order.boosterId) return null;
+  await tx.user.update({ where: { id: order.boosterId }, data: { balance: { increment: amountUsd } } });
+  await tx.boosterProfile.update({ where: { userId: order.boosterId }, data: { totalEarnings: { increment: amountUsd } } });
+  await tx.transaction.create({
+    data: {
+      orderId: order.id,
+      userId: order.boosterId,
+      type: "TIP",
+      amount: amountUsd,
+      currency: "USD",
+      gateway: "WALLET",
+      status: "COMPLETED",
+      metadata: { fromTransactionId: sourceTransactionId },
+    },
+  });
+  await tx.notification.create({
+    data: {
+      userId: order.boosterId,
+      type: "ORDER_UPDATE",
+      data: { orderNumber: order.orderNumber, event: "tip_received", amount: amountUsd.toNumber() },
+      link: `/booster/orders/${order.orderNumber}`,
+    },
+  });
+  return order.boosterId;
+}
+
 /**
  * Single entry point for every provider's webhook, return-URL reconciliation
- * and the sandbox. Idempotent: replays and concurrent deliveries of the same
- * update change nothing after the first.
+ * and the sandbox, for order payments and tips. Idempotent: replays and
+ * concurrent deliveries of the same update change nothing after the first.
  */
 export async function applyPaymentUpdate(gateway: PaymentGateway, update: PaymentUpdate): Promise<ApplyResult> {
   if (update.outcome === "pending") return "ignored";
 
-  const paid: { orderNumber?: string; customerId?: string } = {};
+  const signals: ReturnType<typeof signal.orderUpdated>[] = [];
   const result = await db.$transaction(async (tx): Promise<ApplyResult> => {
     const payment = await tx.transaction.findUnique({
       where: { gateway_gatewayTransactionId: { gateway, gatewayTransactionId: update.reference } },
       include: { order: true },
     });
-    if (!payment || payment.type !== "PAYMENT" || !payment.order) return "unknown_payment";
+    if (!payment || (payment.type !== "PAYMENT" && payment.type !== "TIP") || !payment.order) return "unknown_payment";
     const { order } = payment;
 
     if (update.outcome === "failed" || update.outcome === "expired") {
@@ -45,10 +119,10 @@ export async function applyPaymentUpdate(gateway: PaymentGateway, update: Paymen
     }
 
     // outcome === "paid". Claim the transaction first: only one delivery wins.
-    const expectedCents = order.totalAmount.times(100).toNumber();
+    const expectedCents = payment.amount.times(100).toNumber();
     const amountMatches =
       (update.amountCents === null || update.amountCents === expectedCents) &&
-      (update.currency === null || update.currency === order.currency);
+      (update.currency === null || update.currency === payment.currency);
     const claimed = await tx.transaction.updateMany({
       where: { id: payment.id, status: { not: "COMPLETED" } },
       data: {
@@ -66,13 +140,16 @@ export async function applyPaymentUpdate(gateway: PaymentGateway, update: Paymen
       return "needs_review";
     }
 
+    if (payment.type === "TIP") {
+      const booster = await creditTip(tx, order, payment.amount.times(order.exchangeRate).toDecimalPlaces(2), payment.id);
+      if (!booster) return "needs_review";
+      signals.push(signal.orderUpdated(order.orderNumber), signal.notification(booster));
+      return "tip_paid";
+    }
+
     // Only an order still waiting for payment moves on; anything else (paid twice
     // through two providers, cancelled meanwhile) is kept for a refund.
-    const moved = await tx.order.updateMany({
-      where: { id: order.id, status: "AWAITING_PAYMENT" },
-      data: { status: "PENDING", paidAt: new Date() },
-    });
-    if (moved.count === 0) {
+    if (!(await markOrderPaid(tx, order))) {
       await tx.transaction.update({
         where: { id: payment.id },
         data: { metadata: { providerPaymentId: update.providerPaymentId ?? null, needsRefund: order.status } },
@@ -80,41 +157,21 @@ export async function applyPaymentUpdate(gateway: PaymentGateway, update: Paymen
       console.error(`[payments] ${order.orderNumber} paid again while ${order.status}: refund needed`);
       return "needs_review";
     }
-
-    // Usage counts at payment time. If the limit was reached meanwhile, the
-    // customer has still paid the discounted price, so the order stands.
-    if (order.promoCodeId) {
-      await tx.$executeRaw`
-        UPDATE "PromoCode" SET "currentUses" = "currentUses" + 1
-        WHERE "id" = ${order.promoCodeId}::uuid AND ("maxUses" IS NULL OR "currentUses" < "maxUses")`;
-    }
-
-    await tx.notification.create({
-      data: {
-        userId: order.customerId,
-        type: "ORDER_UPDATE",
-        data: { orderNumber: order.orderNumber, status: "PENDING" },
-        link: `/dashboard/orders/${order.orderNumber}`,
-      },
-    });
-    paid.orderNumber = order.orderNumber;
-    paid.customerId = order.customerId;
+    signals.push(...orderPaidSignals(order));
     return "paid";
   });
 
-  if (result === "paid" && paid.orderNumber && paid.customerId) {
-    broadcast(signal.orderUpdated(paid.orderNumber), signal.poolChanged(), signal.notification(paid.customerId));
-  }
+  broadcast(...signals);
   return result;
 }
 
 /**
- * Asks providers about this order's open payments. Covers customers who come
- * back from the hosted page before the webhook arrives (or when it never does).
+ * Asks providers about this order's open payments and tips. Covers customers who
+ * come back from the hosted page before the webhook arrives (or when it never does).
  */
 export async function reconcileOrderPayments(orderId: string): Promise<void> {
   const open = await db.transaction.findMany({
-    where: { orderId, type: "PAYMENT", status: "PENDING", gatewayTransactionId: { not: null } },
+    where: { orderId, type: { in: ["PAYMENT", "TIP"] }, status: "PENDING", gatewayTransactionId: { not: null } },
     select: { gateway: true, gatewayTransactionId: true },
   });
 

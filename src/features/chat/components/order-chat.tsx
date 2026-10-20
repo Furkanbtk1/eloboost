@@ -163,7 +163,7 @@ export function OrderChat({ orderNumber, role, closedReason, uploadsEnabled, ini
                     {message.content && <p>{message.content}</p>}
                     {message.hasAttachment && <Attachment messageId={message.id} />}
                   </div>
-                  {mine && message.isFlagged && <span className="text-xs text-amber-500">{t("filtered")}</span>}
+                  {(mine || role === "staff") && message.isFlagged && <span className="text-xs text-amber-500">{t("filtered")}</span>}
                   {mine && message.id === lastOwnId && message.isRead && (
                     <span className="text-xs text-muted-foreground">{t("seen")}</span>
                   )}

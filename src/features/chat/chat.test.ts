@@ -93,7 +93,7 @@ describe("chat access", () => {
 
   it("gives support staff read-only access", () => {
     expect(chatRole(viewer({ role: "SUPPORT" }), order)).toBe("staff");
-    expect(chatClosedReason("staff", order)).toBe("closed");
+    expect(chatClosedReason("staff", order)).toBe("readOnly");
     expect(chatRole(viewer({ role: "ADMIN", twoFactorReady: false }), order)).toBeNull();
   });
 

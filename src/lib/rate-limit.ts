@@ -35,6 +35,10 @@ const LIMITS = {
   chatMessage: { requests: 30, windowSeconds: 60 },
   /** Per user: screenshots uploaded to chat. */
   chatAttachment: { requests: 20, windowSeconds: 60 * 60 },
+  /** Per user: disputes opened. */
+  openDispute: { requests: 5, windowSeconds: 60 * 60 },
+  /** Per customer: tips and reviews. */
+  feedback: { requests: 20, windowSeconds: 60 * 60 },
   /** Per user: chat / notification reloads triggered by realtime signals. */
   realtimeSync: { requests: 240, windowSeconds: 60 },
 } as const;

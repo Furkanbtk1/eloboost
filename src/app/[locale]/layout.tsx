@@ -7,6 +7,7 @@ import { getTranslations } from "next-intl/server";
 import { Providers } from "@/components/providers";
 import { routing } from "@/i18n/routing";
 import { realtimeClientConfig } from "@/lib/realtime/server";
+import { siteUrl } from "@/lib/seo";
 
 import "../globals.css";
 
@@ -20,8 +21,12 @@ export function generateStaticParams() {
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Metadata");
   return {
+    metadataBase: siteUrl,
+    applicationName: t("siteName"),
     title: { default: t("title"), template: `%s | ${t("siteName")}` },
     description: t("description"),
+    openGraph: { type: "website", siteName: t("siteName") },
+    twitter: { card: "summary_large_image" },
   };
 }
 

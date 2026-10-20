@@ -18,7 +18,27 @@ export const TWO_FACTOR_REQUIRED_ROLES: readonly UserRole[] = [...STAFF_ROLES, "
 
 type AreaRule = { prefix: string; roles: readonly UserRole[]; requiresTwoFactor: boolean };
 
+/**
+ * Admin panel sections and who may open them (spec RBAC: SuperAdmin = ADMIN,
+ * SupportManager = SUPPORT reads orders, chats and disputes, FinanceManager =
+ * FINANCE handles payouts). The overview at /admin is open to all staff.
+ */
+export const ADMIN_SECTIONS = [
+  { key: "orders", prefix: "/admin/orders", roles: ["ADMIN", "SUPPORT"] },
+  { key: "disputes", prefix: "/admin/disputes", roles: ["ADMIN", "SUPPORT"] },
+  { key: "users", prefix: "/admin/users", roles: ["ADMIN"] },
+  { key: "payouts", prefix: "/admin/payouts", roles: ["ADMIN", "FINANCE"] },
+  { key: "pricing", prefix: "/admin/pricing", roles: ["ADMIN"] },
+  { key: "promos", prefix: "/admin/promos", roles: ["ADMIN"] },
+  { key: "reviews", prefix: "/admin/reviews", roles: ["ADMIN"] },
+  { key: "audit", prefix: "/admin/audit", roles: ["ADMIN"] },
+] as const satisfies readonly { key: string; prefix: string; roles: readonly StaffRole[] }[];
+
+export type AdminSectionKey = (typeof ADMIN_SECTIONS)[number]["key"];
+
+/** The first matching prefix wins, so specific sections come before their parents. */
 const AREAS: readonly AreaRule[] = [
+  ...ADMIN_SECTIONS.map(({ prefix, roles }) => ({ prefix, roles, requiresTwoFactor: true })),
   { prefix: "/admin", roles: STAFF_ROLES, requiresTwoFactor: true },
   { prefix: "/booster", roles: ["BOOSTER"], requiresTwoFactor: true },
   { prefix: "/dashboard", roles: ["CUSTOMER"], requiresTwoFactor: false },
@@ -38,6 +58,12 @@ function matches(pathname: string, prefix: string) {
 
 export function findArea(pathname: string): AreaRule | undefined {
   return AREAS.find((area) => matches(pathname, area.prefix));
+}
+
+/** Role check only (sign-in and 2FA are checked separately). */
+export function roleCanAccess(role: UserRole, pathname: string): boolean {
+  const area = findArea(pathname);
+  return !area || area.roles.includes(role);
 }
 
 export function isAuthPage(pathname: string): boolean {

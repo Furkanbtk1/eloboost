@@ -1,4 +1,4 @@
-import { ChevronRightIcon } from "lucide-react";
+import { ChevronRightIcon, WalletIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
@@ -12,6 +12,7 @@ import { getOrderText } from "@/features/orders/describe";
 import { getCustomerOrders } from "@/features/orders/queries";
 import { Link } from "@/i18n/navigation";
 import { requireArea } from "@/lib/auth/session";
+import { db } from "@/lib/db";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Orders");
@@ -28,8 +29,9 @@ export default function DashboardPage() {
 
 async function Dashboard() {
   const user = await requireArea("/dashboard");
-  const [orders, t, tPanel, text] = await Promise.all([
+  const [orders, wallet, t, tPanel, text] = await Promise.all([
     getCustomerOrders(user.id),
+    db.user.findUnique({ where: { id: user.id }, select: { balance: true } }),
     getTranslations("Orders"),
     getTranslations("Panel"),
     getOrderText(),
@@ -37,7 +39,14 @@ async function Dashboard() {
 
   return (
     <>
-      <PanelHeader title={tPanel("welcome", { name: user.name ?? user.email })} subtitle={t("title")} />
+      <PanelHeader title={tPanel("welcome", { name: user.name ?? user.email })} subtitle={t("title")}>
+        {wallet && wallet.balance.gt(0) && (
+          <span className="flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm" title={t("walletHint")}>
+            <WalletIcon className="size-4 text-primary" />
+            {t("wallet", { balance: text.format.number(wallet.balance.toNumber(), { style: "currency", currency: "USD" }) })}
+          </span>
+        )}
+      </PanelHeader>
 
       {orders.length === 0 ? (
         <Card>

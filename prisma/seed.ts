@@ -186,7 +186,7 @@ async function seedUsers() {
         "league-of-legends": { position: 30, label: "Challenger" },
         "teamfight-tactics": { position: 29, label: "Grandmaster" },
       },
-      payout: { method: "CRYPTO", network: "TRC20", walletAddress: "TQrZ8tKfjjB6Exampl3Wa11etAddr3ss00" },
+      payout: { method: "CRYPTO", network: "USDT_TRC20", address: "TQrZ8tKfjjB6Exampl3Wa11etAddr3ss00" },
       totalEarnings: 1250,
       rating: 4.9,
       ratingCount: 87,
@@ -203,7 +203,7 @@ async function seedUsers() {
         valorant: { position: 24, label: "Radiant" },
         "counter-strike-2": { rating: 28500, label: "28,500" },
       },
-      payout: { method: "BANK_TRANSFER", iban: "DE89370400440532013000", holder: "Vandal Queen" },
+      payout: { method: "BANK_TRANSFER", iban: "DE89370400440532013000", accountHolder: "Vandal Queen" },
       totalEarnings: 640,
       rating: 4.8,
       ratingCount: 41,
@@ -228,32 +228,37 @@ async function seedUsers() {
 
   const boosters = [];
   for (const seed of boosterSeeds) {
-    boosters.push(
-      await prisma.user.create({
-        data: {
-          email: seed.email,
-          name: seed.name,
-          role: "BOOSTER",
-          passwordHash,
-          emailVerified: verified,
-          balance: seed.balance,
-          boosterProfile: {
-            create: {
-              status: seed.status,
-              acceptedGames: { connect: seed.games.map((slug) => ({ slug })) },
-              currentRanks: seed.currentRanks,
-              payoutDetails: seed.payout ? encrypt(JSON.stringify(seed.payout)) : null,
-              totalEarnings: seed.totalEarnings,
-              rating: seed.rating,
-              ratingCount: seed.ratingCount,
-              completedOrders: seed.completedOrders,
-              languages: [...seed.languages],
-              bio: `${seed.name}: verified high-elo player.`,
-            },
+    const booster = await prisma.user.create({
+      data: {
+        email: seed.email,
+        name: seed.name,
+        role: "BOOSTER",
+        passwordHash,
+        emailVerified: verified,
+        balance: seed.balance,
+        boosterProfile: {
+          create: {
+            status: seed.status,
+            acceptedGames: { connect: seed.games.map((slug) => ({ slug })) },
+            currentRanks: seed.currentRanks,
+            totalEarnings: seed.totalEarnings,
+            rating: seed.rating,
+            ratingCount: seed.ratingCount,
+            completedOrders: seed.completedOrders,
+            languages: [...seed.languages],
+            bio: `${seed.name}: verified high-elo player.`,
           },
         },
-      }),
-    );
+      },
+    });
+    // Payout details are bound to the booster's id (see src/features/payouts/details.ts).
+    if (seed.payout) {
+      await prisma.boosterProfile.update({
+        where: { userId: booster.id },
+        data: { payoutDetails: encrypt(JSON.stringify(seed.payout), `payout:${booster.id}`) },
+      });
+    }
+    boosters.push(booster);
   }
 
   const [alex, elif] = await Promise.all([
@@ -483,7 +488,10 @@ async function seedOrders(users: Awaited<ReturnType<typeof seedUsers>>) {
       booster: { connect: { id: shadowCarry.id } },
       amount: 120,
       method: "CRYPTO",
-      destination: encrypt(JSON.stringify({ network: "TRC20", walletAddress: "TQrZ8tKfjjB6Exampl3Wa11etAddr3ss00" })),
+      destination: encrypt(
+        JSON.stringify({ method: "CRYPTO", network: "USDT_TRC20", address: "TQrZ8tKfjjB6Exampl3Wa11etAddr3ss00" }),
+        `payout:${shadowCarry.id}`,
+      ),
       status: "PENDING",
       createdAt: daysAgo(1),
     },
@@ -494,7 +502,10 @@ async function seedOrders(users: Awaited<ReturnType<typeof seedUsers>>) {
       booster: { connect: { id: vandalQueen.id } },
       amount: 50,
       method: "BANK_TRANSFER",
-      destination: encrypt(JSON.stringify({ iban: "DE89370400440532013000", holder: "Vandal Queen" })),
+      destination: encrypt(
+        JSON.stringify({ method: "BANK_TRANSFER", iban: "DE89370400440532013000", accountHolder: "Vandal Queen" }),
+        `payout:${vandalQueen.id}`,
+      ),
       status: "PAID",
       reviewedBy: { connect: { id: finance.id } },
       reviewedAt: daysAgo(3),

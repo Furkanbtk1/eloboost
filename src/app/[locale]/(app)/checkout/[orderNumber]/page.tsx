@@ -16,6 +16,7 @@ import { getCustomerOrder } from "@/features/orders/queries";
 import { PaymentConfirming } from "@/features/payments/components/payment-confirming";
 import { PaymentMethods } from "@/features/payments/components/payment-methods";
 import { availableProviders } from "@/features/payments/registry";
+import { getWalletOffer } from "@/features/payments/wallet";
 import { Link } from "@/i18n/navigation";
 import { requireArea } from "@/lib/auth/session";
 import { getRequestCountry } from "@/lib/geo";
@@ -45,7 +46,12 @@ async function Checkout({ params, searchParams }: Pick<Props, "params" | "search
   const awaitingPayment = order.status === "AWAITING_PAYMENT";
   // Every later status except a cancellation means the order was paid.
   const wasPaid = !awaitingPayment && order.status !== "CANCELLED";
-  const providers = awaitingPayment ? availableProviders(order.currency, await getRequestCountry()) : [];
+  const [providers, wallet] = awaitingPayment
+    ? await Promise.all([
+        getRequestCountry().then((country) => availableProviders(order.currency, country)),
+        getWalletOffer(user.id, order.orderNumber),
+      ])
+    : [[], null];
 
   const [t, tPay, tOrderType, text] = await Promise.all([
     getTranslations("Checkout"),
@@ -108,7 +114,19 @@ async function Checkout({ params, searchParams }: Pick<Props, "params" | "search
                       <AlertDescription>{tPay(paymentReturn)}</AlertDescription>
                     </Alert>
                   )}
-                  <PaymentMethods orderNumber={order.orderNumber} providers={providers} amount={money(order.total)} />
+                  <PaymentMethods
+                    orderNumber={order.orderNumber}
+                    providers={providers}
+                    amount={money(order.total)}
+                    wallet={
+                      wallet
+                        ? {
+                            balance: text.format.number(wallet.balanceUsd, { style: "currency", currency: "USD" }),
+                            enough: wallet.balanceUsd >= wallet.neededUsd,
+                          }
+                        : null
+                    }
+                  />
                   <Button asChild variant="ghost" className="justify-self-start">
                     <Link href={`/boost/${order.game.slug}`}>{t("changeOrder")}</Link>
                   </Button>

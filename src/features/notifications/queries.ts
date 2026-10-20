@@ -12,6 +12,7 @@ const dataSchema = z.object({
   event: z.string().optional().catch(undefined),
   from: z.string().nullish().catch(undefined),
   amount: z.number().optional().catch(undefined),
+  rating: z.number().int().optional().catch(undefined),
 });
 
 export type NotificationItem = {
@@ -28,6 +29,7 @@ export type NotificationItem = {
   event: string | null;
   from: string | null;
   amount: number | null;
+  rating: number | null;
 };
 
 const orderStatuses = new Set<string>(Object.values(OrderStatus));
@@ -54,6 +56,7 @@ export async function getNotifications(userId: string, take = 15): Promise<Notif
       event: data.event ?? null,
       from: data.from ?? null,
       amount: data.amount ?? null,
+      rating: data.rating ?? null,
     };
   });
 }

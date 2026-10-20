@@ -1,4 +1,4 @@
-import { ChevronRightIcon, InboxIcon } from "lucide-react";
+import { ChevronRightIcon, InboxIcon, WalletIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
@@ -86,12 +86,20 @@ async function BoosterWorkspace() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between gap-4">
             <CardTitle>{t("myOrders")}</CardTitle>
-            <Button asChild>
-              <Link href="/booster/pool">
-                <InboxIcon />
-                {t("openPool")}
-              </Link>
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild variant="outline">
+                <Link href="/booster/payouts">
+                  <WalletIcon />
+                  {t("payouts")}
+                </Link>
+              </Button>
+              <Button asChild>
+                <Link href="/booster/pool">
+                  <InboxIcon />
+                  {t("openPool")}
+                </Link>
+              </Button>
+            </div>
           </CardHeader>
           <CardContent>
             {orders.length === 0 ? (

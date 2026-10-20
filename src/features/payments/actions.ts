@@ -1,5 +1,7 @@
 "use server";
 
+import { randomUUID } from "node:crypto";
+
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
@@ -11,8 +13,9 @@ import { db } from "@/lib/db";
 import { env } from "@/lib/env";
 import { getRequestCountry } from "@/lib/geo";
 import { rateLimit } from "@/lib/rate-limit";
+import { broadcast } from "@/lib/realtime/server";
 
-import { applyPaymentUpdate } from "./process";
+import { applyPaymentUpdate, markOrderPaid, orderPaidSignals } from "./process";
 import { sandboxEnabled } from "./providers/sandbox";
 import { availableProviders, getProvider } from "./registry";
 
@@ -99,6 +102,62 @@ export async function startPaymentAction(
   return ok({ redirectUrl: created.redirectUrl });
 }
 
+/**
+ * Pays an order from the customer's wallet (refunds land there). The balance
+ * check, the deduction and moving the order to the pool commit together.
+ */
+export async function payWithWalletAction(
+  rawLocale: string,
+  orderNumber: string,
+): Promise<ActionResult<{ redirectTo: string }>> {
+  const locale = resolveLocale(rawLocale);
+  const t = await getTranslations({ locale, namespace: "Payments.errors" });
+
+  const customer = await currentCustomer();
+  if (!customer) return fail(t("unauthorized"), 401);
+  const limit = await rateLimit("startPayment", customer.id);
+  if (!limit.success) return fail(t("rateLimited"), 429);
+
+  const order = await db.order.findFirst({ where: { orderNumber, customerId: customer.id } });
+  if (!order) return fail(t("notFound"), 404);
+  if (order.status !== "AWAITING_PAYMENT") return fail(t("alreadyPaid"), 409);
+  const usd = order.totalAmount.times(order.exchangeRate).toDecimalPlaces(2);
+
+  const paid = await db.$transaction(async (tx) => {
+    const { count } = await tx.user.updateMany({
+      where: { id: customer.id, balance: { gte: usd } },
+      data: { balance: { decrement: usd } },
+    });
+    if (count !== 1) return "balance" as const;
+    await tx.transaction.create({
+      data: {
+        orderId: order.id,
+        userId: customer.id,
+        type: "PAYMENT",
+        amount: order.totalAmount,
+        currency: order.currency,
+        gateway: "WALLET",
+        gatewayTransactionId: `wallet_${randomUUID()}`,
+        status: "COMPLETED",
+        metadata: { walletUsd: usd.toString() },
+      },
+    });
+    // Rolls the deduction back too if the order was paid or cancelled meanwhile.
+    if (!(await markOrderPaid(tx, order))) throw new OrderNotPayable();
+    return "paid" as const;
+  }).catch((error: unknown) => {
+    if (error instanceof OrderNotPayable) return "stale" as const;
+    throw error;
+  });
+
+  if (paid === "balance") return fail(t("walletInsufficient"), 409);
+  if (paid === "stale") return fail(t("alreadyPaid"), 409);
+  broadcast(...orderPaidSignals(order));
+  return ok({ redirectTo: getPathname({ href: { pathname: `/checkout/${order.orderNumber}`, query: { payment: "success" } }, locale }) });
+}
+
+class OrderNotPayable extends Error {}
+
 export type SandboxOutcome = "paid" | "failed" | "expired";
 
 /** Development only: plays the provider and reports the chosen outcome. */
@@ -116,18 +175,22 @@ export async function sandboxPaymentAction(
 
   const payment = await db.transaction.findFirst({
     where: { gateway: "SANDBOX", gatewayTransactionId: reference, userId: customer.id },
-    include: { order: { select: { orderNumber: true, totalAmount: true, currency: true } } },
+    include: { order: { select: { orderNumber: true } } },
   });
   if (!payment?.order) return fail(t("notFound"), 404);
 
   await applyPaymentUpdate("SANDBOX", {
     reference,
     outcome,
-    amountCents: payment.order.totalAmount.times(100).toNumber(),
-    currency: payment.order.currency,
+    amountCents: payment.amount.times(100).toNumber(),
+    currency: payment.currency,
   });
 
-  const checkoutPath = getPathname({ href: `/checkout/${payment.order.orderNumber}`, locale });
   const result = { paid: "success", failed: "failed", expired: "cancelled" }[outcome];
-  return ok({ redirectTo: `${checkoutPath}?payment=${result}` });
+  // Tips are paid from the order page, order payments from checkout.
+  const back =
+    payment.type === "TIP"
+      ? getPathname({ href: { pathname: `/dashboard/orders/${payment.order.orderNumber}`, query: { tip: result } }, locale })
+      : getPathname({ href: { pathname: `/checkout/${payment.order.orderNumber}`, query: { payment: result } }, locale });
+  return ok({ redirectTo: back });
 }

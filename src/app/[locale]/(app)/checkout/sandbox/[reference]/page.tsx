@@ -36,7 +36,7 @@ async function SandboxPayment({ params }: Pick<Props, "params">) {
 
   const payment = await db.transaction.findFirst({
     where: { gateway: "SANDBOX", gatewayTransactionId: reference, userId: user.id },
-    select: { status: true, amount: true, currency: true, order: { select: { orderNumber: true } } },
+    select: { type: true, status: true, amount: true, currency: true, order: { select: { orderNumber: true } } },
   });
   if (!payment?.order) notFound();
 
@@ -60,7 +60,9 @@ async function SandboxPayment({ params }: Pick<Props, "params">) {
           <>
             <p className="text-sm text-muted-foreground">{t("done")}</p>
             <Button asChild variant="outline" className="justify-self-start">
-              <Link href={`/checkout/${payment.order.orderNumber}`}>{payment.order.orderNumber}</Link>
+              <Link href={payment.type === "TIP" ? `/dashboard/orders/${payment.order.orderNumber}` : `/checkout/${payment.order.orderNumber}`}>
+                {payment.order.orderNumber}
+              </Link>
             </Button>
           </>
         )}

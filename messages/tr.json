@@ -46,7 +46,14 @@
     "perDivision": "küme başına",
     "per100Rating": "100 puan başına",
     "noGames": "Şu anda uygun oyun yok.",
-    "boostNow": "Boost al"
+    "boostNow": "Boost al",
+    "reviews": {
+      "title": "Oyuncular ne diyor",
+      "subtitle": "Tamamlanan siparişlerden son yorumlar.",
+      "stars": "{count, plural, other {# yıldız}}",
+      "byline": "{reviewer} · {booster} ile {game}",
+      "anonymous": "Doğrulanmış müşteri"
+    }
   },
   "OrderType": {
     "DIVISION": "Lig yükseltme",
@@ -238,7 +245,8 @@
       "confirm": {
         "complete": "Bu sipariş tamamlandı olarak işaretlensin mi? Müşterinin giriş bilgileri silinecek ve kazancın bakiyene eklenecek.",
         "release": "Bu sipariş havuza geri bırakılsın mı? Başka bir booster alabilecek."
-      }
+      },
+      "disputed": "Bildirilen bir sorun incelenirken bu sipariş donduruldu. Çözülene kadar oynayamaz ve giriş bilgilerini açamazsın."
     },
     "errors": {
       "notActive": "Booster profilin aktif değil ya da oturumun sona erdi.",
@@ -253,16 +261,387 @@
       "invalidProgress": "Bu ilerleme değeri bu sipariş için geçerli değil.",
       "rateLimited": "Çok fazla işlem yapıldı. Lütfen yavaşla.",
       "generic": "Bir şeyler ters gitti. Lütfen tekrar dene."
-    }
+    },
+    "payouts": "Ödemeler"
   },
   "Admin": {
-    "subtitle": "Platform yönetimi.",
-    "roleLabel": "Rolün",
-    "permissionsTitle": "Yetkilerin",
-    "permissions": {
-      "ADMIN": "Tam erişim: kullanıcılar, fiyatlar, siparişler, anlaşmazlıklar ve ödemeler.",
-      "SUPPORT": "Destek taleplerini, sipariş sohbetlerini ve anlaşmazlıkları okuma.",
-      "FINANCE": "Booster ödeme taleplerini inceleme ve onaylama."
+    "title": "Yönetim",
+    "nav": {
+      "label": "Yönetim bölümleri",
+      "overview": "Genel bakış",
+      "orders": "Siparişler",
+      "disputes": "Anlaşmazlıklar",
+      "users": "Kullanıcılar",
+      "payouts": "Ödemeler",
+      "pricing": "Fiyatlar",
+      "promos": "Kuponlar",
+      "reviews": "Yorumlar",
+      "audit": "Denetim kaydı"
+    },
+    "pagination": {
+      "page": "Sayfa {page}/{pages} · {total} sonuç",
+      "previous": "Önceki",
+      "next": "Sonraki"
+    },
+    "errors": {
+      "forbidden": "Bu işlem için yetkin yok.",
+      "notFound": "Bulunamadı.",
+      "invalid": "Lütfen girdiğin değerleri kontrol et.",
+      "self": "Bu işlemi kendi hesabına uygulayamazsın.",
+      "hasActiveOrders": "Bu booster'ın hâlâ aktif siparişleri var. Önce onları başka birine ata.",
+      "notBooster": "Bu kullanıcı booster değil.",
+      "rankRequired": "Seçilen her oyun için geçerli bir rank seç.",
+      "gamesRequired": "Aktif bir booster'ın en az bir oyunu olmalı.",
+      "stale": "Bu kayıt bu arada başka biri tarafından değiştirildi. Sayfayı yenileyip tekrar dene.",
+      "noteRequired": "Booster'a gösterilecek bir gerekçe yaz.",
+      "referenceRequired": "Transfer referansını gir (3–120 karakter).",
+      "duplicateReference": "Bu referans başka bir ödemede zaten kullanıldı.",
+      "refundRange": "Kısmi iade 0'dan büyük ve sipariş tutarından küçük olmalı.",
+      "pastDate": "Son kullanma tarihi ileri bir tarih olmalı.",
+      "codeExists": "Bu adla bir kupon zaten var.",
+      "needServer": "En az bir sunucu açık kalmalı.",
+      "defaultModifier": "Varsayılan LP seçeneği kapatılamaz."
+    },
+    "transactionType": {
+      "DEPOSIT": "Yükleme",
+      "PAYMENT": "Ödeme",
+      "EARNING": "Kazanç",
+      "TIP": "Bahşiş",
+      "PAYOUT": "Para çekme",
+      "REFUND": "İade"
+    },
+    "overview": {
+      "subtitle": {
+        "ADMIN": "Platformun genel durumu.",
+        "SUPPORT": "Anlaşmazlıklar, aktif siparişler ve sohbet denetimi.",
+        "FINANCE": "Booster ödemeleri ve bakiyeleri."
+      },
+      "revenue": "Gelir",
+      "platform": "Platform kazancı",
+      "paidOrders": "Ödenen siparişler",
+      "newCustomers": "Yeni müşteriler",
+      "openDisputes": "Açık anlaşmazlıklar",
+      "activeOrders": "Aktif siparişler",
+      "activeOrdersHint": "Atanmış, oynanıyor veya duraklatılmış",
+      "pool": "Havuzda bekleyen",
+      "flagged": "Filtrelenen mesajlar",
+      "boosters": "Aktif booster'lar",
+      "pendingBoosters": "{count, plural, =0 {Bekleyen başvuru yok} other {# başvuru bekliyor}}",
+      "pendingPayouts": "İncelenecek ödemeler",
+      "approvedPayouts": "Onaylandı, henüz ödenmedi",
+      "requests": "{count, plural, =0 {Talep yok} other {# talep}}",
+      "paidOut": "Ödenen",
+      "balances": "Booster bakiyeleri",
+      "balancesHint": "Booster'lara borç, henüz talep edilmedi",
+      "last30": "Son 30 gün",
+      "last7": "Son 7 gün",
+      "byStatus": "Duruma göre siparişler",
+      "recentAudit": "Son yönetici işlemleri",
+      "allAudit": "Tüm denetim kaydı",
+      "noAudit": "Henüz yönetici işlemi yok.",
+      "chart": {
+        "title": "Günlük gelir (USD)",
+        "description": "Son 14 günde ödenen siparişler, ödeme gününe göre (UTC).",
+        "bar": "{day}: {amount}, {orders} sipariş",
+        "orders": "{count, plural, =0 {sipariş yok} other {# sipariş}}",
+        "table": "Tablo olarak göster",
+        "day": "Gün",
+        "revenue": "Gelir",
+        "ordersColumn": "Sipariş"
+      }
+    },
+    "users": {
+      "title": "Kullanıcılar",
+      "subtitle": "Müşteri, booster ve personel hesapları.",
+      "applications": "{count, plural, other {# booster başvurusu}}",
+      "search": "E-posta veya ada göre ara",
+      "role": "Rol",
+      "allRoles": "Tüm roller",
+      "filter": "Filtrele",
+      "empty": "Bu filtrelere uyan kullanıcı yok.",
+      "user": "Kullanıcı",
+      "state": "Durum",
+      "joined": "Kayıt",
+      "manage": "Yönet",
+      "banned": "Yasaklı",
+      "back": "Tüm kullanıcılar",
+      "booster": {
+        "title": "Booster profili",
+        "stats": "{completed} tamamlanan · {reviews} yorumdan {rating} ★ · {earnings} kazanç",
+        "status": "Onay durumu",
+        "games": "Oyunlar ve doğrulanmış ranklar",
+        "rankFor": "{game} rankı",
+        "pickRank": "Rank seç",
+        "rating": "Rating",
+        "hint": "Sipariş havuzu yalnızca bu rankların altındaki siparişleri gösterir. Onaylanan booster sipariş alabilir.",
+        "save": "Booster profilini kaydet",
+        "saved": "Booster profili kaydedildi."
+      },
+      "orders": "Siparişler",
+      "noOrders": "Henüz sipariş yok.",
+      "orderRole": {
+        "customer": "müşteri olarak",
+        "booster": "booster olarak"
+      },
+      "transactions": "İşlemler",
+      "noTransactions": "Henüz işlem yok.",
+      "account": "Hesap",
+      "lastLogin": "Son giriş",
+      "balance": "Cüzdan",
+      "twoFactor": "İki adımlı doğrulama",
+      "on": "Açık",
+      "off": "Kapalı",
+      "signIn": "Giriş yöntemi",
+      "password": "E-posta ve şifre",
+      "oauth": "Yalnızca sosyal giriş",
+      "manageTitle": "Hesabı yönet",
+      "actions": {
+        "self": "Kendi rolünü, yasağını veya 2FA'nı buradan değiştiremezsin.",
+        "role": "Rol",
+        "saveRole": "Rolü değiştir",
+        "roleTitle": "Rol değiştirilsin mi?",
+        "roleBody": "Kullanıcının rolü {role} olacak. Personel ve booster rolleri panellerini kullanmadan önce 2FA kurmalı.",
+        "roleHint": "Birini booster yapmak onaysız bir profil oluşturur; oyunlarını ve ranklarını girip ardından onayla.",
+        "roleSaved": "Rol değiştirildi.",
+        "ban": "Kullanıcıyı yasakla",
+        "unban": "Yasağı kaldır",
+        "banBody": "Tüm sayfalardan çıkarılır ve yasak kalkana kadar giriş yapamaz.",
+        "unbanBody": "Tekrar giriş yapabilecek.",
+        "bannedDone": "Kullanıcı yasaklandı.",
+        "unbanned": "Yasak kaldırıldı.",
+        "reset2fa": "2FA'yı sıfırla",
+        "reset2faBody": "Doğrulama uygulamasını kaybettiyse kullan. Bir sonraki girişte 2FA'yı yeniden kurar.",
+        "reset2faDone": "2FA sıfırlandı.",
+        "cancel": "Vazgeç"
+      }
+    },
+    "payouts": {
+      "title": "Ödemeler",
+      "subtitle": "Booster para çekme taleplerini onayla, ardından transferi kaydet.",
+      "views": {
+        "open": "Yapılacaklar",
+        "done": "Geçmiş"
+      },
+      "empty": "Burada bir şey yok.",
+      "requested": "{date} tarihinde talep edildi",
+      "reviewed": "{date} tarihinde incelendi",
+      "actions": {
+        "approve": "Onayla",
+        "approved": "Ödeme onaylandı.",
+        "markPaid": "Ödendi olarak işaretle",
+        "paid": "Ödeme yapıldı olarak kaydedildi.",
+        "reject": "Reddet",
+        "rejected": "Ödeme reddedildi; tutar booster'ın cüzdanına geri döndü.",
+        "reasonPlaceholder": "Booster'a gösterilecek gerekçe",
+        "referencePlaceholder": "Banka veya işlem referansı",
+        "confirmReject": "Ödemeyi reddet",
+        "confirmPaid": "Ödendi olarak kaydet",
+        "cancel": "Vazgeç"
+      }
+    },
+    "orders": {
+      "title": "Siparişler",
+      "subtitle": "Tüm siparişler; sohbetleri, ödemeleri ve erişim kayıtlarıyla.",
+      "search": "Sipariş numarası veya e-posta",
+      "status": "Durum",
+      "allStatuses": "Tüm durumlar",
+      "filter": "Filtrele",
+      "empty": "Bu filtrelere uyan sipariş yok.",
+      "order": "Sipariş",
+      "customer": "Müşteri",
+      "booster": "Booster",
+      "total": "Tutar",
+      "open": "{orderNumber} siparişini aç",
+      "detail": {
+        "back": "Tüm siparişler",
+        "transactions": "İşlemler",
+        "noTransactions": "Henüz işlem yok.",
+        "people": "Taraflar",
+        "customer": "Müşteri",
+        "booster": "Booster",
+        "noBooster": "Atanmış booster yok.",
+        "money": "Tutarlar",
+        "total": "Toplam",
+        "boosterCut": "Booster payı",
+        "platformCut": "Platform payı",
+        "rate": "Döviz kuru",
+        "timeline": "Zaman çizelgesi",
+        "events": {
+          "createdAt": "Oluşturuldu",
+          "paidAt": "Ödendi",
+          "assignedAt": "Atandı",
+          "startedAt": "Başladı",
+          "completedAt": "Tamamlandı",
+          "cancelledAt": "İptal edildi"
+        },
+        "access": "Giriş bilgisi erişimi",
+        "credentialsStored": "Müşterinin oyun girişi kayıtlı (şifreli).",
+        "credentialsNone": "Kayıtlı oyun girişi yok.",
+        "noAccess": "Giriş bilgileri hiç açılmadı."
+      }
+    },
+    "disputes": {
+      "title": "Anlaşmazlıklar",
+      "subtitle": "Karar bekleyen dondurulmuş siparişler.",
+      "views": {
+        "OPEN": "Açık",
+        "RESOLVED": "Çözüldü"
+      },
+      "empty": "Burada anlaşmazlık yok.",
+      "openedBy": "{name} ({role}) tarafından {date} tarihinde açıldı",
+      "openTitle": "Açık anlaşmazlık: sipariş donduruldu",
+      "adminOnly": "Anlaşmazlıkları yalnızca süper admin çözebilir. Aşağıdaki sohbeti okuyabilirsin.",
+      "history": "Geçmiş anlaşmazlıklar",
+      "resolutions": {
+        "REFUNDED": "İade edildi",
+        "PARTIAL_REFUND": "Kısmi iade",
+        "REASSIGNED": "Yeniden atandı",
+        "CONTINUED": "Devam etti"
+      },
+      "resolve": {
+        "decision": "Karar",
+        "options": {
+          "REFUNDED": {
+            "title": "Tamamını iade et",
+            "body": "Siparişi iptal eder ve {total} tutarını müşterinin cüzdanına aktarır. Booster ödeme almaz."
+          },
+          "PARTIAL_REFUND": {
+            "title": "Kısmi iade",
+            "body": "{total} tutarının bir kısmını cüzdana iade eder, siparişi kapatır ve kalan kısım için booster'a ödeme yapar."
+          },
+          "REASSIGNED": {
+            "title": "Başka booster'a ver",
+            "body": "Mevcut booster'ı çıkarır ve siparişi havuza geri koyar."
+          },
+          "CONTINUED": {
+            "title": "Siparişe devam et",
+            "body": "Siparişi kaldığı yerden çözer."
+          }
+        },
+        "refundAmount": "İade tutarı ({currency})",
+        "boosterShare": "Booster kalan kısım için yaklaşık {amount} alır.",
+        "note": "Karar notu",
+        "noteHint": "Anlaşmazlıkla ve denetim kaydıyla birlikte saklanır.",
+        "submit": "Anlaşmazlığı çöz",
+        "done": "Anlaşmazlık çözüldü."
+      }
+    },
+    "reviews": {
+      "title": "Yorumlar",
+      "subtitle": "Herkese açık olmaması gereken yorumları gizle. Booster puanına yine de sayılırlar.",
+      "empty": "Henüz yorum yok.",
+      "stars": "{count, plural, other {# yıldız}}",
+      "public": "Herkese açık",
+      "private": "Gizli",
+      "noComment": "Yorum yok.",
+      "meta": "{customer} → {booster} · {game} · {date}",
+      "hide": "Gizle",
+      "show": "Göster",
+      "hidden": "Yorum gizlendi.",
+      "shown": "Yorum yeniden görünür."
+    },
+    "promos": {
+      "title": "Kuponlar",
+      "subtitle": "Kullanım limiti ve son kullanma tarihi olan yüzdelik veya sabit indirimler.",
+      "new": "Yeni kupon",
+      "empty": "Henüz kupon yok.",
+      "code": "Kod",
+      "discount": "İndirim",
+      "uses": "Kullanım",
+      "expires": "Son tarih",
+      "minOrder": "Min. sipariş",
+      "active": "Aktif",
+      "usedUp": "Tükendi",
+      "expired": "Süresi doldu",
+      "toggle": "{code} kuponunu aç veya kapat",
+      "form": {
+        "code": "Kod",
+        "type": "Tür",
+        "percentage": "Yüzde",
+        "fixed": "Sabit tutar (USD)",
+        "valuePercent": "İndirim (%)",
+        "valueFixed": "İndirim (USD)",
+        "maxUses": "Kullanım limiti",
+        "unlimited": "Sınırsız",
+        "expiresOn": "Geçerlilik sonu",
+        "minOrder": "Minimum sipariş (USD)",
+        "none": "Yok",
+        "create": "Kupon oluştur",
+        "created": "Kupon oluşturuldu."
+      }
+    },
+    "pricing": {
+      "title": "Fiyatlar",
+      "subtitle": "Koda dokunmadan fiyatları değiştir. Yeni siparişler hemen bu fiyatları kullanır.",
+      "games": "Oyunlar",
+      "saved": "Kaydedildi. Yeni siparişler bu fiyatları kullanır.",
+      "save": "Kaydet",
+      "note": "Verilmiş siparişler ödeme anındaki fiyatlarını korur.",
+      "game": {
+        "title": "Oyun",
+        "description": "Her siparişe eklenen sabit ücret, koçluk saat ücreti ve oyunun sunulup sunulmadığı.",
+        "basePrice": "Taban fiyat (USD)",
+        "hourly": "Koçluk saat ücreti (USD)",
+        "status": "Görünürlük",
+        "active": "Sunuluyor",
+        "inactive": "Gizli"
+      },
+      "steps": {
+        "title": "Rank fiyatları",
+        "description": "USD. Küme: bu ranktan bir sonrakine çıkış. Galibiyet ve yerleştirme: bu rankta maç başına fiyat.",
+        "rank": "Rank",
+        "division": "Sonraki küme",
+        "win": "Galibiyet başına",
+        "placement": "Yerleştirme başına",
+        "top": "En üst rank"
+      },
+      "brackets": {
+        "title": "Rating fiyatları",
+        "description": "Her aralıkta kazanılan 100 rating puanı ve galibiyet başına USD.",
+        "range": "Rating aralığı",
+        "per100": "100 puan başına",
+        "win": "Galibiyet başına"
+      },
+      "servers": {
+        "title": "Sunucular",
+        "description": "Sunucu başına yüzde fark (ör. 10 = +%10). Gizli sunucular seçilemez.",
+        "server": "Sunucu",
+        "region": "Bölge",
+        "percent": "Fark %",
+        "active": "Sunuluyor"
+      },
+      "modifiers": {
+        "title": "Seçenekler ve ek hizmetler",
+        "description": "Yüzde olarak fiyat değişimi (ör. 20 = +%20, -10 = -%10).",
+        "option": "Seçenek",
+        "category": "Tür",
+        "percent": "Değişim %",
+        "active": "Sunuluyor",
+        "default": "varsayılan",
+        "categories": {
+          "LP_GAIN": "LP kazancı",
+          "ADD_ON": "Ek hizmet"
+        }
+      },
+      "settings": {
+        "title": "Platform ayarları",
+        "description": "Yeni siparişlere ve ödeme taleplerine uygulanır.",
+        "share": "Booster payı (%)",
+        "platform": "Platformda kalan %{percent}",
+        "minPayout": "Minimum ödeme (USD)"
+      }
+    },
+    "audit": {
+      "title": "Denetim kaydı",
+      "subtitle": "Tüm yönetici işlemleri, en yenisi önce.",
+      "filter": "İşlem başlangıcı, ör. payout.",
+      "apply": "Filtrele",
+      "empty": "Kayıt yok.",
+      "when": "Zaman",
+      "who": "Kim",
+      "action": "İşlem",
+      "target": "Hedef",
+      "details": "Ayrıntılar"
     }
   },
   "BoostPage": {
@@ -409,7 +788,8 @@
       "alreadyPaid": "Bu sipariş için artık ödeme gerekmiyor.",
       "unavailable": "Bu ödeme yöntemi bu sipariş için kullanılamıyor.",
       "rateLimited": "Çok fazla deneme yapıldı. Lütfen birkaç dakika bekle.",
-      "providerError": "Ödeme sağlayıcısına ulaşılamadı. Tekrar dene ya da başka bir yöntem seç."
+      "providerError": "Ödeme sağlayıcısına ulaşılamadı. Tekrar dene ya da başka bir yöntem seç.",
+      "walletInsufficient": "Cüzdan bakiyen bu sipariş için yeterli değil."
     },
     "sandbox": {
       "title": "Test ödemesi",
@@ -418,6 +798,11 @@
       "fail": "Ödeme başarısız",
       "cancel": "Müşteri iptal etti",
       "done": "Bu test ödemesi zaten tamamlandı."
+    },
+    "wallet": {
+      "name": "Cüzdan bakiyesi",
+      "balance": "{balance} bakiyenden anında öde.",
+      "insufficient": "{balance} bakiyen bu sipariş için yeterli değil."
     }
   },
   "Errors": {
@@ -481,7 +866,9 @@
       "notEditable": "Bu sipariş artık değiştirilemez.",
       "passwordRequired": "Hesap şifresini gir.",
       "rateLimited": "Çok fazla değişiklik yapıldı. Lütfen biraz bekle."
-    }
+    },
+    "wallet": "Cüzdan: {balance}",
+    "walletHint": "İadeler buraya yatar. Sipariş veya bahşiş ödemek için kullanabilirsin."
   },
   "Chat": {
     "title": "Sipariş sohbeti",
@@ -509,7 +896,8 @@
     "attachmentMissing": "Görsel açılamadı",
     "closed": {
       "waitingForBooster": "Siparişini bir booster aldığında sohbet açılır.",
-      "closed": "Bu sohbet kapandı. Geçmiş mesajları okumaya devam edebilirsin."
+      "closed": "Bu sohbet kapandı. Geçmiş mesajları okumaya devam edebilirsin.",
+      "readOnly": "Salt okunur: personel sipariş sohbetlerine yazamaz."
     },
     "errors": {
       "notFound": "Sohbet bulunamadı.",
@@ -537,6 +925,132 @@
     "newMessage": "{orderNumber} siparişinde yeni mesaj",
     "dispute": "{orderNumber}: anlaşmazlık {status, select, OPEN {açıldı} RESOLVED {çözüldü} other {güncellendi}}",
     "payout": "{amount} tutarındaki ödeme talebin {status, select, PENDING {alındı} APPROVED {onaylandı} REJECTED {reddedildi} PAID {ödendi} other {güncellendi}}",
-    "system": "Sistem bildirimi"
+    "system": "Sistem bildirimi",
+    "tipReceived": "{orderNumber}: {amount} bahşiş aldın",
+    "reviewReceived": "{orderNumber}: müşteri sana {rating}/5 puan verdi",
+    "refunded": "{orderNumber}: {amount} cüzdanına iade edildi",
+    "boosterStatus": "Booster hesabın {status, select, ACTIVE {onaylandı} SUSPENDED {askıya alındı} other {incelemede}}"
+  },
+  "Payouts": {
+    "title": "Ödemeler",
+    "subtitle": "Kazancını kripto veya banka transferiyle çek.",
+    "back": "Booster paneli",
+    "balance": "Kullanılabilir bakiye",
+    "minimum": "Minimum ödeme",
+    "history": "Ödeme geçmişi",
+    "noHistory": "Henüz ödeme talebi yok.",
+    "date": "Tarih",
+    "amount": "Tutar",
+    "method": "Yöntem",
+    "status": "Durum",
+    "statuses": {
+      "PENDING": "İnceleme bekliyor",
+      "APPROVED": "Onaylandı",
+      "REJECTED": "Reddedildi",
+      "PAID": "Ödendi"
+    },
+    "request": {
+      "title": "Ödeme talep et",
+      "to": "Alıcı: {destination}",
+      "alreadyOpen": "İşlemde olan bir ödemen var. O ödenince veya reddedilince yenisini talep edebilirsin.",
+      "needDetails": "Önce ödeme bilgilerini ekle.",
+      "belowMinimum": "{min} tutarından itibaren ödeme talep edebilirsin. Bakiyen {balance}.",
+      "amount": "Tutar (USD)",
+      "hint": "Minimum {min} USD. Tutar, finans ekibi inceleyene kadar bakiyenden ayrılır.",
+      "submit": "Ödeme talep et",
+      "sent": "Ödeme talep edildi.",
+      "cancel": "Geri çek",
+      "cancelled": "Talep geri çekildi; tutar bakiyene döndü."
+    },
+    "details": {
+      "title": "Ödeme bilgileri",
+      "current": "Mevcut: {destination}",
+      "none": "Henüz eklenmedi.",
+      "method": "Ödeme yöntemi",
+      "methods": {
+        "CRYPTO": "Kripto",
+        "BANK_TRANSFER": "Banka transferi"
+      },
+      "network": "Ağ",
+      "networks": {
+        "USDT_TRC20": "USDT (TRC20)",
+        "USDT_ERC20": "USDT (ERC20)",
+        "BTC": "Bitcoin",
+        "ETH": "Ethereum"
+      },
+      "address": "Cüzdan adresi",
+      "accountHolder": "Hesap sahibi",
+      "iban": "IBAN",
+      "hint": "Şifreli saklanır. Her talep, oluşturulduğu andaki bilgileri korur.",
+      "save": "Bilgileri kaydet",
+      "saved": "Ödeme bilgileri kaydedildi."
+    },
+    "errors": {
+      "notActive": "Yalnızca onaylı ve 2FA'sı açık booster'lar ödeme talep edebilir.",
+      "invalidDetails": "Ödeme bilgilerini kontrol et.",
+      "rateLimited": "Çok fazla değişiklik yapıldı. Lütfen biraz bekle.",
+      "invalidAmount": "En fazla iki ondalıklı bir USD tutarı gir.",
+      "belowMinimum": "Minimum ödeme {min} USD.",
+      "noDetails": "Önce ödeme bilgilerini ekle.",
+      "alreadyOpen": "İşlemde olan bir ödemen var.",
+      "insufficient": "Bakiyen bu tutardan düşük.",
+      "notCancellable": "Bu talep artık geri çekilemez."
+    }
+  },
+  "Disputes": {
+    "open": {
+      "button": "Sorun bildir",
+      "title": "Bu siparişle ilgili sorun bildir",
+      "body": "Destek ekibi karar verene kadar sipariş dondurulur: booster oynayamaz ve giriş bilgileri gizli kalır. Sohbetten yazışmaya devam edebilirsiniz.",
+      "reason": "Ne oldu?",
+      "placeholder": "Ör. hesaba ceza geldi, booster'a ulaşılamıyor…",
+      "hint": "En az 20 karakter. Destek ekibi sipariş sohbetini de okur.",
+      "cancel": "Vazgeç",
+      "submit": "Siparişi dondur ve bildir",
+      "opened": "Bildirildi. Destek ekibi siparişi inceleyecek."
+    },
+    "errors": {
+      "notFound": "Sipariş bulunamadı.",
+      "reason": "Sorunu en az 20 karakterle anlat.",
+      "rateLimited": "Çok fazla bildirim yapıldı. Lütfen biraz bekle.",
+      "notDisputable": "Bu sipariş şu anki durumunda anlaşmazlığa konu edilemez."
+    }
+  },
+  "Feedback": {
+    "tip": {
+      "title": "Booster'ına bahşiş ver",
+      "description": "Sonuçtan memnun musun? Bahşişin tamamı booster'ına gider.",
+      "amount": "Bahşiş tutarı",
+      "fromWallet": "Cüzdan ({balance})",
+      "hint": "Kart veya kriptoyla ödersen sağlayıcının sayfasına gidip buraya dönersin.",
+      "thanks": "Teşekkürler! Bahşiş booster'ına ulaştı.",
+      "sent": "{amount} bahşiş gönderdin. Teşekkürler!",
+      "return": {
+        "success": "Teşekkürler! Ödeme onaylanınca bahşiş booster'ına ulaşır.",
+        "cancelled": "Bahşiş ödemesi iptal edildi.",
+        "failed": "Bahşiş ödemesi başarısız oldu. Tekrar deneyebilirsin."
+      }
+    },
+    "review": {
+      "title": "Booster'ını değerlendir",
+      "description": "Değerlendirmen diğer oyuncuların seçim yapmasına yardımcı olur.",
+      "rating": "Puan",
+      "stars": "{count, plural, other {# yıldız}}",
+      "comment": "Yorum (isteğe bağlı)",
+      "placeholder": "Nasıl geçti?",
+      "public": "Yorumumu sitede göster (yalnızca adım ve soyadımın baş harfi)",
+      "submit": "Değerlendirmeyi gönder",
+      "thanks": "Değerlendirmen için teşekkürler!"
+    },
+    "errors": {
+      "notFound": "Yalnızca tamamlanan siparişlere bahşiş verilebilir veya değerlendirme yapılabilir.",
+      "invalid": "Lütfen girdiklerini kontrol et.",
+      "rateLimited": "Çok fazla deneme yapıldı. Lütfen biraz bekle.",
+      "alreadyTipped": "Bu sipariş için zaten bahşiş verdin.",
+      "walletInsufficient": "Cüzdan bakiyen bu bahşiş için yetersiz.",
+      "unavailable": "Bu ödeme yöntemi kullanılamıyor.",
+      "providerError": "Ödeme sağlayıcısı yanıt vermedi. Lütfen tekrar dene.",
+      "alreadyReviewed": "Bu siparişi zaten değerlendirdin."
+    }
   }
 }

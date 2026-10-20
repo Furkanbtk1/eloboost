@@ -46,7 +46,14 @@
     "perDivision": "por división",
     "per100Rating": "por cada 100 de rating",
     "noGames": "No hay juegos disponibles en este momento.",
-    "boostNow": "Empezar boost"
+    "boostNow": "Empezar boost",
+    "reviews": {
+      "title": "Lo que dicen los jugadores",
+      "subtitle": "Reseñas recientes de pedidos terminados.",
+      "stars": "{count, plural, one {# estrella} other {# estrellas}}",
+      "byline": "{reviewer} · {game} con {booster}",
+      "anonymous": "Cliente verificado"
+    }
   },
   "OrderType": {
     "DIVISION": "Boost de división",
@@ -238,7 +245,8 @@
       "confirm": {
         "complete": "¿Marcar este pedido como completado? Se borrarán los datos de acceso del cliente y tus ganancias se añadirán a tu saldo.",
         "release": "¿Devolver este pedido a la bolsa? Otro booster podrá aceptarlo."
-      }
+      },
+      "disputed": "Este pedido está congelado mientras soporte revisa un problema reportado. No puedes jugarlo ni abrir los datos de acceso hasta que se resuelva."
     },
     "errors": {
       "notActive": "Tu perfil de booster no está activo o tu sesión ha caducado.",
@@ -253,16 +261,387 @@
       "invalidProgress": "Ese valor de progreso no es válido para este pedido.",
       "rateLimited": "Demasiadas acciones. Ve más despacio.",
       "generic": "Algo ha salido mal. Inténtalo de nuevo."
-    }
+    },
+    "payouts": "Retiros"
   },
   "Admin": {
-    "subtitle": "Gestión de la plataforma.",
-    "roleLabel": "Tu rol",
-    "permissionsTitle": "Tus permisos",
-    "permissions": {
-      "ADMIN": "Acceso total: usuarios, precios, pedidos, disputas y pagos.",
-      "SUPPORT": "Leer tickets de soporte, chats de pedidos y disputas.",
-      "FINANCE": "Revisar y aprobar solicitudes de pago de boosters."
+    "title": "Administración",
+    "nav": {
+      "label": "Secciones de administración",
+      "overview": "Resumen",
+      "orders": "Pedidos",
+      "disputes": "Disputas",
+      "users": "Usuarios",
+      "payouts": "Retiros",
+      "pricing": "Precios",
+      "promos": "Cupones",
+      "reviews": "Reseñas",
+      "audit": "Registro"
+    },
+    "pagination": {
+      "page": "Página {page} de {pages} · {total} resultados",
+      "previous": "Anterior",
+      "next": "Siguiente"
+    },
+    "errors": {
+      "forbidden": "No tienes permiso para hacer esto.",
+      "notFound": "No encontrado.",
+      "invalid": "Revisa los valores que introdujiste.",
+      "self": "No puedes hacer esto con tu propia cuenta.",
+      "hasActiveOrders": "Este booster aún tiene pedidos activos. Reasígnalos primero.",
+      "notBooster": "Este usuario no es booster.",
+      "rankRequired": "Elige un rango válido para cada juego seleccionado.",
+      "gamesRequired": "Un booster activo necesita al menos un juego.",
+      "stale": "Alguien lo cambió mientras tanto. Recarga e inténtalo de nuevo.",
+      "noteRequired": "Escribe un motivo para el booster.",
+      "referenceRequired": "Introduce la referencia de la transferencia (3–120 caracteres).",
+      "duplicateReference": "Esta referencia ya se usó en otro retiro.",
+      "refundRange": "El reembolso parcial debe ser mayor que 0 y menor que el total del pedido.",
+      "pastDate": "La fecha de caducidad debe ser futura.",
+      "codeExists": "Ya existe un cupón con este nombre.",
+      "needServer": "Al menos un servidor debe seguir activo.",
+      "defaultModifier": "La opción de LP predeterminada no se puede desactivar."
+    },
+    "transactionType": {
+      "DEPOSIT": "Recarga",
+      "PAYMENT": "Pago",
+      "EARNING": "Ganancia",
+      "TIP": "Propina",
+      "PAYOUT": "Retiro",
+      "REFUND": "Reembolso"
+    },
+    "overview": {
+      "subtitle": {
+        "ADMIN": "El estado de la plataforma de un vistazo.",
+        "SUPPORT": "Disputas, pedidos activos y moderación del chat.",
+        "FINANCE": "Retiros y saldos de los boosters."
+      },
+      "revenue": "Ingresos",
+      "platform": "Ganancia de la plataforma",
+      "paidOrders": "Pedidos pagados",
+      "newCustomers": "Clientes nuevos",
+      "openDisputes": "Disputas abiertas",
+      "activeOrders": "Pedidos activos",
+      "activeOrdersHint": "Asignados, en curso o en pausa",
+      "pool": "Esperando en la bolsa",
+      "flagged": "Mensajes filtrados",
+      "boosters": "Boosters activos",
+      "pendingBoosters": "{count, plural, =0 {Sin solicitudes} one {# solicitud pendiente} other {# solicitudes pendientes}}",
+      "pendingPayouts": "Retiros por revisar",
+      "approvedPayouts": "Aprobados, aún sin pagar",
+      "requests": "{count, plural, =0 {Sin solicitudes} one {# solicitud} other {# solicitudes}}",
+      "paidOut": "Pagado",
+      "balances": "Saldos de boosters",
+      "balancesHint": "Debido a los boosters, aún no solicitado",
+      "last30": "Últimos 30 días",
+      "last7": "Últimos 7 días",
+      "byStatus": "Pedidos por estado",
+      "recentAudit": "Actividad reciente de administración",
+      "allAudit": "Registro completo",
+      "noAudit": "Aún no hay actividad de administración.",
+      "chart": {
+        "title": "Ingresos diarios (USD)",
+        "description": "Pedidos pagados en los últimos 14 días, por día de pago (UTC).",
+        "bar": "{day}: {amount}, {orders} pedidos",
+        "orders": "{count, plural, =0 {sin pedidos} one {# pedido} other {# pedidos}}",
+        "table": "Ver como tabla",
+        "day": "Día",
+        "revenue": "Ingresos",
+        "ordersColumn": "Pedidos"
+      }
+    },
+    "users": {
+      "title": "Usuarios",
+      "subtitle": "Cuentas de clientes, boosters y personal.",
+      "applications": "{count, plural, one {# solicitud de booster} other {# solicitudes de booster}}",
+      "search": "Buscar por correo o nombre",
+      "role": "Rol",
+      "allRoles": "Todos los roles",
+      "filter": "Filtrar",
+      "empty": "Ningún usuario coincide con estos filtros.",
+      "user": "Usuario",
+      "state": "Estado",
+      "joined": "Registro",
+      "manage": "Gestionar",
+      "banned": "Bloqueado",
+      "back": "Todos los usuarios",
+      "booster": {
+        "title": "Perfil de booster",
+        "stats": "{completed} completados · {rating} ★ de {reviews} reseñas · {earnings} ganados",
+        "status": "Aprobación",
+        "games": "Juegos y rangos verificados",
+        "rankFor": "Rango en {game}",
+        "pickRank": "Elige un rango",
+        "rating": "Rating",
+        "hint": "La bolsa de pedidos solo muestra pedidos por debajo de estos rangos. Un booster aprobado puede tomar pedidos.",
+        "save": "Guardar perfil de booster",
+        "saved": "Perfil de booster guardado."
+      },
+      "orders": "Pedidos",
+      "noOrders": "Aún no hay pedidos.",
+      "orderRole": {
+        "customer": "como cliente",
+        "booster": "como booster"
+      },
+      "transactions": "Transacciones",
+      "noTransactions": "Aún no hay transacciones.",
+      "account": "Cuenta",
+      "lastLogin": "Último inicio de sesión",
+      "balance": "Saldo",
+      "twoFactor": "Doble factor",
+      "on": "Activado",
+      "off": "Desactivado",
+      "signIn": "Inicia sesión con",
+      "password": "Correo y contraseña",
+      "oauth": "Solo inicio social",
+      "manageTitle": "Gestionar cuenta",
+      "actions": {
+        "self": "Aquí no puedes cambiar tu propio rol, bloqueo ni 2FA.",
+        "role": "Rol",
+        "saveRole": "Cambiar rol",
+        "roleTitle": "¿Cambiar el rol?",
+        "roleBody": "El usuario pasará a ser {role}. Los roles de personal y booster deben configurar 2FA antes de usar su panel.",
+        "roleHint": "Hacer booster a alguien crea un perfil sin aprobar; añade sus juegos y rangos y luego apruébalo.",
+        "roleSaved": "Rol cambiado.",
+        "ban": "Bloquear usuario",
+        "unban": "Quitar bloqueo",
+        "banBody": "Se cierra su sesión en todas las páginas y no podrá entrar hasta que se quite el bloqueo.",
+        "unbanBody": "Podrá volver a iniciar sesión.",
+        "bannedDone": "Usuario bloqueado.",
+        "unbanned": "Bloqueo quitado.",
+        "reset2fa": "Restablecer 2FA",
+        "reset2faBody": "Úsalo si perdió su app de autenticación. Volverá a configurar 2FA en su próximo inicio de sesión.",
+        "reset2faDone": "2FA restablecido.",
+        "cancel": "Cancelar"
+      }
+    },
+    "payouts": {
+      "title": "Retiros",
+      "subtitle": "Aprueba las solicitudes de retiro de los boosters y registra luego la transferencia.",
+      "views": {
+        "open": "Pendientes",
+        "done": "Historial"
+      },
+      "empty": "Aquí no hay nada.",
+      "requested": "Solicitado el {date}",
+      "reviewed": "revisado el {date}",
+      "actions": {
+        "approve": "Aprobar",
+        "approved": "Retiro aprobado.",
+        "markPaid": "Marcar como pagado",
+        "paid": "Retiro registrado como pagado.",
+        "reject": "Rechazar",
+        "rejected": "Retiro rechazado; el importe volvió al saldo del booster.",
+        "reasonPlaceholder": "Motivo que verá el booster",
+        "referencePlaceholder": "Referencia bancaria o de la transacción",
+        "confirmReject": "Rechazar retiro",
+        "confirmPaid": "Guardar como pagado",
+        "cancel": "Cancelar"
+      }
+    },
+    "orders": {
+      "title": "Pedidos",
+      "subtitle": "Todos los pedidos, con su chat, pagos y registro de accesos.",
+      "search": "Número de pedido o correo",
+      "status": "Estado",
+      "allStatuses": "Todos los estados",
+      "filter": "Filtrar",
+      "empty": "Ningún pedido coincide con estos filtros.",
+      "order": "Pedido",
+      "customer": "Cliente",
+      "booster": "Booster",
+      "total": "Total",
+      "open": "Abrir {orderNumber}",
+      "detail": {
+        "back": "Todos los pedidos",
+        "transactions": "Transacciones",
+        "noTransactions": "Aún no hay transacciones.",
+        "people": "Participantes",
+        "customer": "Cliente",
+        "booster": "Booster",
+        "noBooster": "Sin booster asignado.",
+        "money": "Importes",
+        "total": "Total",
+        "boosterCut": "Parte del booster",
+        "platformCut": "Parte de la plataforma",
+        "rate": "Tipo de cambio",
+        "timeline": "Cronología",
+        "events": {
+          "createdAt": "Creado",
+          "paidAt": "Pagado",
+          "assignedAt": "Asignado",
+          "startedAt": "Iniciado",
+          "completedAt": "Completado",
+          "cancelledAt": "Cancelado"
+        },
+        "access": "Acceso a los datos de acceso",
+        "credentialsStored": "Los datos de acceso del cliente están guardados (cifrados).",
+        "credentialsNone": "No hay datos de acceso guardados.",
+        "noAccess": "Los datos de acceso nunca se mostraron."
+      }
+    },
+    "disputes": {
+      "title": "Disputas",
+      "subtitle": "Pedidos congelados que esperan una decisión.",
+      "views": {
+        "OPEN": "Abiertas",
+        "RESOLVED": "Resueltas"
+      },
+      "empty": "No hay disputas aquí.",
+      "openedBy": "Abierta por {name} ({role}) el {date}",
+      "openTitle": "Disputa abierta: el pedido está congelado",
+      "adminOnly": "Solo un superadministrador puede resolver disputas. Puedes leer el chat abajo.",
+      "history": "Disputas anteriores",
+      "resolutions": {
+        "REFUNDED": "Reembolsado",
+        "PARTIAL_REFUND": "Reembolso parcial",
+        "REASSIGNED": "Reasignado",
+        "CONTINUED": "Continuado"
+      },
+      "resolve": {
+        "decision": "Decisión",
+        "options": {
+          "REFUNDED": {
+            "title": "Reembolso total",
+            "body": "Cancela el pedido y abona {total} al saldo del cliente. El booster no cobra."
+          },
+          "PARTIAL_REFUND": {
+            "title": "Reembolso parcial",
+            "body": "Reembolsa parte de {total} al saldo, cierra el pedido y paga al booster por el resto."
+          },
+          "REASSIGNED": {
+            "title": "Dar a otro booster",
+            "body": "Quita al booster actual y devuelve el pedido a la bolsa."
+          },
+          "CONTINUED": {
+            "title": "Continuar el pedido",
+            "body": "Descongela el pedido donde se quedó."
+          }
+        },
+        "refundAmount": "Importe del reembolso ({currency})",
+        "boosterShare": "El booster recibe unos {amount} por el resto.",
+        "note": "Nota de la decisión",
+        "noteHint": "Se guarda con la disputa y en el registro.",
+        "submit": "Resolver disputa",
+        "done": "Disputa resuelta."
+      }
+    },
+    "reviews": {
+      "title": "Reseñas",
+      "subtitle": "Oculta las reseñas que no deban ser públicas. Siguen contando para la valoración del booster.",
+      "empty": "Aún no hay reseñas.",
+      "stars": "{count, plural, one {# estrella} other {# estrellas}}",
+      "public": "Pública",
+      "private": "Oculta",
+      "noComment": "Sin comentario.",
+      "meta": "{customer} sobre {booster} · {game} · {date}",
+      "hide": "Ocultar",
+      "show": "Mostrar",
+      "hidden": "Reseña oculta.",
+      "shown": "Reseña visible de nuevo."
+    },
+    "promos": {
+      "title": "Cupones",
+      "subtitle": "Descuentos porcentuales o fijos con límite de usos y fecha de caducidad.",
+      "new": "Nuevo cupón",
+      "empty": "Aún no hay cupones.",
+      "code": "Código",
+      "discount": "Descuento",
+      "uses": "Usos",
+      "expires": "Caduca",
+      "minOrder": "Pedido mín.",
+      "active": "Activo",
+      "usedUp": "Agotado",
+      "expired": "Caducado",
+      "toggle": "Activar o desactivar {code}",
+      "form": {
+        "code": "Código",
+        "type": "Tipo",
+        "percentage": "Porcentaje",
+        "fixed": "Importe fijo (USD)",
+        "valuePercent": "Descuento (%)",
+        "valueFixed": "Descuento (USD)",
+        "maxUses": "Límite de usos",
+        "unlimited": "Ilimitado",
+        "expiresOn": "Válido hasta",
+        "minOrder": "Pedido mínimo (USD)",
+        "none": "Ninguno",
+        "create": "Crear cupón",
+        "created": "Cupón creado."
+      }
+    },
+    "pricing": {
+      "title": "Precios",
+      "subtitle": "Cambia los precios sin tocar el código. Los pedidos nuevos los usan al momento.",
+      "games": "Juegos",
+      "saved": "Guardado. Los pedidos nuevos usan estos precios.",
+      "save": "Guardar",
+      "note": "Los pedidos ya hechos conservan el precio con el que se pagaron.",
+      "game": {
+        "title": "Juego",
+        "description": "Tarifa fija añadida a cada pedido, tarifa de coaching y si el juego se ofrece.",
+        "basePrice": "Precio base (USD)",
+        "hourly": "Coaching por hora (USD)",
+        "status": "Visibilidad",
+        "active": "Ofrecido",
+        "inactive": "Oculto"
+      },
+      "steps": {
+        "title": "Precios por rango",
+        "description": "USD. División: subir de este rango al siguiente. Victoria y clasificación: precio por partida en este rango.",
+        "rank": "Rango",
+        "division": "Siguiente división",
+        "win": "Por victoria",
+        "placement": "Por clasificatoria",
+        "top": "Rango máximo"
+      },
+      "brackets": {
+        "title": "Precios por rating",
+        "description": "USD por cada 100 puntos de rating ganados en cada tramo, y por victoria.",
+        "range": "Tramo de rating",
+        "per100": "Por 100",
+        "win": "Por victoria"
+      },
+      "servers": {
+        "title": "Servidores",
+        "description": "Recargo por servidor en porcentaje (p. ej. 10 = +10 %). Los servidores ocultos no se pueden elegir.",
+        "server": "Servidor",
+        "region": "Región",
+        "percent": "Recargo %",
+        "active": "Ofrecido"
+      },
+      "modifiers": {
+        "title": "Opciones y extras",
+        "description": "Cambio de precio en porcentaje (p. ej. 20 = +20 %, -10 = -10 %).",
+        "option": "Opción",
+        "category": "Tipo",
+        "percent": "Cambio %",
+        "active": "Ofrecido",
+        "default": "predeterminada",
+        "categories": {
+          "LP_GAIN": "Ganancia de LP",
+          "ADD_ON": "Extra"
+        }
+      },
+      "settings": {
+        "title": "Ajustes de la plataforma",
+        "description": "Se aplican a pedidos nuevos y solicitudes de retiro.",
+        "share": "Parte del booster (%)",
+        "platform": "La plataforma se queda el {percent} %",
+        "minPayout": "Retiro mínimo (USD)"
+      }
+    },
+    "audit": {
+      "title": "Registro",
+      "subtitle": "Todas las acciones de administración, la más reciente primero.",
+      "filter": "La acción empieza por, p. ej. payout.",
+      "apply": "Filtrar",
+      "empty": "Sin entradas.",
+      "when": "Cuándo",
+      "who": "Quién",
+      "action": "Acción",
+      "target": "Objetivo",
+      "details": "Detalles"
     }
   },
   "BoostPage": {
@@ -409,7 +788,8 @@
       "alreadyPaid": "Este pedido ya no necesita un pago.",
       "unavailable": "Este método de pago no está disponible para este pedido.",
       "rateLimited": "Demasiados intentos. Espera unos minutos.",
-      "providerError": "No se ha podido contactar con el proveedor de pago. Inténtalo de nuevo o elige otro método."
+      "providerError": "No se ha podido contactar con el proveedor de pago. Inténtalo de nuevo o elige otro método.",
+      "walletInsufficient": "Tu saldo no alcanza para este pedido."
     },
     "sandbox": {
       "title": "Pago de prueba",
@@ -418,6 +798,11 @@
       "fail": "El pago falla",
       "cancel": "El cliente cancela",
       "done": "Este pago de prueba ya ha terminado."
+    },
+    "wallet": {
+      "name": "Saldo de la cuenta",
+      "balance": "Paga al instante con tu saldo de {balance}.",
+      "insufficient": "Tu saldo de {balance} no alcanza para este pedido."
     }
   },
   "Errors": {
@@ -481,7 +866,9 @@
       "notEditable": "Este pedido ya no se puede modificar.",
       "passwordRequired": "Introduce la contraseña de la cuenta.",
       "rateLimited": "Demasiados cambios. Espera un rato."
-    }
+    },
+    "wallet": "Saldo: {balance}",
+    "walletHint": "Los reembolsos llegan aquí. Úsalo para pagar pedidos o propinas."
   },
   "Chat": {
     "title": "Chat del pedido",
@@ -509,7 +896,8 @@
     "attachmentMissing": "Imagen no disponible",
     "closed": {
       "waitingForBooster": "El chat se abre en cuanto un booster acepte tu pedido.",
-      "closed": "Este chat está cerrado. Puedes seguir leyendo el historial."
+      "closed": "Este chat está cerrado. Puedes seguir leyendo el historial.",
+      "readOnly": "Solo lectura: el personal no puede escribir en los chats de pedidos."
     },
     "errors": {
       "notFound": "Chat no encontrado.",
@@ -537,6 +925,132 @@
     "newMessage": "Nuevo mensaje sobre {orderNumber}",
     "dispute": "{orderNumber}: disputa {status, select, OPEN {abierta} RESOLVED {resuelta} other {actualizada}}",
     "payout": "Retiro de {amount} {status, select, PENDING {solicitado} APPROVED {aprobado} REJECTED {rechazado} PAID {pagado} other {actualizado}}",
-    "system": "Aviso del sistema"
+    "system": "Aviso del sistema",
+    "tipReceived": "{orderNumber}: recibiste una propina de {amount}",
+    "reviewReceived": "{orderNumber}: el cliente te valoró con {rating}/5",
+    "refunded": "{orderNumber}: se reembolsaron {amount} a tu saldo",
+    "boosterStatus": "Tu cuenta de booster está {status, select, ACTIVE {aprobada} SUSPENDED {suspendida} other {en revisión}}"
+  },
+  "Payouts": {
+    "title": "Retiros",
+    "subtitle": "Retira tus ganancias por cripto o transferencia bancaria.",
+    "back": "Panel de booster",
+    "balance": "Saldo disponible",
+    "minimum": "Retiro mínimo",
+    "history": "Historial de retiros",
+    "noHistory": "Aún no hay solicitudes de retiro.",
+    "date": "Fecha",
+    "amount": "Importe",
+    "method": "Método",
+    "status": "Estado",
+    "statuses": {
+      "PENDING": "Pendiente de revisión",
+      "APPROVED": "Aprobado",
+      "REJECTED": "Rechazado",
+      "PAID": "Pagado"
+    },
+    "request": {
+      "title": "Solicitar un retiro",
+      "to": "A {destination}",
+      "alreadyOpen": "Ya tienes un retiro en curso. Podrás pedir otro cuando se pague o se rechace.",
+      "needDetails": "Añade primero tus datos de cobro.",
+      "belowMinimum": "Puedes solicitar un retiro desde {min}. Tu saldo es {balance}.",
+      "amount": "Importe (USD)",
+      "hint": "Mínimo {min} USD. El importe se retiene de tu saldo hasta que finanzas lo revise.",
+      "submit": "Solicitar retiro",
+      "sent": "Retiro solicitado.",
+      "cancel": "Retirar solicitud",
+      "cancelled": "Solicitud retirada; el importe volvió a tu saldo."
+    },
+    "details": {
+      "title": "Datos de cobro",
+      "current": "Actual: {destination}",
+      "none": "Aún no añadidos.",
+      "method": "Método de cobro",
+      "methods": {
+        "CRYPTO": "Cripto",
+        "BANK_TRANSFER": "Transferencia bancaria"
+      },
+      "network": "Red",
+      "networks": {
+        "USDT_TRC20": "USDT (TRC20)",
+        "USDT_ERC20": "USDT (ERC20)",
+        "BTC": "Bitcoin",
+        "ETH": "Ethereum"
+      },
+      "address": "Dirección de la wallet",
+      "accountHolder": "Titular de la cuenta",
+      "iban": "IBAN",
+      "hint": "Se guardan cifrados. Cada solicitud conserva los datos con los que se hizo.",
+      "save": "Guardar datos",
+      "saved": "Datos de cobro guardados."
+    },
+    "errors": {
+      "notActive": "Solo los boosters aprobados y con 2FA pueden solicitar retiros.",
+      "invalidDetails": "Revisa tus datos de cobro.",
+      "rateLimited": "Demasiados cambios. Espera un momento.",
+      "invalidAmount": "Introduce un importe en USD con hasta dos decimales.",
+      "belowMinimum": "El retiro mínimo es de {min} USD.",
+      "noDetails": "Añade primero tus datos de cobro.",
+      "alreadyOpen": "Ya tienes un retiro en curso.",
+      "insufficient": "Tu saldo es menor que este importe.",
+      "notCancellable": "Esta solicitud ya no se puede retirar."
+    }
+  },
+  "Disputes": {
+    "open": {
+      "button": "Reportar un problema",
+      "title": "Reportar un problema con este pedido",
+      "body": "El pedido queda congelado hasta que soporte decida: el booster no puede jugar y los datos de acceso siguen ocultos. Podéis seguir hablando por el chat.",
+      "reason": "¿Qué pasó?",
+      "placeholder": "P. ej. la cuenta recibió una sanción, el booster no responde…",
+      "hint": "Al menos 20 caracteres. Soporte también lee el chat del pedido.",
+      "cancel": "Cancelar",
+      "submit": "Congelar pedido y reportar",
+      "opened": "Reportado. Soporte revisará el pedido."
+    },
+    "errors": {
+      "notFound": "Pedido no encontrado.",
+      "reason": "Describe el problema en al menos 20 caracteres.",
+      "rateLimited": "Demasiados reportes. Espera un rato.",
+      "notDisputable": "Este pedido no se puede disputar en su estado actual."
+    }
+  },
+  "Feedback": {
+    "tip": {
+      "title": "Da una propina a tu booster",
+      "description": "¿Contento con el resultado? Toda la propina va para tu booster.",
+      "amount": "Importe de la propina",
+      "fromWallet": "Saldo ({balance})",
+      "hint": "Si pagas con tarjeta o cripto, irás a la página del proveedor y volverás aquí.",
+      "thanks": "¡Gracias! Tu booster recibió la propina.",
+      "sent": "Diste una propina de {amount}. ¡Gracias!",
+      "return": {
+        "success": "¡Gracias! La propina llegará a tu booster en cuanto se confirme el pago.",
+        "cancelled": "Se canceló el pago de la propina.",
+        "failed": "El pago de la propina falló. Puedes intentarlo de nuevo."
+      }
+    },
+    "review": {
+      "title": "Valora a tu booster",
+      "description": "Tu valoración ayuda a otros jugadores a elegir.",
+      "rating": "Valoración",
+      "stars": "{count, plural, one {# estrella} other {# estrellas}}",
+      "comment": "Comentario (opcional)",
+      "placeholder": "¿Qué tal fue?",
+      "public": "Mostrar mi reseña en la web (solo nombre e inicial)",
+      "submit": "Enviar valoración",
+      "thanks": "¡Gracias por tu valoración!"
+    },
+    "errors": {
+      "notFound": "Solo se pueden valorar o dar propina a pedidos terminados.",
+      "invalid": "Revisa lo que introdujiste.",
+      "rateLimited": "Demasiados intentos. Espera un rato.",
+      "alreadyTipped": "Ya diste una propina en este pedido.",
+      "walletInsufficient": "Tu saldo no alcanza para esta propina.",
+      "unavailable": "Este método de pago no está disponible.",
+      "providerError": "El proveedor de pago no respondió. Inténtalo de nuevo.",
+      "alreadyReviewed": "Ya valoraste este pedido."
+    }
   }
 }
