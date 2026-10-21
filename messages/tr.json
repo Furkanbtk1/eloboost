@@ -824,7 +824,8 @@
       "unavailable": "Bu ödeme yöntemi bu sipariş için kullanılamıyor.",
       "rateLimited": "Çok fazla deneme yapıldı. Lütfen birkaç dakika bekle.",
       "providerError": "Ödeme sağlayıcısına ulaşılamadı. Tekrar dene ya da başka bir yöntem seç.",
-      "walletInsufficient": "Cüzdan bakiyen bu sipariş için yeterli değil."
+      "walletInsufficient": "Cüzdan bakiyen bu sipariş için yeterli değil.",
+      "depositRange": "{min} ile {max} USD arasında, en fazla iki ondalıklı bir tutar gir."
     },
     "sandbox": {
       "title": "Test ödemesi",
@@ -964,7 +965,8 @@
     "tipReceived": "{orderNumber}: {amount} bahşiş aldın",
     "reviewReceived": "{orderNumber}: müşteri sana {rating}/5 puan verdi",
     "refunded": "{orderNumber}: {amount} cüzdanına iade edildi",
-    "boosterStatus": "Booster hesabın {status, select, ACTIVE {onaylandı} SUSPENDED {askıya alındı} other {incelemede}}"
+    "boosterStatus": "Booster hesabın {status, select, ACTIVE {onaylandı} SUSPENDED {askıya alındı} other {incelemede}}",
+    "deposit": "Cüzdanına {amount} eklendi"
   },
   "Payouts": {
     "title": "Ödemeler",
@@ -1101,6 +1103,22 @@
       "body": "Bu e-posta adresinin sana ait olduğunu onayla. Bağlantı 24 saat geçerli.",
       "button": "E-postamı doğrula",
       "footer": "EloBoost hesabını sen açmadıysan bu e-postayı yok sayabilirsin."
+    }
+  },
+  "Wallet": {
+    "button": "Bakiye yükle",
+    "title": "Bakiye yükle",
+    "description": "Cüzdanına bakiye yükle ({min}–{max} USD). Sipariş ve bahşiş için kullanabilirsin; iadeler de buraya yatar.",
+    "presets": "Hızlı tutarlar",
+    "amount": "Tutar (USD)",
+    "payWith": "{method} ile öde",
+    "noMethods": "Şu anda kullanılabilir ödeme yöntemi yok.",
+    "hint": "Ödeme onaylanır onaylanmaz bakiye eklenir.",
+    "close": "Kapat",
+    "return": {
+      "success": "Teşekkürler! Ödeme onaylanınca bakiyen güncellenir.",
+      "cancelled": "Yükleme iptal edildi. Ücret alınmadı.",
+      "failed": "Ödeme başarısız oldu. Ücret alınmadı; lütfen tekrar dene."
     }
   }
 }

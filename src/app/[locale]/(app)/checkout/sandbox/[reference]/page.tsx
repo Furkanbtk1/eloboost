@@ -38,7 +38,7 @@ async function SandboxPayment({ params }: Pick<Props, "params">) {
     where: { gateway: "SANDBOX", gatewayTransactionId: reference, userId: user.id },
     select: { type: true, status: true, amount: true, currency: true, order: { select: { orderNumber: true } } },
   });
-  if (!payment?.order) notFound();
+  if (!payment || (!payment.order && payment.type !== "DEPOSIT")) notFound();
 
   const [t, format] = await Promise.all([getTranslations("Payments.sandbox"), getFormatter()]);
   const amount = format.number(payment.amount.toNumber(), { style: "currency", currency: payment.currency });
@@ -50,7 +50,7 @@ async function SandboxPayment({ params }: Pick<Props, "params">) {
           <FlaskConicalIcon className="size-5 text-amber-500" />
           {t("title")}
         </CardTitle>
-        <CardDescription>{t("body", { orderNumber: payment.order.orderNumber })}</CardDescription>
+        <CardDescription>{t("body", { orderNumber: payment.order?.orderNumber ?? "WALLET" })}</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
         <p className="text-3xl font-bold tabular-nums">{amount}</p>
@@ -60,8 +60,16 @@ async function SandboxPayment({ params }: Pick<Props, "params">) {
           <>
             <p className="text-sm text-muted-foreground">{t("done")}</p>
             <Button asChild variant="outline" className="justify-self-start">
-              <Link href={payment.type === "TIP" ? `/dashboard/orders/${payment.order.orderNumber}` : `/checkout/${payment.order.orderNumber}`}>
-                {payment.order.orderNumber}
+              <Link
+                href={
+                  !payment.order
+                    ? "/dashboard"
+                    : payment.type === "TIP"
+                      ? `/dashboard/orders/${payment.order.orderNumber}`
+                      : `/checkout/${payment.order.orderNumber}`
+                }
+              >
+                {payment.order?.orderNumber ?? "WALLET"}
               </Link>
             </Button>
           </>

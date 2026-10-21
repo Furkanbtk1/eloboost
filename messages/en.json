@@ -824,7 +824,8 @@
       "unavailable": "This payment method isn't available for this order.",
       "rateLimited": "Too many attempts. Please wait a few minutes.",
       "providerError": "The payment provider couldn't be reached. Please try again or pick another method.",
-      "walletInsufficient": "Your wallet balance isn't enough for this order."
+      "walletInsufficient": "Your wallet balance isn't enough for this order.",
+      "depositRange": "Enter an amount between {min} and {max} USD, with at most two decimals."
     },
     "sandbox": {
       "title": "Test payment",
@@ -964,7 +965,8 @@
     "tipReceived": "{orderNumber}: you received a {amount} tip",
     "reviewReceived": "{orderNumber}: the customer rated you {rating}/5",
     "refunded": "{orderNumber}: {amount} was refunded to your wallet",
-    "boosterStatus": "Your booster account is {status, select, ACTIVE {approved} SUSPENDED {suspended} other {under review}}"
+    "boosterStatus": "Your booster account is {status, select, ACTIVE {approved} SUSPENDED {suspended} other {under review}}",
+    "deposit": "{amount} was added to your wallet"
   },
   "Payouts": {
     "title": "Payouts",
@@ -1101,6 +1103,22 @@
       "body": "Confirm that this email address belongs to you. The link works for 24 hours.",
       "button": "Verify my email",
       "footer": "If you didn't create an EloBoost account, you can ignore this email."
+    }
+  },
+  "Wallet": {
+    "button": "Add balance",
+    "title": "Add balance",
+    "description": "Top up your wallet ({min}–{max} USD). Use it for orders and tips; refunds land here too.",
+    "presets": "Quick amounts",
+    "amount": "Amount (USD)",
+    "payWith": "Pay with {method}",
+    "noMethods": "No payment methods are available right now.",
+    "hint": "The balance is added as soon as the payment is confirmed.",
+    "close": "Close",
+    "return": {
+      "success": "Thanks! Your balance is updated as soon as the payment is confirmed.",
+      "cancelled": "The top-up was cancelled. You weren't charged.",
+      "failed": "The payment failed. You weren't charged; please try again."
     }
   }
 }

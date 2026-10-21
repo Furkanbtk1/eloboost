@@ -824,7 +824,8 @@
       "unavailable": "Este método de pago no está disponible para este pedido.",
       "rateLimited": "Demasiados intentos. Espera unos minutos.",
       "providerError": "No se ha podido contactar con el proveedor de pago. Inténtalo de nuevo o elige otro método.",
-      "walletInsufficient": "Tu saldo no alcanza para este pedido."
+      "walletInsufficient": "Tu saldo no alcanza para este pedido.",
+      "depositRange": "Introduce un importe entre {min} y {max} USD, con hasta dos decimales."
     },
     "sandbox": {
       "title": "Pago de prueba",
@@ -964,7 +965,8 @@
     "tipReceived": "{orderNumber}: recibiste una propina de {amount}",
     "reviewReceived": "{orderNumber}: el cliente te valoró con {rating}/5",
     "refunded": "{orderNumber}: se reembolsaron {amount} a tu saldo",
-    "boosterStatus": "Tu cuenta de booster está {status, select, ACTIVE {aprobada} SUSPENDED {suspendida} other {en revisión}}"
+    "boosterStatus": "Tu cuenta de booster está {status, select, ACTIVE {aprobada} SUSPENDED {suspendida} other {en revisión}}",
+    "deposit": "Se añadieron {amount} a tu saldo"
   },
   "Payouts": {
     "title": "Retiros",
@@ -1101,6 +1103,22 @@
       "body": "Confirma que esta dirección de correo es tuya. El enlace es válido durante 24 horas.",
       "button": "Verificar mi correo",
       "footer": "Si no creaste una cuenta de EloBoost, ignora este correo."
+    }
+  },
+  "Wallet": {
+    "button": "Añadir saldo",
+    "title": "Añadir saldo",
+    "description": "Recarga tu saldo ({min}–{max} USD). Úsalo para pedidos y propinas; los reembolsos también llegan aquí.",
+    "presets": "Importes rápidos",
+    "amount": "Importe (USD)",
+    "payWith": "Pagar con {method}",
+    "noMethods": "Ahora mismo no hay métodos de pago disponibles.",
+    "hint": "El saldo se añade en cuanto se confirma el pago.",
+    "close": "Cerrar",
+    "return": {
+      "success": "¡Gracias! Tu saldo se actualizará en cuanto se confirme el pago.",
+      "cancelled": "Se canceló la recarga. No se te cobró nada.",
+      "failed": "El pago falló. No se te cobró nada; inténtalo de nuevo."
     }
   }
 }

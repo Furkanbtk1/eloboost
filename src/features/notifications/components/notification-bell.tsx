@@ -131,6 +131,7 @@ function NotificationList({ items, onRead }: { items: NotificationItem[]; onRead
       case "DISPUTE_UPDATE":
         return t("dispute", { orderNumber, status: item.status ?? "other" });
       case "PAYOUT_UPDATE":
+        if (item.event === "deposit") return t("deposit", { amount: usd(item.amount) });
         return t("payout", { amount: usd(item.amount), status: item.status ?? "other" });
       case "SYSTEM":
         return item.event === "booster_status" ? t("boosterStatus", { status: item.status ?? "other" }) : t("system");

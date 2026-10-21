@@ -1,6 +1,7 @@
 import { hasLocale } from "next-intl";
 
-import { reconcileOrderPayments } from "@/features/payments/process";
+import { reconcileOrderPayments, reconcileUserDeposits } from "@/features/payments/process";
+import { getCurrentUser } from "@/lib/auth/session";
 import { getPathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { db } from "@/lib/db";
@@ -19,8 +20,15 @@ export async function GET(request: Request) {
   const rawLocale = url.searchParams.get("locale") ?? "";
   const locale = hasLocale(routing.locales, rawLocale) ? rawLocale : routing.defaultLocale;
   const isTip = url.searchParams.get("kind") === "tip";
-
   const limit = await rateLimit("paymentReturn", clientIpFrom(request.headers));
+
+  // Top-ups belong to the signed-in customer, not to an order.
+  if (url.searchParams.get("kind") === "deposit") {
+    const user = await getCurrentUser();
+    if (user && limit.success) await reconcileUserDeposits(user.id);
+    return Response.redirect(new URL(getPathname({ href: { pathname: "/dashboard", query: { deposit: "success" } }, locale }), url), 303);
+  }
+
   const order = /^ELO-\d{5,6}$/.test(orderNumber)
     ? await db.order.findUnique({ where: { orderNumber }, select: { id: true, status: true } })
     : null;

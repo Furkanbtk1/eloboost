@@ -15,6 +15,7 @@ import { getRequestCountry } from "@/lib/geo";
 import { rateLimit } from "@/lib/rate-limit";
 import { broadcast } from "@/lib/realtime/server";
 
+import { DEPOSIT_MAX_USD, DEPOSIT_MIN_USD } from "./deposit";
 import { applyPaymentUpdate, markOrderPaid, orderPaidSignals } from "./process";
 import { sandboxEnabled } from "./providers/sandbox";
 import { availableProviders, getProvider } from "./registry";
@@ -158,6 +159,72 @@ export async function payWithWalletAction(
 
 class OrderNotPayable extends Error {}
 
+/**
+ * Starts a wallet top-up: a hosted payment for `amountUsd`, credited to the
+ * wallet by the provider's webhook (or the return page) through the same
+ * idempotent pipeline as orders. Amounts are re-validated here, not trusted.
+ */
+export async function startDepositAction(
+  rawLocale: string,
+  rawAmountUsd: unknown,
+  providerId: string,
+): Promise<ActionResult<{ redirectUrl: string }>> {
+  const locale = resolveLocale(rawLocale);
+  const t = await getTranslations({ locale, namespace: "Payments.errors" });
+
+  const customer = await currentCustomer();
+  if (!customer) return fail(t("unauthorized"), 401);
+  const limit = await rateLimit("startPayment", customer.id);
+  if (!limit.success) return fail(t("rateLimited"), 429);
+
+  const amount = typeof rawAmountUsd === "number" && Number.isFinite(rawAmountUsd) ? rawAmountUsd : NaN;
+  const cents = Math.round(amount * 100);
+  if (!(Math.abs(amount * 100 - cents) < 1e-6) || cents < DEPOSIT_MIN_USD * 100 || cents > DEPOSIT_MAX_USD * 100) {
+    return fail(t("depositRange", { min: DEPOSIT_MIN_USD, max: DEPOSIT_MAX_USD }), 400, {
+      amount: [t("depositRange", { min: DEPOSIT_MIN_USD, max: DEPOSIT_MAX_USD })],
+    });
+  }
+
+  const provider = getProvider(providerId);
+  if (!provider || !availableProviders("USD", await getRequestCountry()).includes(provider.id)) {
+    return fail(t("unavailable"), 400);
+  }
+
+  const dashboardPath = getPathname({ href: "/dashboard", locale });
+  let created;
+  try {
+    created = await provider.createPayment({
+      order: {
+        id: customer.id,
+        orderNumber: "WALLET",
+        totalCents: cents,
+        currency: "USD",
+        description: "Add balance",
+        customer,
+      },
+      successUrl: absolute(`/api/payments/return?${new URLSearchParams({ kind: "deposit", locale })}`),
+      cancelUrl: absolute(`${dashboardPath}?deposit=cancelled`),
+      locale,
+    });
+  } catch (error) {
+    console.error(`[payments] ${provider.id} createPayment failed for a top-up`, error);
+    return fail(t("providerError"), 502);
+  }
+
+  await db.transaction.create({
+    data: {
+      userId: customer.id,
+      type: "DEPOSIT",
+      amount: cents / 100,
+      currency: "USD",
+      gateway: provider.gateway,
+      gatewayTransactionId: created.reference,
+      status: "PENDING",
+    },
+  });
+  return ok({ redirectUrl: created.redirectUrl });
+}
+
 export type SandboxOutcome = "paid" | "failed" | "expired";
 
 /** Development only: plays the provider and reports the chosen outcome. */
@@ -177,7 +244,7 @@ export async function sandboxPaymentAction(
     where: { gateway: "SANDBOX", gatewayTransactionId: reference, userId: customer.id },
     include: { order: { select: { orderNumber: true } } },
   });
-  if (!payment?.order) return fail(t("notFound"), 404);
+  if (!payment || (!payment.order && payment.type !== "DEPOSIT")) return fail(t("notFound"), 404);
 
   await applyPaymentUpdate("SANDBOX", {
     reference,
@@ -188,8 +255,9 @@ export async function sandboxPaymentAction(
 
   const result = { paid: "success", failed: "failed", expired: "cancelled" }[outcome];
   // Tips are paid from the order page, order payments from checkout.
-  const back =
-    payment.type === "TIP"
+  const back = !payment.order
+    ? getPathname({ href: { pathname: "/dashboard", query: { deposit: result } }, locale })
+    : payment.type === "TIP"
       ? getPathname({ href: { pathname: `/dashboard/orders/${payment.order.orderNumber}`, query: { tip: result } }, locale })
       : getPathname({ href: { pathname: `/checkout/${payment.order.orderNumber}`, query: { payment: result } }, locale });
   return ok({ redirectTo: back });

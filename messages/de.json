@@ -824,7 +824,8 @@
       "unavailable": "Diese Zahlungsmethode ist für diesen Auftrag nicht verfügbar.",
       "rateLimited": "Zu viele Versuche. Bitte warte ein paar Minuten.",
       "providerError": "Der Zahlungsanbieter ist nicht erreichbar. Versuche es erneut oder wähle eine andere Methode.",
-      "walletInsufficient": "Dein Guthaben reicht für diesen Auftrag nicht."
+      "walletInsufficient": "Dein Guthaben reicht für diesen Auftrag nicht.",
+      "depositRange": "Gib einen Betrag zwischen {min} und {max} USD mit höchstens zwei Nachkommastellen ein."
     },
     "sandbox": {
       "title": "Testzahlung",
@@ -964,7 +965,8 @@
     "tipReceived": "{orderNumber}: Du hast {amount} Trinkgeld erhalten",
     "reviewReceived": "{orderNumber}: Der Kunde hat dich mit {rating}/5 bewertet",
     "refunded": "{orderNumber}: {amount} wurden deinem Guthaben erstattet",
-    "boosterStatus": "Dein Booster-Konto ist {status, select, ACTIVE {freigegeben} SUSPENDED {gesperrt} other {in Prüfung}}"
+    "boosterStatus": "Dein Booster-Konto ist {status, select, ACTIVE {freigegeben} SUSPENDED {gesperrt} other {in Prüfung}}",
+    "deposit": "{amount} wurden deinem Guthaben gutgeschrieben"
   },
   "Payouts": {
     "title": "Auszahlungen",
@@ -1101,6 +1103,22 @@
       "body": "Bestätige, dass diese E-Mail-Adresse dir gehört. Der Link gilt 24 Stunden.",
       "button": "Meine E-Mail bestätigen",
       "footer": "Falls du kein EloBoost-Konto erstellt hast, ignoriere diese E-Mail."
+    }
+  },
+  "Wallet": {
+    "button": "Guthaben aufladen",
+    "title": "Guthaben aufladen",
+    "description": "Lade dein Guthaben auf ({min}–{max} USD). Nutze es für Aufträge und Trinkgeld; Erstattungen landen ebenfalls hier.",
+    "presets": "Schnellbeträge",
+    "amount": "Betrag (USD)",
+    "payWith": "Mit {method} bezahlen",
+    "noMethods": "Derzeit sind keine Zahlungsmethoden verfügbar.",
+    "hint": "Das Guthaben wird gutgeschrieben, sobald die Zahlung bestätigt ist.",
+    "close": "Schließen",
+    "return": {
+      "success": "Danke! Dein Guthaben wird aktualisiert, sobald die Zahlung bestätigt ist.",
+      "cancelled": "Die Aufladung wurde abgebrochen. Es wurde nichts abgebucht.",
+      "failed": "Die Zahlung ist fehlgeschlagen. Es wurde nichts abgebucht; bitte versuch es erneut."
     }
   }
 }

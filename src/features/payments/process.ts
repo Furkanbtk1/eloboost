@@ -13,6 +13,8 @@ export type ApplyResult =
   | "paid"
   /** Tip credited to the booster. */
   | "tip_paid"
+  /** Wallet top-up credited to the customer. */
+  | "deposit_paid"
   /** Failure / expiry recorded on the transaction. */
   | "recorded"
   /** Nothing to do: still pending, or this update was already applied. */
@@ -107,8 +109,11 @@ export async function applyPaymentUpdate(gateway: PaymentGateway, update: Paymen
       where: { gateway_gatewayTransactionId: { gateway, gatewayTransactionId: update.reference } },
       include: { order: true },
     });
-    if (!payment || (payment.type !== "PAYMENT" && payment.type !== "TIP") || !payment.order) return "unknown_payment";
+    if (!payment) return "unknown_payment";
     const { order } = payment;
+    // Order payments and tips belong to an order; a top-up belongs to the user alone.
+    const isDeposit = payment.type === "DEPOSIT";
+    if (!isDeposit && ((payment.type !== "PAYMENT" && payment.type !== "TIP") || !order)) return "unknown_payment";
 
     if (update.outcome === "failed" || update.outcome === "expired") {
       const { count } = await tx.transaction.updateMany({
@@ -136,9 +141,25 @@ export async function applyPaymentUpdate(gateway: PaymentGateway, update: Paymen
     if (claimed.count === 0) return "ignored";
 
     if (!amountMatches) {
-      console.error(`[payments] amount mismatch on ${order.orderNumber} (${gateway} ${update.reference})`);
+      console.error(`[payments] amount mismatch on ${order?.orderNumber ?? "top-up"} (${gateway} ${update.reference})`);
       return "needs_review";
     }
+
+    if (isDeposit) {
+      // Wallet currency is USD, so the charged amount is the credit.
+      await tx.user.update({ where: { id: payment.userId }, data: { balance: { increment: payment.amount } } });
+      await tx.notification.create({
+        data: {
+          userId: payment.userId,
+          type: "PAYOUT_UPDATE",
+          data: { event: "deposit", amount: payment.amount.toNumber() },
+          link: "/dashboard",
+        },
+      });
+      signals.push(signal.notification(payment.userId));
+      return "deposit_paid";
+    }
+    if (!order) return "unknown_payment";
 
     if (payment.type === "TIP") {
       const booster = await creditTip(tx, order, payment.amount.times(order.exchangeRate).toDecimalPlaces(2), payment.id);
@@ -163,6 +184,25 @@ export async function applyPaymentUpdate(gateway: PaymentGateway, update: Paymen
 
   broadcast(...signals);
   return result;
+}
+
+/** Asks providers about a customer's open top-ups (their return URL has no order to look up). */
+export async function reconcileUserDeposits(userId: string): Promise<void> {
+  const open = await db.transaction.findMany({
+    where: { userId, type: "DEPOSIT", status: "PENDING", gatewayTransactionId: { not: null } },
+    select: { gateway: true, gatewayTransactionId: true },
+  });
+  await Promise.all(
+    open.map(async ({ gateway, gatewayTransactionId }) => {
+      const provider = getProviderByGateway(gateway);
+      if (!provider || !gatewayTransactionId) return;
+      try {
+        await applyPaymentUpdate(gateway, await provider.fetchStatus(gatewayTransactionId));
+      } catch (error) {
+        console.error(`[payments] reconcile deposit ${gateway} ${gatewayTransactionId} failed`, error);
+      }
+    }),
+  );
 }
 
 /**

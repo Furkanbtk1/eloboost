@@ -5,48 +5,63 @@ import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 import { PanelHeader, PanelSkeleton } from "@/components/layout/panel";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { OrderStatusBadge } from "@/features/orders/components/status-badge";
 import { getOrderText } from "@/features/orders/describe";
 import { getCustomerOrders } from "@/features/orders/queries";
+import { AddBalanceDialog } from "@/features/payments/components/add-balance-dialog";
+import { availableProviders } from "@/features/payments/registry";
 import { Link } from "@/i18n/navigation";
 import { requireArea } from "@/lib/auth/session";
 import { db } from "@/lib/db";
+import { getRequestCountry } from "@/lib/geo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Orders");
   return { title: t("title"), robots: { index: false } };
 }
 
-export default function DashboardPage() {
+export default function DashboardPage({ searchParams }: PageProps<"/[locale]/dashboard">) {
   return (
     <Suspense fallback={<PanelSkeleton />}>
-      <Dashboard />
+      <Dashboard searchParams={searchParams} />
     </Suspense>
   );
 }
 
-async function Dashboard() {
+async function Dashboard({ searchParams }: Pick<PageProps<"/[locale]/dashboard">, "searchParams">) {
   const user = await requireArea("/dashboard");
-  const [orders, wallet, t, tPanel, text] = await Promise.all([
+  const { deposit } = await searchParams;
+  const depositReturn = deposit === "success" || deposit === "cancelled" || deposit === "failed" ? deposit : null;
+  const depositProviders = availableProviders("USD", await getRequestCountry());
+  const [orders, wallet, t, tPanel, tWallet, text] = await Promise.all([
     getCustomerOrders(user.id),
     db.user.findUnique({ where: { id: user.id }, select: { balance: true } }),
     getTranslations("Orders"),
     getTranslations("Panel"),
+    getTranslations("Wallet"),
     getOrderText(),
   ]);
 
   return (
     <>
       <PanelHeader title={tPanel("welcome", { name: user.name ?? user.email })} subtitle={t("title")}>
-        {wallet && wallet.balance.gt(0) && (
+        <div className="flex items-center gap-2">
           <span className="flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm" title={t("walletHint")}>
             <WalletIcon className="size-4 text-primary" />
-            {t("wallet", { balance: text.format.number(wallet.balance.toNumber(), { style: "currency", currency: "USD" }) })}
+            {t("wallet", { balance: text.format.number(wallet?.balance.toNumber() ?? 0, { style: "currency", currency: "USD" }) })}
           </span>
-        )}
+          <AddBalanceDialog providers={depositProviders} />
+        </div>
       </PanelHeader>
+
+      {depositReturn && (
+        <Alert className="mb-6" variant={depositReturn === "failed" ? "destructive" : "default"}>
+          <AlertDescription>{tWallet(`return.${depositReturn}`)}</AlertDescription>
+        </Alert>
+      )}
 
       {orders.length === 0 ? (
         <Card>
