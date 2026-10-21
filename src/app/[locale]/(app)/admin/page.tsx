@@ -12,7 +12,7 @@ import { StatTile } from "@/features/admin/components/stat-tile";
 import { getAdminMetrics, getAuditLog } from "@/features/admin/metrics";
 import { OrderStatus } from "@/generated/prisma/enums";
 import { Link } from "@/i18n/navigation";
-import { isStaffRole, type StaffRole } from "@/lib/auth/access";
+import { isStaffRole } from "@/lib/auth/access";
 import { requireArea } from "@/lib/auth/session";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -79,26 +79,35 @@ async function AdminOverview() {
     balances: { label: t("balances"), value: usd(metrics.boosterBalances), hint: t("balancesHint") },
   };
   type TileKey = keyof typeof tiles;
-  const layout: Record<StaffRole, TileKey[]> = {
-    ADMIN: ["revenue", "platform", "paidOrders", "customers", "disputes", "pendingPayouts", "boosters", "balances"],
-    SUPPORT: ["disputes", "activeOrders", "pool", "flagged"],
-    FINANCE: ["pendingPayouts", "approvedPayouts", "paidOut", "balances"],
-  };
+  const layout: TileKey[] = [
+    "revenue",
+    "platform",
+    "paidOrders",
+    "customers",
+    "disputes",
+    "activeOrders",
+    "pool",
+    "flagged",
+    "pendingPayouts",
+    "approvedPayouts",
+    "boosters",
+    "balances",
+  ];
 
   return (
     <>
-      <PanelHeader title={tPanel("welcome", { name: user.name ?? user.email })} subtitle={t(`subtitle.${role}`)}>
+      <PanelHeader title={tPanel("welcome", { name: user.name ?? user.email })} subtitle={t("subtitle")}>
         <Badge>{tRole(role)}</Badge>
       </PanelHeader>
 
       <div className="grid gap-6">
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-          {layout[role].map((key) => (
+          {layout.map((key) => (
             <StatTile key={key} {...tiles[key]} />
           ))}
         </div>
 
-        {role === "ADMIN" && (
+        {(
           <Card>
             <CardHeader>
               <CardTitle className="text-base">{t("chart.title")}</CardTitle>
@@ -110,7 +119,7 @@ async function AdminOverview() {
           </Card>
         )}
 
-        {role !== "FINANCE" && (
+        {(
           <Card>
             <CardHeader>
               <CardTitle className="text-base">{t("byStatus")}</CardTitle>

@@ -73,9 +73,7 @@
   "Roles": {
     "CUSTOMER": "Müşteri",
     "BOOSTER": "Booster",
-    "SUPPORT": "Destek yöneticisi",
-    "FINANCE": "Finans yöneticisi",
-    "ADMIN": "Süper admin"
+    "ADMIN": "Admin"
   },
   "Validation": {
     "emailInvalid": "Geçerli bir e-posta adresi gir.",
@@ -352,11 +350,7 @@
       "REFUND": "İade"
     },
     "overview": {
-      "subtitle": {
-        "ADMIN": "Platformun genel durumu.",
-        "SUPPORT": "Anlaşmazlıklar, aktif siparişler ve sohbet denetimi.",
-        "FINANCE": "Booster ödemeleri ve bakiyeleri."
-      },
+      "subtitle": "Platformun durumu, destek ve finans tek yerde.",
       "revenue": "Gelir",
       "platform": "Platform kazancı",
       "paidOrders": "Ödenen siparişler",

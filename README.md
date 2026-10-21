@@ -40,9 +40,8 @@ atlamak için `.env` dosyasında `REQUIRE_STAFF_2FA=false` yapıp sunucuyu yenid
 
 | E-posta | Rol |
 | --- | --- |
-| admin@eloboost.test | ADMIN (SuperAdmin) |
-| support@eloboost.test | SUPPORT (SupportManager) |
-| finance@eloboost.test | FINANCE (FinanceManager) |
+| admin@eloboost.test | ADMIN |
+| finance@eloboost.test | ADMIN (ikinci yönetici hesabı) |
 | shadowcarry@eloboost.test | BOOSTER (aktif; LoL, TFT) |
 | vandalqueen@eloboost.test | BOOSTER (aktif; Valorant, CS2) |
 | newcomer@eloboost.test | BOOSTER (onay bekliyor; OW2) |
@@ -95,18 +94,13 @@ src/
 | --- | --- | --- |
 | `/dashboard` | CUSTOMER | Hayır |
 | `/booster` | BOOSTER | Evet |
-| `/admin` | ADMIN, SUPPORT, FINANCE | Evet |
+| `/admin` | ADMIN | Evet |
 | `/account/*` | Tüm giriş yapmış kullanıcılar | Hayır |
 
-Admin paneli bölümleri de aynı kurallarla korunur (`ADMIN_SECTIONS`, `src/lib/auth/access.ts`). Yetkisi olmayan rol
-`/admin` genel bakışa yönlendirilir; server action'lar rolü ayrıca kendileri de kontrol eder.
-
-| Bölüm | ADMIN | SUPPORT | FINANCE |
-| --- | --- | --- | --- |
-| Genel bakış (`/admin`) | Tüm metrikler | Anlaşmazlık ve sohbet metrikleri | Payout metrikleri |
-| Siparişler, anlaşmazlıklar | Okur ve karar verir | Yalnızca okur | – |
-| Payout'lar | Evet | – | Evet |
-| Kullanıcılar, fiyatlar, kuponlar, yorumlar, denetim kaydı | Evet | – | – |
+Roller üç tanedir: CUSTOMER, BOOSTER ve ADMIN. Destek (anlaşmazlıklar, sohbetler) ve finans (payout onayı) dahil tüm
+yönetim işleri tek bir ADMIN rolünde toplanır. Bu yüzden görev ayrımı yoktur: ADMIN hesabı hem anlaşmazlığı çözer hem
+para çıkışını onaylar. Admin bölümleri `ADMIN_SECTIONS` ile (`src/lib/auth/access.ts`) korunur; yetkisi olmayan rol
+`/admin` yerine kendi paneline yönlendirilir, server action'lar rolü ayrıca kendileri de kontrol eder.
 
 - **İki katmanlı kontrol:** `src/proxy.ts`, JWT'ye bakarak hızlı bir ön kontrol ve yönlendirme yapar. Her korumalı sayfa
   ise `requireArea()` (`src/lib/auth/session.ts`) ile rolü, yasak durumunu ve 2FA'yı **veritabanından** yeniden doğrular.
@@ -300,7 +294,7 @@ origin'den gelen istekleri kabul eder:
 | Kanal | Kimler abone olabilir |
 | --- | --- |
 | `private-user-<id>` | Yalnızca kullanıcının kendisi (bildirim zili) |
-| `private-order-<no>` | Siparişin müşterisi, mevcut booster'ı, ADMIN ve SUPPORT |
+| `private-order-<no>` | Siparişin müşterisi, mevcut booster'ı ve ADMIN |
 | `private-booster-pool` | Onaylı ve 2FA'sı açık booster'lar |
 
 WebSocket bağlantısı ilk abonelikte açılır. Giriş yapmamış ziyaretçiler hiç bağlanmaz, böylece Pusher'ın bağlantı
@@ -384,7 +378,7 @@ Kayıtlar `/admin/audit` sayfasında eylem önekine göre (ör. `payout.`) filtr
 - Siparişin müşterisi veya booster'ı, sipariş ASSIGNED / IN_PROGRESS / PAUSED durumundayken "Sorun bildir" ile anlaşmazlık
   açabilir. Gerekçe en az 20 karakter olmalı ve küfür filtresinden geçer.
 - Açılan anlaşmazlıkta sipariş `DISPUTED` (dondurulmuş) olur: booster işlem yapamaz ve giriş bilgilerini açamaz, sohbet
-  açık kalır. Karşı taraf ile ADMIN/SUPPORT bildirim alır.
+  açık kalır. Karşı taraf ile ADMIN'ler bildirim alır.
 - Kararı yalnızca ADMIN verir (kurallar: `src/features/disputes/rules.ts`):
 
 | Karar | Sipariş | Para |
@@ -437,7 +431,8 @@ hiçbir harici script yüklenmez.
 
 ### Spesifikasyondan bilinçli sapmalar
 
-- `UserRole`'e RBAC için `FINANCE` eklendi. Eşleşmeler: ADMIN = SuperAdmin, SUPPORT = SupportManager, FINANCE = FinanceManager.
+- `UserRole` üç değerlidir (CUSTOMER, BOOSTER, ADMIN). Spesifikasyondaki SupportManager ve FinanceManager yetkileri ADMIN'e
+  katıldı (migration `20261022100000_simplify_roles`: mevcut SUPPORT/FINANCE hesapları ADMIN'e çevrildi).
 - `OrderStatus`'e `AWAITING_PAYMENT` (ödeme öncesi) ve `ASSIGNED` (booster atandı, henüz başlamadı) eklendi. Böylece
   müşteri stepper'ı birebir durumlara karşılık gelir.
 - `TransactionType`'a `EARNING` (booster payı) ve `TIP` (bahşiş) eklendi.

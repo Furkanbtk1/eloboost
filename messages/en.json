@@ -73,9 +73,7 @@
   "Roles": {
     "CUSTOMER": "Customer",
     "BOOSTER": "Booster",
-    "SUPPORT": "Support manager",
-    "FINANCE": "Finance manager",
-    "ADMIN": "Super admin"
+    "ADMIN": "Admin"
   },
   "Validation": {
     "emailInvalid": "Enter a valid email address.",
@@ -352,11 +350,7 @@
       "REFUND": "Refund"
     },
     "overview": {
-      "subtitle": {
-        "ADMIN": "Platform health at a glance.",
-        "SUPPORT": "Disputes, active orders and chat moderation.",
-        "FINANCE": "Booster payouts and balances."
-      },
+      "subtitle": "Platform health, support and finance in one place.",
       "revenue": "Revenue",
       "platform": "Platform earnings",
       "paidOrders": "Paid orders",

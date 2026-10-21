@@ -24,12 +24,10 @@ datasource db {
 // Enums
 // -----------------------------------------------------------------------------
 
-/// ADMIN = SuperAdmin, SUPPORT = SupportManager, FINANCE = FinanceManager.
+/// ADMIN covers everything staff do: support, disputes, payouts, pricing and content.
 enum UserRole {
   CUSTOMER
   BOOSTER
-  SUPPORT
-  FINANCE
   ADMIN
 }
 

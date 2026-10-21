@@ -32,7 +32,7 @@ async function currentBooster() {
 
 async function notifyFinance(amount: number) {
   const staff = await db.user.findMany({
-    where: { role: { in: ["FINANCE", "ADMIN"] }, isBanned: false },
+    where: { role: "ADMIN", isBanned: false },
     select: { id: true },
   });
   if (staff.length === 0) return [];

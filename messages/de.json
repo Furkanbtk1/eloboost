@@ -73,9 +73,7 @@
   "Roles": {
     "CUSTOMER": "Kunde",
     "BOOSTER": "Booster",
-    "SUPPORT": "Support-Manager",
-    "FINANCE": "Finanz-Manager",
-    "ADMIN": "Super-Admin"
+    "ADMIN": "Admin"
   },
   "Validation": {
     "emailInvalid": "Gib eine gültige E-Mail-Adresse ein.",
@@ -352,11 +350,7 @@
       "REFUND": "Erstattung"
     },
     "overview": {
-      "subtitle": {
-        "ADMIN": "Der Zustand der Plattform auf einen Blick.",
-        "SUPPORT": "Streitfälle, aktive Aufträge und Chat-Moderation.",
-        "FINANCE": "Booster-Auszahlungen und Guthaben."
-      },
+      "subtitle": "Plattformstatus, Support und Finanzen an einem Ort.",
       "revenue": "Umsatz",
       "platform": "Plattformanteil",
       "paidOrders": "Bezahlte Aufträge",

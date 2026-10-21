@@ -27,7 +27,7 @@ export function chatRole(viewer: ChatViewer, order: Pick<ChatOrder, "customerId"
   if (viewer.role === "BOOSTER") {
     return viewer.boosterStatus === "ACTIVE" && order.boosterId === viewer.id ? "booster" : null;
   }
-  if (viewer.role === "ADMIN" || viewer.role === "SUPPORT") return "staff";
+  if (viewer.role === "ADMIN") return "staff";
   return null;
 }
 

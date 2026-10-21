@@ -6,7 +6,7 @@ import type { UserRole } from "@/generated/prisma/enums";
  * Paths are locale-free, e.g. "/admin/payouts".
  */
 
-export const STAFF_ROLES = ["ADMIN", "SUPPORT", "FINANCE"] as const satisfies readonly UserRole[];
+export const STAFF_ROLES = ["ADMIN"] as const satisfies readonly UserRole[];
 export type StaffRole = (typeof STAFF_ROLES)[number];
 
 export function isStaffRole(role: UserRole): role is StaffRole {
@@ -18,16 +18,12 @@ export const TWO_FACTOR_REQUIRED_ROLES: readonly UserRole[] = [...STAFF_ROLES, "
 
 type AreaRule = { prefix: string; roles: readonly UserRole[]; requiresTwoFactor: boolean };
 
-/**
- * Admin panel sections and who may open them (spec RBAC: SuperAdmin = ADMIN,
- * SupportManager = SUPPORT reads orders, chats and disputes, FinanceManager =
- * FINANCE handles payouts). The overview at /admin is open to all staff.
- */
+/** Admin panel sections. ADMIN covers support, disputes and finance, so each is open to ADMIN only. */
 export const ADMIN_SECTIONS = [
-  { key: "orders", prefix: "/admin/orders", roles: ["ADMIN", "SUPPORT"] },
-  { key: "disputes", prefix: "/admin/disputes", roles: ["ADMIN", "SUPPORT"] },
+  { key: "orders", prefix: "/admin/orders", roles: ["ADMIN"] },
+  { key: "disputes", prefix: "/admin/disputes", roles: ["ADMIN"] },
   { key: "users", prefix: "/admin/users", roles: ["ADMIN"] },
-  { key: "payouts", prefix: "/admin/payouts", roles: ["ADMIN", "FINANCE"] },
+  { key: "payouts", prefix: "/admin/payouts", roles: ["ADMIN"] },
   { key: "pricing", prefix: "/admin/pricing", roles: ["ADMIN"] },
   { key: "promos", prefix: "/admin/promos", roles: ["ADMIN"] },
   { key: "reviews", prefix: "/admin/reviews", roles: ["ADMIN"] },

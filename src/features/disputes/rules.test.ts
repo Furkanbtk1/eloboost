@@ -56,14 +56,13 @@ describe("payout details", () => {
 });
 
 describe("admin sections (RBAC)", () => {
-  it("gives each staff role only its sections", () => {
-    expect(roleCanAccess("SUPPORT", "/admin")).toBe(true);
-    expect(roleCanAccess("SUPPORT", "/admin/disputes")).toBe(true);
-    expect(roleCanAccess("SUPPORT", "/admin/payouts")).toBe(false);
-    expect(roleCanAccess("FINANCE", "/admin/payouts")).toBe(true);
-    expect(roleCanAccess("FINANCE", "/admin/orders/ELO-123456")).toBe(false);
-    expect(roleCanAccess("FINANCE", "/admin/users")).toBe(false);
-    expect(roleCanAccess("ADMIN", "/admin/pricing")).toBe(true);
+  it("opens every admin section to ADMIN and none to anyone else", () => {
+    for (const section of ADMIN_SECTIONS) {
+      expect(roleCanAccess("ADMIN", `${section.prefix}/x`)).toBe(true);
+      expect(roleCanAccess("BOOSTER", section.prefix)).toBe(false);
+      expect(roleCanAccess("CUSTOMER", section.prefix)).toBe(false);
+    }
+    expect(roleCanAccess("ADMIN", "/admin")).toBe(true);
     expect(roleCanAccess("CUSTOMER", "/admin")).toBe(false);
   });
 

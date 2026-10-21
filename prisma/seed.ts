@@ -163,15 +163,14 @@ async function seedUsers() {
   const passwordHash = await bcrypt.hash(SEED_PASSWORD, 12);
   const verified = daysAgo(60);
 
-  const [admin, support, finance] = await Promise.all(
+  const [admin, finance] = await Promise.all(
     (
       [
-        ["admin@eloboost.test", "Super Admin", "ADMIN"],
-        ["support@eloboost.test", "Support Manager", "SUPPORT"],
-        ["finance@eloboost.test", "Finance Manager", "FINANCE"],
+        ["admin@eloboost.test", "Super Admin"],
+        ["finance@eloboost.test", "Finance Admin"],
       ] as const
-    ).map(([email, name, role]) =>
-      prisma.user.create({ data: { email, name, role, passwordHash, emailVerified: verified } }),
+    ).map(([email, name]) =>
+      prisma.user.create({ data: { email, name, role: "ADMIN", passwordHash, emailVerified: verified } }),
     ),
   );
 
@@ -272,7 +271,6 @@ async function seedUsers() {
 
   return {
     admin,
-    support,
     finance,
     shadowCarry: boosters[0],
     vandalQueen: boosters[1],

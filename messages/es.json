@@ -73,9 +73,7 @@
   "Roles": {
     "CUSTOMER": "Cliente",
     "BOOSTER": "Booster",
-    "SUPPORT": "Responsable de soporte",
-    "FINANCE": "Responsable de finanzas",
-    "ADMIN": "Superadmin"
+    "ADMIN": "Administrador"
   },
   "Validation": {
     "emailInvalid": "Introduce un correo electrónico válido.",
@@ -352,11 +350,7 @@
       "REFUND": "Reembolso"
     },
     "overview": {
-      "subtitle": {
-        "ADMIN": "El estado de la plataforma de un vistazo.",
-        "SUPPORT": "Disputas, pedidos activos y moderación del chat.",
-        "FINANCE": "Retiros y saldos de los boosters."
-      },
+      "subtitle": "Estado de la plataforma, soporte y finanzas en un solo lugar.",
       "revenue": "Ingresos",
       "platform": "Ganancia de la plataforma",
       "paidOrders": "Pedidos pagados",

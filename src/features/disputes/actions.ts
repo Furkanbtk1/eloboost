@@ -37,7 +37,7 @@ export async function openDisputeAction(rawLocale: string, orderNumber: string, 
   const limit = await rateLimit("openDispute", viewer.id);
   if (!limit.success) return fail(t("rateLimited"), 429);
 
-  const staff = await db.user.findMany({ where: { role: { in: ["ADMIN", "SUPPORT"] }, isBanned: false }, select: { id: true } });
+  const staff = await db.user.findMany({ where: { role: "ADMIN", isBanned: false }, select: { id: true } });
   const other = role === "customer" ? order.boosterId : order.customerId;
 
   const opened = await db.$transaction(async (tx) => {

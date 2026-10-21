@@ -88,11 +88,11 @@ describe("chat access", () => {
     expect(chatRole(viewer({ id: "other", role: "BOOSTER", boosterStatus: "ACTIVE" }), order)).toBeNull();
     expect(chatRole(viewer({ id: "booster", role: "BOOSTER", boosterStatus: "SUSPENDED" }), order)).toBeNull();
     expect(chatRole(viewer({ id: "booster", role: "BOOSTER", boosterStatus: "ACTIVE", twoFactorReady: false }), order)).toBeNull();
-    expect(chatRole(viewer({ role: "FINANCE" }), order)).toBeNull();
+    expect(chatRole(viewer({ role: "BOOSTER", boosterStatus: null }), order)).toBeNull();
   });
 
   it("gives support staff read-only access", () => {
-    expect(chatRole(viewer({ role: "SUPPORT" }), order)).toBe("staff");
+    expect(chatRole(viewer({ role: "ADMIN" }), order)).toBe("staff");
     expect(chatClosedReason("staff", order)).toBe("readOnly");
     expect(chatRole(viewer({ role: "ADMIN", twoFactorReady: false }), order)).toBeNull();
   });
