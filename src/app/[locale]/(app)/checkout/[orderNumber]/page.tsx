@@ -128,7 +128,9 @@ async function Checkout({ params, searchParams }: Pick<Props, "params" | "search
                     }
                   />
                   <Button asChild variant="ghost" className="justify-self-start">
-                    <Link href={`/boost/${order.game.slug}`}>{t("changeOrder")}</Link>
+                    <Link href={order.orderType === "ACCOUNT" ? { pathname: "/", hash: "services" } : `/boost/${order.game.slug}`}>
+                      {t("changeOrder")}
+                    </Link>
                   </Button>
                 </>
               )}

@@ -1,10 +1,10 @@
-import type { OrderType } from "@/generated/prisma/enums";
 import {
   applicableModifiers,
   maxPosition,
   maxRating,
   POINTS_BUCKET_KEYS,
   QUANTITY_LIMITS,
+  type OrderType,
   type PricingCatalog,
   type QuoteInput,
 } from "@/features/pricing/engine";

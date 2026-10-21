@@ -2,10 +2,12 @@
 
 import { randomUUID } from "node:crypto";
 
+import { updateTag } from "next/cache";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
 import { auth } from "@/auth";
+import { ACCOUNTS_CACHE_TAG } from "@/features/accounts/queries";
 import { getPathname } from "@/i18n/navigation";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { fail, ok, type ActionResult } from "@/lib/action-result";
@@ -144,8 +146,9 @@ export async function payWithWalletAction(
       },
     });
     // Rolls the deduction back too if the order was paid or cancelled meanwhile.
-    if (!(await markOrderPaid(tx, order))) throw new OrderNotPayable();
-    return "paid" as const;
+    const settled = await markOrderPaid(tx, order);
+    if (!settled) throw new OrderNotPayable();
+    return settled;
   }).catch((error: unknown) => {
     if (error instanceof OrderNotPayable) return "stale" as const;
     throw error;
@@ -153,7 +156,8 @@ export async function payWithWalletAction(
 
   if (paid === "balance") return fail(t("walletInsufficient"), 409);
   if (paid === "stale") return fail(t("alreadyPaid"), 409);
-  broadcast(...orderPaidSignals(order));
+  broadcast(...orderPaidSignals(order, paid));
+  if (order.orderType === "ACCOUNT") updateTag(ACCOUNTS_CACHE_TAG);
   return ok({ redirectTo: getPathname({ href: { pathname: `/checkout/${order.orderNumber}`, query: { payment: "success" } }, locale }) });
 }
 

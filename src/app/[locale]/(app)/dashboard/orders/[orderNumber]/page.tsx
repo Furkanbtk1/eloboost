@@ -7,6 +7,7 @@ import { Suspense } from "react";
 
 import { PanelSkeleton } from "@/components/layout/panel";
 import { LiveRefresh } from "@/components/realtime/live-refresh";
+import { AccountOrder } from "@/features/accounts/components/account-order";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -51,6 +52,7 @@ async function CustomerOrder({ params, searchParams }: Pick<Props, "params" | "s
   const [{ orderNumber }, query] = await Promise.all([params, searchParams]);
   const order = await getCustomerOrderDetail(orderNumber, user.id);
   if (!order) notFound();
+  if (order.orderType === "ACCOUNT") return <AccountOrder order={order} customerId={user.id} />;
   /** Back from a tip payment: "success" | "cancelled" | "failed". */
   const tipReturn = typeof query.tip === "string" ? query.tip : null;
 

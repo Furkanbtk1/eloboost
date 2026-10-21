@@ -54,6 +54,13 @@ enum OrderType {
   WIN
   PLACEMENT
   COACHING
+  /// A ready-made account bought from the shop (no booster involved).
+  ACCOUNT
+}
+
+enum AccountKind {
+  ACCOUNT
+  SMURF
 }
 
 /// AWAITING_PAYMENT -> PENDING (paid, in the booster pool) -> ASSIGNED (claimed)
@@ -238,6 +245,66 @@ model TwoFactorBackupCode {
   @@unique([userId, codeHash])
 }
 
+/// Something for sale in the account shop: one tier on one server of one game.
+model AccountProduct {
+  id            String      @id @default(uuid(7)) @db.Uuid
+  gameId        String      @db.Uuid
+  kind          AccountKind
+  /// GameServer.code, e.g. "EUW".
+  serverCode    String
+  /// Display name, e.g. "Hand-Leveled Rookie".
+  tier          String
+  level         Int?
+  championCount Int
+  hasMailAccess Boolean     @default(false)
+  /// USD.
+  price         Decimal     @db.Decimal(10, 2)
+  isActive      Boolean     @default(true)
+  sortOrder     Int         @default(0)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  game  Game           @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  stock AccountStock[]
+
+  @@index([gameId, kind, serverCode])
+}
+
+/// One real account that can be sold once. `credentials` is ciphertext (JSON), bound to this row's id.
+model AccountStock {
+  id          String    @id @default(uuid(7)) @db.Uuid
+  productId   String    @db.Uuid
+  credentials String
+  /// Set when sold; unique, so one order gets exactly one account.
+  orderId     String?   @unique @db.Uuid
+  soldAt      DateTime?
+  createdAt   DateTime  @default(now())
+
+  product AccountProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
+  order   Order?         @relation(fields: [orderId], references: [id], onDelete: SetNull)
+
+  @@index([productId, orderId])
+}
+
+/// SEO article. Written in the admin panel; `content` is plain text with light markup (see features/blog/markdown.ts).
+model BlogPost {
+  id          String    @id @default(uuid(7)) @db.Uuid
+  slug        String    @unique
+  /// Language the article is written in; the blog lists the visitor's language.
+  locale      String    @default("en")
+  title       String
+  /// Short summary for lists and meta description.
+  excerpt     String?
+  content     String    @db.Text
+  author      String
+  isPublished Boolean   @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([isPublished, publishedAt])
+}
+
 /// Single-use email links. `identifier` is "reset:<userId>" or "verify:<userId>"; `token` is the SHA-256 of the emailed value.
 model VerificationToken {
   id         String   @id @default(uuid(7)) @db.Uuid
@@ -293,12 +360,13 @@ model Game {
   createdAt           DateTime    @default(now())
   updatedAt           DateTime    @updatedAt
 
-  rankSteps      RankStep[]
-  ratingBrackets RatingBracket[]
-  servers        GameServer[]
-  modifiers      PriceModifier[]
-  orders         Order[]
-  boosters       BoosterProfile[]
+  rankSteps       RankStep[]
+  ratingBrackets  RatingBracket[]
+  servers         GameServer[]
+  modifiers       PriceModifier[]
+  orders          Order[]
+  boosters        BoosterProfile[]
+  accountProducts AccountProduct[]
 
   @@index([status, sortOrder])
 }
@@ -463,6 +531,7 @@ model Order {
   review               Review?
   disputes             Dispute[]
   credentialAccessLogs CredentialAccessLog[]
+  accountStock         AccountStock?
 
   @@index([status, gameId])
   @@index([customerId, createdAt])

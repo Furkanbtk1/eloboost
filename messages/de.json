@@ -59,11 +59,34 @@
     "DIVISION": "Division-Boost",
     "WIN": "Sieg-Boost",
     "PLACEMENT": "Platzierungsspiele",
-    "COACHING": "Coaching"
+    "COACHING": "Coaching",
+    "ACCOUNT": "Spielkonto"
   },
   "Footer": {
     "rights": "© EloBoost. Alle Rechte vorbehalten.",
-    "disclaimer": "EloBoost steht in keiner Verbindung zu Riot Games, Valve oder Blizzard."
+    "disclaimer": "EloBoost steht in keiner Verbindung zu Riot Games, Valve, Blizzard Entertainment, NetEase Games oder Marvel und wird von ihnen nicht unterstützt.",
+    "payments": "Sichere Zahlung",
+    "navLabel": "Fußbereich",
+    "soon": "Bald",
+    "draftNotice": "Entwurfsvorlage: Lass diese Seite vor dem Start von einem Anwalt prüfen und anpassen. (Nur in der Entwicklung sichtbar.)",
+    "columns": {
+      "games": "Spiele",
+      "tools": "Kostenlose Tools",
+      "guides": "Ratgeber",
+      "company": "Unternehmen",
+      "legal": "Rechtliches"
+    },
+    "links": {
+      "calculator": "Preisrechner",
+      "tracking": "Auftragsverfolgung",
+      "blog": "Blog",
+      "howItWorks": "So funktioniert es",
+      "about": "Über uns",
+      "contact": "Kontakt",
+      "terms": "Nutzungsbedingungen",
+      "privacy": "Datenschutz",
+      "refunds": "Erstattungsrichtlinie"
+    }
   },
   "NotFound": {
     "title": "Seite nicht gefunden",
@@ -315,7 +338,9 @@
       "pricing": "Preise",
       "promos": "Gutscheine",
       "reviews": "Bewertungen",
-      "audit": "Protokoll"
+      "audit": "Protokoll",
+      "blog": "Blog",
+      "accounts": "Konto-Shop"
     },
     "pagination": {
       "page": "Seite {page} von {pages} · {total} Ergebnisse",
@@ -339,7 +364,9 @@
       "pastDate": "Das Ablaufdatum muss in der Zukunft liegen.",
       "codeExists": "Einen Gutschein mit diesem Namen gibt es schon.",
       "needServer": "Mindestens ein Server muss aktiv bleiben.",
-      "defaultModifier": "Die Standard-LP-Option kann nicht deaktiviert werden."
+      "defaultModifier": "Die Standard-LP-Option kann nicht deaktiviert werden.",
+      "slugExists": "Diese Adresse wird schon von einem anderen Artikel verwendet.",
+      "stockFormat": "Jede Zeile braucht \"Benutzername Passwort\" oder \"Benutzername Passwort E-Mail E-Mail-Passwort\" (bis zu {max} Zeilen). Es wurde nichts importiert."
     },
     "transactionType": {
       "DEPOSIT": "Einzahlung",
@@ -677,6 +704,72 @@
       "action": "Aktion",
       "target": "Ziel",
       "details": "Details"
+    },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Artikel für den öffentlichen Blog schreiben und veröffentlichen.",
+      "new": "Neuer Artikel",
+      "newTitle": "Neuer Artikel",
+      "editTitle": "Artikel bearbeiten",
+      "back": "Alle Artikel",
+      "empty": "Noch keine Artikel.",
+      "published": "Veröffentlicht",
+      "draft": "Entwurf",
+      "edit": "Bearbeiten",
+      "form": {
+        "title": "Titel",
+        "slug": "Adresse (Slug)",
+        "slugAuto": "Wird aus dem Titel erzeugt",
+        "language": "Sprache",
+        "author": "Autor",
+        "excerpt": "Zusammenfassung",
+        "excerptHint": "Wird in der Liste und als Suchbeschreibung angezeigt. Bis zu 300 Zeichen.",
+        "content": "Inhalt",
+        "contentHint": "Nutze ## für Überschriften, - für Listen, **fett** und [Text](https://link). HTML ist nicht erlaubt.",
+        "publish": "Veröffentlicht (auf der Seite sichtbar)",
+        "save": "Speichern",
+        "savedDraft": "Entwurf gespeichert.",
+        "savedPublished": "Artikel gespeichert und veröffentlicht.",
+        "delete": "Löschen",
+        "confirmDelete": "Diesen Artikel endgültig löschen?",
+        "deleted": "Artikel gelöscht.",
+        "preview": "Vorschau",
+        "untitled": "Ohne Titel",
+        "previewEmpty": "Dein Artikel erscheint hier, während du tippst."
+      }
+    },
+    "accounts": {
+      "title": "Konto-Shop",
+      "subtitle": "Produkte, Preise und der Kontobestand dahinter.",
+      "new": "Neues Produkt",
+      "empty": "Noch keine Produkte.",
+      "price": "Preis (USD)",
+      "savePrice": "Preis speichern",
+      "saved": "Gespeichert.",
+      "active": "Im Verkauf",
+      "available": "{count} verfügbar",
+      "sold": "{count} verkauft",
+      "mailYes": "mit E-Mail",
+      "mailNo": "ohne E-Mail",
+      "addStock": "Konten hinzufügen",
+      "importStock": "Konten importieren",
+      "stockPlaceholder": "Benutzername Passwort\nBenutzername Passwort E-Mail E-Mail-Passwort",
+      "stockHint": "Ein Konto pro Zeile, durch Leerzeichen getrennt. Verschlüsselt gespeichert; jedes wird einmal verkauft.",
+      "stockAdded": "{count, plural, one {# Konto hinzugefügt.} other {# Konten hinzugefügt.}}",
+      "form": {
+        "game": "Spiel",
+        "kind": "Art",
+        "account": "Konto",
+        "smurf": "Smurf",
+        "server": "Server",
+        "tier": "Name",
+        "level": "Level",
+        "champions": "Champions / Agents",
+        "price": "Preis (USD)",
+        "mail": "Inklusive E-Mail-Zugriff",
+        "create": "Produkt erstellen",
+        "created": "Produkt erstellt. Füge Konten hinzu, um es zu verkaufen."
+      }
     }
   },
   "BoostPage": {
@@ -1119,6 +1212,64 @@
       "success": "Danke! Dein Guthaben wird aktualisiert, sobald die Zahlung bestätigt ist.",
       "cancelled": "Die Aufladung wurde abgebrochen. Es wurde nichts abgebucht.",
       "failed": "Die Zahlung ist fehlgeschlagen. Es wurde nichts abgebucht; bitte versuch es erneut."
+    }
+  },
+  "Blog": {
+    "title": "EloBoost-Blog",
+    "description": "Rang-Guides, Spieltipps und News von unseren Boostern und Coaches.",
+    "empty": "Noch keine Artikel. Schau bald wieder vorbei.",
+    "read": "Artikel lesen",
+    "back": "Alle Artikel",
+    "minutes": "{count} Min. Lesezeit"
+  },
+  "Shop": {
+    "title": "Spielinterne Services",
+    "subtitle": "Wähle, was du brauchst: Boost, Coaching oder ein spielfertiges Konto.",
+    "tabsLabel": "Services",
+    "tabs": {
+      "proDivisions": "Pro-Divisionen",
+      "proGames": "Pro-Spiele",
+      "placements": "Platzierungen",
+      "accounts": "Konten",
+      "smurfs": "Smurfs",
+      "coaching": "Coaching"
+    },
+    "from": "Ab {price}",
+    "noGames": "Noch kein Spiel bietet diesen Service an.",
+    "emptyShop": "Derzeit sind keine Konten im Angebot. Schau bald wieder vorbei.",
+    "chooseGame": "Spiel",
+    "chooseServer": "Server",
+    "inStock": "{count} auf Lager",
+    "outOfStock": "Nicht auf Lager",
+    "soldOut": "Ausverkauft",
+    "noProducts": "Für diesen Server ist noch nichts gelistet.",
+    "level": "Level {level}",
+    "champions": "{count, plural, one {# Champion / Agent} other {# Champions / Agents}}",
+    "mailYes": "Voller E-Mail-Zugriff inklusive",
+    "mailNo": "Kein E-Mail-Zugriff",
+    "buy": "Jetzt kaufen",
+    "buying": "Bitte warten …",
+    "deliveryNote": "Wird sofort nach der Zahlung geliefert. Ändere das Passwort umgehend.",
+    "errors": {
+      "signInRequired": "Melde dich an, um ein Konto zu kaufen.",
+      "customersOnly": "Nur Kundenkonten können kaufen.",
+      "unavailable": "Dieses Konto ist nicht mehr verfügbar.",
+      "soldOut": "Ausverkauft: Ein anderer Käufer war schneller.",
+      "rateLimited": "Zu viele Versuche. Bitte warte einen Moment."
+    },
+    "delivered": {
+      "title": "Dein Konto",
+      "description": "Sofort geliefert. Melde dich an und ändere sofort das Passwort (und die E-Mail, falls enthalten).",
+      "tier": "Konto",
+      "server": "Server",
+      "username": "Benutzername",
+      "password": "Passwort",
+      "email": "Konto-E-Mail",
+      "emailPassword": "E-Mail-Passwort",
+      "copy": "Kopieren",
+      "copied": "Kopiert.",
+      "none": "Nicht verfügbar",
+      "cancelled": "Der Kauf konnte nicht abgeschlossen werden, weil das Konto ausverkauft war. Der Betrag wurde deinem Guthaben gutgeschrieben."
     }
   }
 }

@@ -107,6 +107,22 @@ const OVERWATCH_TIERS: readonly TierDef[] = [
   { tier: "Champion", divisions: OW_DIVISIONS, divisionPrice: 40, winPrice: 14, placementPrice: 16 },
 ];
 
+const WR_TIERS: readonly TierDef[] = LOL_TIERS.filter((def) => def.tier !== "Iron");
+
+const MR_DIVISIONS = ["3", "2", "1"] as const;
+
+const MARVEL_RIVALS_TIERS: readonly TierDef[] = [
+  { tier: "Bronze", divisions: MR_DIVISIONS, divisionPrice: 3, winPrice: 1.5, placementPrice: 2 },
+  { tier: "Silver", divisions: MR_DIVISIONS, divisionPrice: 4, winPrice: 2, placementPrice: 2.5 },
+  { tier: "Gold", divisions: MR_DIVISIONS, divisionPrice: 6, winPrice: 3, placementPrice: 3.5 },
+  { tier: "Platinum", divisions: MR_DIVISIONS, divisionPrice: 8, winPrice: 4, placementPrice: 5 },
+  { tier: "Diamond", divisions: MR_DIVISIONS, divisionPrice: 12, winPrice: 5.5, placementPrice: 6.5 },
+  { tier: "Grandmaster", divisions: MR_DIVISIONS, divisionPrice: 20, winPrice: 8, placementPrice: 9 },
+  { tier: "Celestial", divisions: MR_DIVISIONS, divisionPrice: 32, winPrice: 12, placementPrice: 14 },
+  { tier: "Eternity", divisions: MR_DIVISIONS, divisionPrice: 50, winPrice: 18, placementPrice: 20 },
+  { tier: "One Above All", divisionPrice: 0, winPrice: 30, placementPrice: 35 },
+];
+
 const RIOT_LOL_SERVERS = [
   { code: "EUW", name: "Europe West", region: "EU", priceModifier: 0 },
   { code: "EUNE", name: "Europe Nordic & East", region: "EU", priceModifier: 0 },
@@ -215,6 +231,47 @@ export const GAMES: GameSeed[] = [
       { code: "EU", name: "Europe", region: "EU", priceModifier: 0 },
       { code: "AMERICAS", name: "Americas", region: "NA", priceModifier: 10 },
       { code: "ASIA", name: "Asia", region: "ASIA", priceModifier: 10 },
+    ],
+    specificRoleLabel: "Specific heroes",
+  },
+  {
+    name: "Wild Rift",
+    slug: "wild-rift",
+    logoUrl: "/games/wild-rift.svg",
+    rankSystem: "DIVISION",
+    supportedOrderTypes: ["DIVISION", "WIN", "PLACEMENT", "COACHING"],
+    basePrice: 0,
+    coachingHourlyRate: 14,
+    rankSteps: buildLadder(WR_TIERS, 0.8),
+    servers: [
+      { code: "EU", name: "Europe", region: "EU", priceModifier: 0 },
+      { code: "TR", name: "Turkey", region: "EU", priceModifier: 0 },
+      { code: "NA", name: "North America", region: "NA", priceModifier: 10 },
+      { code: "SEA", name: "South-East Asia", region: "ASIA", priceModifier: 10 },
+      { code: "KR", name: "Korea", region: "ASIA", priceModifier: 20 },
+      { code: "BR", name: "Brazil", region: "SA", priceModifier: 5 },
+    ],
+    lpGain: LOL_LP_GAIN,
+    specificRoleLabel: "Specific roles & champions",
+  },
+  {
+    name: "Marvel Rivals",
+    slug: "marvel-rivals",
+    logoUrl: "/games/marvel-rivals.svg",
+    rankSystem: "DIVISION",
+    supportedOrderTypes: ["DIVISION", "WIN", "PLACEMENT", "COACHING"],
+    basePrice: 0,
+    coachingHourlyRate: 15,
+    rankSteps: buildLadder(MARVEL_RIVALS_TIERS),
+    servers: [
+      { code: "EU", name: "Europe", region: "EU", priceModifier: 0 },
+      { code: "NA", name: "North America", region: "NA", priceModifier: 10 },
+      { code: "ASIA", name: "Asia", region: "ASIA", priceModifier: 10 },
+      { code: "SA", name: "South America", region: "SA", priceModifier: 5 },
+    ],
+    lpGain: [
+      { key: "normal_rs", label: "Normal rank score (+20 or more)", percentage: 0, isDefault: true },
+      { key: "low_rs", label: "Low rank score (below +20)", percentage: 20 },
     ],
     specificRoleLabel: "Specific heroes",
   },

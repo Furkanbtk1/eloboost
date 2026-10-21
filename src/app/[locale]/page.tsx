@@ -7,6 +7,8 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ServiceBrowser } from "@/features/accounts/components/service-browser";
+import { getShopCatalog } from "@/features/accounts/queries";
 import { PublicReviews } from "@/features/feedback/components/public-reviews";
 import { GameCard } from "@/features/games/game-card";
 import { getActiveGames } from "@/features/games/queries";
@@ -32,7 +34,12 @@ export async function generateMetadata({ params }: PageProps<"/[locale]">): Prom
 }
 
 export default async function HomePage() {
-  const [t, tMeta, games] = await Promise.all([getTranslations("Home"), getTranslations("Metadata"), getActiveGames()]);
+  const [t, tMeta, games, shop] = await Promise.all([
+    getTranslations("Home"),
+    getTranslations("Metadata"),
+    getActiveGames(),
+    getShopCatalog(),
+  ]);
   const structuredData = jsonLd({
     "@graph": [
       { "@type": "Organization", "@id": absoluteUrl("/#organization"), name: tMeta("siteName"), url: absoluteUrl("/") },
@@ -75,7 +82,12 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <section className="mx-auto grid max-w-6xl gap-4 px-4 md:grid-cols-3">
+        <ServiceBrowser
+          games={games.map(({ slug, name, logoUrl, supportedOrderTypes, startingPrice }) => ({ slug, name, logoUrl, supportedOrderTypes, startingPrice }))}
+          shop={shop}
+        />
+
+        <section id="how-it-works" className="mx-auto grid max-w-6xl scroll-mt-20 gap-4 px-4 md:grid-cols-3">
           {FEATURES.map(({ key, icon: Icon }) => (
             <div key={key} className="rounded-xl border border-border/60 bg-card/50 p-6">
               <Icon className="mb-3 size-6 text-primary" />

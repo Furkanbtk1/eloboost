@@ -18,7 +18,12 @@ type Describable = {
  * "3 wins at Platinum IV", option labels...
  */
 export async function getOrderText() {
-  const [t, format, messages] = await Promise.all([getTranslations("Calculator"), getFormatter(), getMessages()]);
+  const [t, tOrderType, format, messages] = await Promise.all([
+    getTranslations("Calculator"),
+    getTranslations("OrderType"),
+    getFormatter(),
+    getMessages(),
+  ]);
   const optionLabels: Record<string, string> = messages.Calculator.modifierLabels;
 
   const rank = (snapshot: RankSnapshot) =>
@@ -35,6 +40,8 @@ export async function getOrderText() {
         return t("lines.games", { count, rank: rank(order.startRank) });
       case "COACHING":
         return t("lines.hours", { count });
+      case "ACCOUNT":
+        return tOrderType("ACCOUNT");
     }
   };
 

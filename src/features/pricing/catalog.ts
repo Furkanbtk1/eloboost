@@ -6,7 +6,7 @@ import { z } from "zod";
 import type { Prisma } from "@/generated/prisma/client";
 import { db } from "@/lib/db";
 
-import type { PricingCatalog } from "./engine";
+import { isBoostType, type PricingCatalog } from "./engine";
 
 /** Cache tag to invalidate when any game's prices change in the admin panel. */
 export const PRICING_CACHE_TAG = "pricing";
@@ -36,7 +36,7 @@ export async function getPricingCatalog(slug: string): Promise<PricingCatalog | 
     slug: game.slug,
     name: game.name,
     rankSystem: game.rankSystem,
-    orderTypes: game.supportedOrderTypes,
+    orderTypes: game.supportedOrderTypes.filter(isBoostType),
     basePriceCents: toCents(game.basePrice),
     coachingHourlyCents: game.coachingHourlyRate ? toCents(game.coachingHourlyRate) : null,
     steps: game.rankSteps.map((step) => ({
@@ -65,7 +65,7 @@ export async function getPricingCatalog(slug: string): Promise<PricingCatalog | 
       description: modifier.description,
       category: modifier.category,
       percentBp: toBasisPoints(modifier.percentage),
-      orderTypes: modifier.orderTypes,
+      orderTypes: modifier.orderTypes.filter(isBoostType),
       isDefault: modifier.isDefault,
     })),
   };

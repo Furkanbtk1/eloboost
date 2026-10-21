@@ -63,6 +63,8 @@ bildirimler ve audit log kayıtları da vardır.
 | `npm run db:migrate` | Şema değişikliğinden migration üretir ve uygular |
 | `npm run db:deploy` | Production'da migration uygular |
 | `npm run db:seed` / `db:reset` | Seed / veritabanını sıfırla + seed |
+| `npm run db:add-games` | Katalogda olup veritabanında olmayan oyunları ekler (veriye dokunmaz) |
+| `npm run db:add-demo-accounts` | Yalnızca geliştirme: hesap mağazası için sahte ürün ve stok ekler |
 | `npm run db:studio` | Prisma Studio |
 
 ## Proje yapısı
@@ -333,6 +335,62 @@ kotası harcanmaz.
   değişkenlerini doldurun. `PUSHER_HOST` ve `PUSHER_PORT` boş kalmalı.
 - Dosyalar için public erişimi kapalı bir Cloudflare R2 (veya S3) bucket'ı açın ve `S3_*` değişkenlerini doldurun.
   Örnekler `.env.example` dosyasında.
+
+## Bakiye (cüzdan) yükleme
+
+Müşteri panelinde "Bakiye yükle" düğmesi bir pencere açar: hızlı tutarlar ($10/25/50/100) veya serbest tutar (5–1000 USD, en fazla iki
+ondalık) ve sunulan ödeme yöntemleri. Ödeme Stripe'ın barındırılan sayfasında yapılır; onay, siparişlerle **aynı** idempotent hattan
+geçer (`applyPaymentUpdate`): webhook ve dönüş adresi `DEPOSIT` işlemini tamamlar ve tutarı `User.balance`'a (USD, `Decimal`) ekler.
+Yerelde Stripe hesabı olmadan Test ödemesi (sandbox) kullanılır.
+
+- Mevcut cüzdan alanı `User.balance`'tır; ayrı bir Float alanı eklenmedi (para için kuruş hatası yapar ve bakiyeyi ikiye böler).
+- Tutar sunucuda yeniden doğrulanır. Başarısız veya iptal edilen yüklemeler bakiyeye dokunmaz.
+- Ödeme ekranında **"Cüzdan bakiyesiyle öde"** seçeneği her zaman görünür; bakiye yetmiyorsa pasiftir ve sebebi yazar.
+- Gerçek Stripe akışı için `STRIPE_SECRET_KEY` ve `STRIPE_WEBHOOK_SECRET` gerekir; `checkout.session.completed` olayı kullanılır.
+
+## Hesap mağazası
+
+Ana sayfadaki "Oyun içi hizmetler" bölümü yatay kaydırmalı sekmelerden oluşur: Pro Divisions, Pro Games, Placements, Accounts, Smurfs,
+Coaching. İlk dördü boost hizmetleridir ve ilgili oyunun hesaplayıcısını o hizmet seçili açar (`/boost/<oyun>#service=WIN`). **Accounts** ve
+**Smurfs** sekmeleri hesap satar:
+
+- Oyun seç, sunucu çubuğundan sunucu seç (stok ve "şu fiyattan" bilgisi), ardından fiyat kartlarından (seviye, şampiyon sayısı, e-posta
+  erişimi) "Satın al"a bas.
+- **Satın alma:** Fiyat veritabanından alınır; sipariş türü `ACCOUNT`, tutar USD'dir ve ödeme normal ödeme ekranından yapılır. Ödeme
+  onaylandığında satır kilitli (`FOR UPDATE SKIP LOCKED`) bir stok kalemi siparişe bağlanır ve sipariş anında `COMPLETED` olur; hesap
+  bilgileri yalnızca müşterinin sipariş sayfasında gösterilir (şifre varsayılan olarak gizli).
+- **Son hesap, iki alıcı:** Stok sipariş oluşturulurken değil ödeme anında ayrılır. İki kişi aynı anda ödeyince biri hesabı alır, diğerinin
+  sipariş `CANCELLED` olur ve tutarı cüzdanına otomatik iade edilir (kimse boş yere ödemez).
+- **Stok güvenliği:** Giriş bilgileri AES-256-GCM ile şifreli saklanır ve kayıt kimliğine bağlıdır. Booster havuzuna hiç girmez.
+- **Admin → Hesap mağazası:** Ürün (oyun, tür, sunucu, ad, seviye, şampiyon, e-posta, fiyat) oluşturma, fiyat/satışta durumu değiştirme ve
+  toplu stok ekleme (satır başına `kullanıcı şifre` veya `kullanıcı şifre e-posta e-postaŞifresi`; bir satır bozuksa hiçbiri eklenmez).
+- Fiyat motoru yalnızca boost türlerini (`OrderType`: DIVISION, WIN, PLACEMENT, COACHING) tanır; `ACCOUNT` motora girmez.
+
+## Blog
+
+`BlogPost` modeli ve `/blog`, `/blog/<slug>` sayfaları. Yazılar admin panelinde (**Blog**) yazılır: başlık, adres, dil, yazar, özet, içerik,
+yayında/taslak ve canlı önizleme. Her yazı tek bir dildedir ve o dilin blog listesinde görünür.
+
+- **İçerik güvenli işaretlemedir** (`src/features/blog/markdown.ts`): `##`/`###` başlık, `-` liste, `**kalın**`, `[metin](bağlantı)`.
+  HTML hiçbir zaman sayfaya girmez; yazıdaki `<script>` düz metin olarak görünür, `javascript:` gibi bağlantılar düşürülür.
+- SEO: canonical, OpenGraph (`article`), `Article` JSON-LD, sitemap'e yazının kendi dilindeki adresi. Yayından kalkan yazı listeden ve
+  sitemap'ten çıkar.
+
+## Footer ve yasal sayfalar
+
+5 sütunlu footer: Oyunlar (mevcut tüm oyunlar, Wild Rift ve Marvel Rivals dahil), Ücretsiz araçlar, Rehberler (Blog), Şirket ve Yasal;
+üstte kabul edilen ödeme yöntemleri. Rozetlerde yalnızca gerçekten bağlı yöntemler vardır (Visa/Mastercard/Apple Pay/Google Pay Stripe
+üzerinden, BTC/USDT Coinbase üzerinden). **PayPal henüz entegre değil**, bu yüzden gösterilmez; sağlayıcı eklenince
+`src/components/layout/payment-badges.tsx`'e eklenir.
+
+**Yasal sayfalar (Kullanım Koşulları, Gizlilik, İade; Hakkımızda, İletişim) taslak şablondur** (`src/features/legal/content.ts`, EN + TR; DE/ES
+İngilizceye düşer). Yayına almadan önce bir avukata inceletip şirket adı, adres ve yargı yetkisiyle uyarlayın. İletişim sayfasında
+`SUPPORT_EMAIL` gösterilir.
+
+## Wild Rift ve Marvel Rivals
+
+İki oyun da fiyat listesiyle (`prisma/seed-data/catalog.ts`) kataloğa eklendi. Mevcut bir veritabanına eklemek için `npm run db:add-games`
+(seed'den farklı olarak hiçbir veriyi silmez). Fiyatlar başlangıç değerleridir; Admin → Fiyatlar'dan değiştirin.
 
 ## Admin paneli
 

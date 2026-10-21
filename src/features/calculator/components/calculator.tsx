@@ -33,6 +33,16 @@ export function Calculator({ catalog, rates }: { catalog: PricingCatalog; rates:
     void useCalculatorStore.persist.rehydrate();
   }, []);
 
+  // Links from the service tabs arrive as /boost/<game>#service=WIN: open that service once.
+  useEffect(() => {
+    const wanted = /^#service=([A-Z]+)$/.exec(window.location.hash)?.[1];
+    const orderType = catalog.orderTypes.find((type) => type === wanted);
+    if (!orderType) return;
+    const current = normalizeConfig(catalog, useCalculatorStore.getState().configs[catalog.slug]);
+    if (current.orderType !== orderType) useCalculatorStore.getState().saveConfig(catalog.slug, withOrderType(current, orderType));
+    history.replaceState(null, "", window.location.pathname + window.location.search);
+  }, [catalog]);
+
   const config = useMemo(() => normalizeConfig(catalog, saved), [catalog, saved]);
   const result = useMemo(() => calculateQuote(catalog, config), [catalog, config]);
   const update = (next: QuoteInput) => saveConfig(catalog.slug, next);

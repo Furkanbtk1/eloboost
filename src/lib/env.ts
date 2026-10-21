@@ -53,6 +53,9 @@ const serverEnvSchema = z
     /** Simulated "test payment" method. Never offered when NODE_ENV is production. */
     PAYMENTS_SANDBOX: booleanFlag(true),
 
+    /** Shown on the contact page and used as a mailto link. */
+    SUPPORT_EMAIL: optional,
+
     // Transactional email (Resend). Without a key, links are printed to the server console in
     // development and emails are skipped (with a warning) in production.
     RESEND_API_KEY: optional,

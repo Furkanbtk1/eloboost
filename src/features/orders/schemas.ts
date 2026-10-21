@@ -1,11 +1,11 @@
 import { z } from "zod";
 
-import { Currency, OrderType } from "@/generated/prisma/enums";
+import { Currency } from "@/generated/prisma/enums";
 import { POINTS_BUCKET_KEYS } from "@/features/pricing/engine";
 
 /** Calculator selection as sent by the browser. Prices are never accepted from it. */
 export const quoteInputSchema = z.object({
-  orderType: z.enum(OrderType),
+  orderType: z.enum(["DIVISION", "WIN", "PLACEMENT", "COACHING"]),
   current: z.number().int().min(0).max(100_000),
   target: z.number().int().min(0).max(100_000),
   currentPoints: z.enum(POINTS_BUCKET_KEYS),

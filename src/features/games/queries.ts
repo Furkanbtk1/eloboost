@@ -2,7 +2,8 @@ import "server-only";
 
 import { cacheLife, cacheTag } from "next/cache";
 
-import type { OrderType, RankSystem } from "@/generated/prisma/client";
+import type { RankSystem } from "@/generated/prisma/client";
+import { isBoostType, type OrderType } from "@/features/pricing/engine";
 import { db } from "@/lib/db";
 
 /** Cache tag to invalidate when games or their prices change in the admin panel. */
@@ -51,6 +52,10 @@ export async function getActiveGames(): Promise<GameSummary[]> {
   // Plain objects only: Prisma Decimals are not serializable across the cache boundary.
   return games.map(({ rankSteps, ratingBrackets, ...game }) => {
     const cheapest = rankSteps[0]?.divisionPrice ?? ratingBrackets[0]?.pricePer100 ?? null;
-    return { ...game, startingPrice: cheapest ? cheapest.toNumber() : null };
+    return {
+      ...game,
+      supportedOrderTypes: game.supportedOrderTypes.filter(isBoostType),
+      startingPrice: cheapest ? cheapest.toNumber() : null,
+    };
   });
 }

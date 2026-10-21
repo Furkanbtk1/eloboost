@@ -59,11 +59,34 @@
     "DIVISION": "Lig yükseltme",
     "WIN": "Galibiyet boost",
     "PLACEMENT": "Yerleştirme maçları",
-    "COACHING": "Koçluk"
+    "COACHING": "Koçluk",
+    "ACCOUNT": "Oyun hesabı"
   },
   "Footer": {
     "rights": "© EloBoost. Tüm hakları saklıdır.",
-    "disclaimer": "EloBoost; Riot Games, Valve veya Blizzard ile bağlantılı değildir."
+    "disclaimer": "EloBoost; Riot Games, Valve, Blizzard Entertainment, NetEase Games veya Marvel ile bağlantılı değildir ve onlar tarafından onaylanmamıştır.",
+    "payments": "Güvenli ödeme",
+    "navLabel": "Alt bilgi",
+    "soon": "Yakında",
+    "draftNotice": "Taslak şablon: yayına almadan önce bir avukata inceletip uyarla. (Yalnızca geliştirmede görünür.)",
+    "columns": {
+      "games": "Oyunlar",
+      "tools": "Ücretsiz araçlar",
+      "guides": "Rehberler",
+      "company": "Şirket",
+      "legal": "Yasal"
+    },
+    "links": {
+      "calculator": "Fiyat hesaplayıcı",
+      "tracking": "Sipariş takibi",
+      "blog": "Blog",
+      "howItWorks": "Nasıl çalışır",
+      "about": "Hakkımızda",
+      "contact": "İletişim",
+      "terms": "Kullanım Koşulları",
+      "privacy": "Gizlilik Politikası",
+      "refunds": "İade Politikası"
+    }
   },
   "NotFound": {
     "title": "Sayfa bulunamadı",
@@ -315,7 +338,9 @@
       "pricing": "Fiyatlar",
       "promos": "Kuponlar",
       "reviews": "Yorumlar",
-      "audit": "Denetim kaydı"
+      "audit": "Denetim kaydı",
+      "blog": "Blog",
+      "accounts": "Hesap mağazası"
     },
     "pagination": {
       "page": "Sayfa {page}/{pages} · {total} sonuç",
@@ -339,7 +364,9 @@
       "pastDate": "Son kullanma tarihi ileri bir tarih olmalı.",
       "codeExists": "Bu adla bir kupon zaten var.",
       "needServer": "En az bir sunucu açık kalmalı.",
-      "defaultModifier": "Varsayılan LP seçeneği kapatılamaz."
+      "defaultModifier": "Varsayılan LP seçeneği kapatılamaz.",
+      "slugExists": "Bu adresi başka bir yazı zaten kullanıyor.",
+      "stockFormat": "Her satır \"kullanıcı şifre\" veya \"kullanıcı şifre e-posta e-postaŞifresi\" olmalı (en fazla {max} satır). Hiçbir şey içe aktarılmadı."
     },
     "transactionType": {
       "DEPOSIT": "Yükleme",
@@ -677,6 +704,72 @@
       "action": "İşlem",
       "target": "Hedef",
       "details": "Ayrıntılar"
+    },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Herkese açık blog için yazı yaz ve yayınla.",
+      "new": "Yeni yazı",
+      "newTitle": "Yeni yazı",
+      "editTitle": "Yazıyı düzenle",
+      "back": "Tüm yazılar",
+      "empty": "Henüz yazı yok.",
+      "published": "Yayında",
+      "draft": "Taslak",
+      "edit": "Düzenle",
+      "form": {
+        "title": "Başlık",
+        "slug": "Adres (slug)",
+        "slugAuto": "Başlıktan oluşturulur",
+        "language": "Dil",
+        "author": "Yazar",
+        "excerpt": "Özet",
+        "excerptHint": "Listede ve arama açıklaması olarak gösterilir. En fazla 300 karakter.",
+        "content": "İçerik",
+        "contentHint": "Başlık için ##, liste için -, **kalın** ve [metin](https://bağlantı) kullan. HTML kullanılamaz.",
+        "publish": "Yayında (sitede görünür)",
+        "save": "Kaydet",
+        "savedDraft": "Taslak kaydedildi.",
+        "savedPublished": "Yazı kaydedildi ve yayınlandı.",
+        "delete": "Sil",
+        "confirmDelete": "Bu yazı kalıcı olarak silinsin mi?",
+        "deleted": "Yazı silindi.",
+        "preview": "Önizleme",
+        "untitled": "Başlıksız",
+        "previewEmpty": "Yazdıkça yazın burada görünür."
+      }
+    },
+    "accounts": {
+      "title": "Hesap mağazası",
+      "subtitle": "Ürünler, fiyatlar ve arkalarındaki hesap stoğu.",
+      "new": "Yeni ürün",
+      "empty": "Henüz ürün yok.",
+      "price": "Fiyat (USD)",
+      "savePrice": "Fiyatı kaydet",
+      "saved": "Kaydedildi.",
+      "active": "Satışta",
+      "available": "{count} mevcut",
+      "sold": "{count} satıldı",
+      "mailYes": "e-postalı",
+      "mailNo": "e-postasız",
+      "addStock": "Hesap ekle",
+      "importStock": "Hesapları içe aktar",
+      "stockPlaceholder": "kullanıcı şifre\nkullanıcı şifre e-posta e-postaŞifresi",
+      "stockHint": "Satır başına bir hesap, boşlukla ayrılmış. Şifreli saklanır; her biri bir kez satılır.",
+      "stockAdded": "{count} hesap eklendi.",
+      "form": {
+        "game": "Oyun",
+        "kind": "Tür",
+        "account": "Hesap",
+        "smurf": "Smurf",
+        "server": "Sunucu",
+        "tier": "Ad",
+        "level": "Seviye",
+        "champions": "Şampiyon / ajan",
+        "price": "Fiyat (USD)",
+        "mail": "E-posta erişimi dahil",
+        "create": "Ürün oluştur",
+        "created": "Ürün oluşturuldu. Satışa çıkarmak için hesap ekle."
+      }
     }
   },
   "BoostPage": {
@@ -1119,6 +1212,64 @@
       "success": "Teşekkürler! Ödeme onaylanınca bakiyen güncellenir.",
       "cancelled": "Yükleme iptal edildi. Ücret alınmadı.",
       "failed": "Ödeme başarısız oldu. Ücret alınmadı; lütfen tekrar dene."
+    }
+  },
+  "Blog": {
+    "title": "EloBoost Blog",
+    "description": "Booster ve koçlarımızdan rank rehberleri, oyun ipuçları ve haberler.",
+    "empty": "Henüz yazı yok. Yakında tekrar bak.",
+    "read": "Yazıyı oku",
+    "back": "Tüm yazılar",
+    "minutes": "{count} dk okuma"
+  },
+  "Shop": {
+    "title": "Oyun içi hizmetler",
+    "subtitle": "İhtiyacını seç: boost, koçluk veya oynamaya hazır bir hesap.",
+    "tabsLabel": "Hizmetler",
+    "tabs": {
+      "proDivisions": "Pro Lig Boost",
+      "proGames": "Pro Maçlar",
+      "placements": "Yerleştirme",
+      "accounts": "Hesaplar",
+      "smurfs": "Smurf Hesaplar",
+      "coaching": "Koçluk"
+    },
+    "from": "{price}'den başlayan",
+    "noGames": "Henüz bu hizmeti sunan oyun yok.",
+    "emptyShop": "Şu anda satışta hesap yok. Yakında tekrar bak.",
+    "chooseGame": "Oyun",
+    "chooseServer": "Sunucu",
+    "inStock": "{count} stokta",
+    "outOfStock": "Stok yok",
+    "soldOut": "Tükendi",
+    "noProducts": "Bu sunucu için henüz ürün yok.",
+    "level": "Seviye {level}",
+    "champions": "{count} şampiyon / ajan",
+    "mailYes": "Tam e-posta erişimi dahil",
+    "mailNo": "E-posta erişimi yok",
+    "buy": "Satın al",
+    "buying": "Lütfen bekle…",
+    "deliveryNote": "Ödemeden hemen sonra teslim edilir. Şifreyi hemen değiştir.",
+    "errors": {
+      "signInRequired": "Hesap satın almak için giriş yap.",
+      "customersOnly": "Yalnızca müşteri hesapları satın alabilir.",
+      "unavailable": "Bu hesap artık satışta değil.",
+      "soldOut": "Tükendi: başka bir alıcı daha hızlıydı.",
+      "rateLimited": "Çok fazla deneme. Lütfen biraz bekle."
+    },
+    "delivered": {
+      "title": "Hesabın",
+      "description": "Anında teslim edildi. Giriş yap ve şifreyi (varsa e-postayı da) hemen değiştir.",
+      "tier": "Hesap",
+      "server": "Sunucu",
+      "username": "Kullanıcı adı",
+      "password": "Şifre",
+      "email": "Hesap e-postası",
+      "emailPassword": "E-posta şifresi",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı.",
+      "none": "Yok",
+      "cancelled": "Hesap tükendiği için bu satın alma tamamlanamadı. Tutar cüzdanına iade edildi."
     }
   }
 }

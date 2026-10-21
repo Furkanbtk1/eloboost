@@ -27,6 +27,8 @@ export const ADMIN_SECTIONS = [
   { key: "pricing", prefix: "/admin/pricing", roles: ["ADMIN"] },
   { key: "promos", prefix: "/admin/promos", roles: ["ADMIN"] },
   { key: "reviews", prefix: "/admin/reviews", roles: ["ADMIN"] },
+  { key: "accounts", prefix: "/admin/accounts", roles: ["ADMIN"] },
+  { key: "blog", prefix: "/admin/blog", roles: ["ADMIN"] },
   { key: "audit", prefix: "/admin/audit", roles: ["ADMIN"] },
 ] as const satisfies readonly { key: string; prefix: string; roles: readonly StaffRole[] }[];
 

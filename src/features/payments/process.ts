@@ -1,7 +1,12 @@
 import "server-only";
 
+import { fulfilAccountOrder } from "@/features/accounts/fulfil";
 import type { Prisma } from "@/generated/prisma/client";
+import type { OrderType } from "@/generated/prisma/enums";
 import type { PaymentGateway } from "@/generated/prisma/enums";
+import { revalidateTag } from "next/cache";
+
+import { ACCOUNTS_CACHE_TAG } from "@/features/accounts/queries";
 import { db } from "@/lib/db";
 import { broadcast, signal } from "@/lib/realtime/server";
 
@@ -24,13 +29,34 @@ export type ApplyResult =
   /** Money arrived but the order can't take it (amount mismatch, already paid, cancelled): manual review/refund. */
   | "needs_review";
 
-type PaidOrder = { id: string; orderNumber: string; customerId: string; promoCodeId: string | null };
+type PaidOrder = {
+  id: string;
+  orderNumber: string;
+  customerId: string;
+  promoCodeId: string | null;
+  orderType: OrderType;
+  totalAmount: Prisma.Decimal;
+  extraOptions: Prisma.JsonValue;
+};
+
+/** What a confirmed payment did to the order. */
+export type PaidOutcome = false | "pool" | "delivered" | "refunded";
 
 /**
- * Moves an unpaid order into the booster pool: counts the promo code use and
- * tells the customer. False when the order was no longer waiting for payment.
+ * Settles an order that just got paid. Boost orders enter the booster pool
+ * (promo use counted, customer told). Shop accounts are delivered on the spot.
+ * False when the order was no longer waiting for payment.
  */
-export async function markOrderPaid(tx: Prisma.TransactionClient, order: PaidOrder): Promise<boolean> {
+export async function markOrderPaid(tx: Prisma.TransactionClient, order: PaidOrder): Promise<PaidOutcome> {
+  if (order.orderType === "ACCOUNT") {
+    // Claim the order first so a duplicate payment can't take a second account.
+    const claimed = await tx.order.updateMany({
+      where: { id: order.id, status: "AWAITING_PAYMENT" },
+      data: { status: "PENDING" },
+    });
+    return claimed.count === 0 ? false : fulfilAccountOrder(tx, order);
+  }
+
   const moved = await tx.order.updateMany({
     where: { id: order.id, status: "AWAITING_PAYMENT" },
     data: { status: "PENDING", paidAt: new Date() },
@@ -53,12 +79,13 @@ export async function markOrderPaid(tx: Prisma.TransactionClient, order: PaidOrd
       link: `/dashboard/orders/${order.orderNumber}`,
     },
   });
-  return true;
+  return "pool";
 }
 
-export const orderPaidSignals = (order: { orderNumber: string; customerId: string }) => [
+export const orderPaidSignals = (order: { orderNumber: string; customerId: string }, outcome: PaidOutcome = "pool") => [
   signal.orderUpdated(order.orderNumber),
-  signal.poolChanged(),
+  // Only boost orders appear in the pool.
+  ...(outcome === "pool" ? [signal.poolChanged()] : []),
   signal.notification(order.customerId),
 ];
 
@@ -170,7 +197,8 @@ export async function applyPaymentUpdate(gateway: PaymentGateway, update: Paymen
 
     // Only an order still waiting for payment moves on; anything else (paid twice
     // through two providers, cancelled meanwhile) is kept for a refund.
-    if (!(await markOrderPaid(tx, order))) {
+    const settled = await markOrderPaid(tx, order);
+    if (!settled) {
       await tx.transaction.update({
         where: { id: payment.id },
         data: { metadata: { providerPaymentId: update.providerPaymentId ?? null, needsRefund: order.status } },
@@ -178,7 +206,8 @@ export async function applyPaymentUpdate(gateway: PaymentGateway, update: Paymen
       console.error(`[payments] ${order.orderNumber} paid again while ${order.status}: refund needed`);
       return "needs_review";
     }
-    signals.push(...orderPaidSignals(order));
+    signals.push(...orderPaidSignals(order, settled));
+    if (order.orderType === "ACCOUNT") revalidateTag(ACCOUNTS_CACHE_TAG, "max");
     return "paid";
   });
 

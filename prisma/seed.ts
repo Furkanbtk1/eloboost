@@ -13,7 +13,8 @@ import bcrypt from "bcryptjs";
 import { PrismaClient } from "../src/generated/prisma/client";
 import type { Currency, OrderStatus, OrderType, Prisma } from "../src/generated/prisma/client";
 import { encrypt } from "../src/lib/crypto";
-import { COMMON_ADD_ONS, GAMES } from "./seed-data/catalog";
+import { GAMES } from "./seed-data/catalog";
+import { createGame } from "./seed-data/create-game";
 
 if (process.env.NODE_ENV === "production" && process.env.SEED_ALLOW_PRODUCTION !== "true") {
   throw new Error("Refusing to run the seed in production: it deletes all data.");
@@ -77,49 +78,7 @@ async function truncateAll() {
 
 async function seedCatalog() {
   for (const [index, game] of GAMES.entries()) {
-    await prisma.game.create({
-      data: {
-        name: game.name,
-        slug: game.slug,
-        logoUrl: game.logoUrl,
-        rankSystem: game.rankSystem,
-        supportedOrderTypes: game.supportedOrderTypes,
-        basePrice: game.basePrice,
-        coachingHourlyRate: game.coachingHourlyRate,
-        sortOrder: index,
-        rankSteps: game.rankSteps ? { create: game.rankSteps } : undefined,
-        ratingBrackets: game.ratingBrackets ? { create: game.ratingBrackets } : undefined,
-        servers: {
-          create: game.servers.map((server, sortOrder) => ({ ...server, sortOrder })),
-        },
-        modifiers: {
-          create: [
-            ...(game.lpGain ?? []).map((option, sortOrder) => ({
-              category: "LP_GAIN" as const,
-              key: option.key,
-              label: option.label,
-              percentage: option.percentage,
-              isDefault: option.isDefault ?? false,
-              orderTypes: ["DIVISION"] satisfies OrderType[],
-              sortOrder,
-            })),
-            ...COMMON_ADD_ONS.map((addOn, sortOrder) => ({
-              category: "ADD_ON" as const,
-              key: addOn.key,
-              label: addOn.key === "specific_role" ? game.specificRoleLabel : addOn.label,
-              description: addOn.description,
-              percentage: addOn.percentage,
-              // Coaching is priced per hour; only the stream add-on makes sense there.
-              orderTypes:
-                addOn.key === "live_stream"
-                  ? []
-                  : game.supportedOrderTypes.filter((type) => type !== "COACHING"),
-              sortOrder,
-            })),
-          ],
-        },
-      },
-    });
+    await createGame(prisma, game, index);
   }
 
   await prisma.setting.createMany({

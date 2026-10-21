@@ -59,11 +59,34 @@
     "DIVISION": "Division boost",
     "WIN": "Win boost",
     "PLACEMENT": "Placements",
-    "COACHING": "Coaching"
+    "COACHING": "Coaching",
+    "ACCOUNT": "Game account"
   },
   "Footer": {
     "rights": "© EloBoost. All rights reserved.",
-    "disclaimer": "EloBoost is not affiliated with Riot Games, Valve or Blizzard."
+    "disclaimer": "EloBoost is not affiliated with or endorsed by Riot Games, Valve, Blizzard Entertainment, NetEase Games or Marvel.",
+    "payments": "Secure payments",
+    "navLabel": "Footer",
+    "soon": "Soon",
+    "draftNotice": "Draft template: have a lawyer review and adapt this page before you launch. (Shown in development only.)",
+    "columns": {
+      "games": "Games",
+      "tools": "Free tools",
+      "guides": "Guides",
+      "company": "Company",
+      "legal": "Legal"
+    },
+    "links": {
+      "calculator": "Price calculator",
+      "tracking": "Order tracking",
+      "blog": "Blog",
+      "howItWorks": "How it works",
+      "about": "About us",
+      "contact": "Contact",
+      "terms": "Terms of Service",
+      "privacy": "Privacy Policy",
+      "refunds": "Refund Policy"
+    }
   },
   "NotFound": {
     "title": "Page not found",
@@ -315,7 +338,9 @@
       "pricing": "Pricing",
       "promos": "Promo codes",
       "reviews": "Reviews",
-      "audit": "Audit log"
+      "audit": "Audit log",
+      "blog": "Blog",
+      "accounts": "Account shop"
     },
     "pagination": {
       "page": "Page {page} of {pages} · {total} results",
@@ -339,7 +364,9 @@
       "pastDate": "The expiry date must be in the future.",
       "codeExists": "A promo code with this name already exists.",
       "needServer": "At least one server must stay active.",
-      "defaultModifier": "The default LP option can't be turned off."
+      "defaultModifier": "The default LP option can't be turned off.",
+      "slugExists": "Another article already uses this address.",
+      "stockFormat": "Each line needs \"username password\" or \"username password email emailPassword\" (up to {max} lines). Nothing was imported."
     },
     "transactionType": {
       "DEPOSIT": "Deposit",
@@ -677,6 +704,72 @@
       "action": "Action",
       "target": "Target",
       "details": "Details"
+    },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Write and publish articles for the public blog.",
+      "new": "New article",
+      "newTitle": "New article",
+      "editTitle": "Edit article",
+      "back": "All articles",
+      "empty": "No articles yet.",
+      "published": "Published",
+      "draft": "Draft",
+      "edit": "Edit",
+      "form": {
+        "title": "Title",
+        "slug": "Address (slug)",
+        "slugAuto": "Created from the title",
+        "language": "Language",
+        "author": "Author",
+        "excerpt": "Summary",
+        "excerptHint": "Shown in the list and as the search description. Up to 300 characters.",
+        "content": "Content",
+        "contentHint": "Use ## for headings, - for lists, **bold** and [text](https://link). HTML is not allowed.",
+        "publish": "Published (visible on the site)",
+        "save": "Save",
+        "savedDraft": "Draft saved.",
+        "savedPublished": "Article saved and published.",
+        "delete": "Delete",
+        "confirmDelete": "Delete this article for good?",
+        "deleted": "Article deleted.",
+        "preview": "Preview",
+        "untitled": "Untitled",
+        "previewEmpty": "Your article appears here as you type."
+      }
+    },
+    "accounts": {
+      "title": "Account shop",
+      "subtitle": "Products, prices and the account stock behind them.",
+      "new": "New product",
+      "empty": "No products yet.",
+      "price": "Price (USD)",
+      "savePrice": "Save price",
+      "saved": "Saved.",
+      "active": "On sale",
+      "available": "{count} available",
+      "sold": "{count} sold",
+      "mailYes": "with email",
+      "mailNo": "no email",
+      "addStock": "Add accounts",
+      "importStock": "Import accounts",
+      "stockPlaceholder": "username password\nusername password email emailPassword",
+      "stockHint": "One account per line, separated by spaces. Stored encrypted; each is sold once.",
+      "stockAdded": "{count, plural, one {# account added.} other {# accounts added.}}",
+      "form": {
+        "game": "Game",
+        "kind": "Type",
+        "account": "Account",
+        "smurf": "Smurf",
+        "server": "Server",
+        "tier": "Name",
+        "level": "Level",
+        "champions": "Champions / agents",
+        "price": "Price (USD)",
+        "mail": "Includes email access",
+        "create": "Create product",
+        "created": "Product created. Add accounts to put it on sale."
+      }
     }
   },
   "BoostPage": {
@@ -1119,6 +1212,64 @@
       "success": "Thanks! Your balance is updated as soon as the payment is confirmed.",
       "cancelled": "The top-up was cancelled. You weren't charged.",
       "failed": "The payment failed. You weren't charged; please try again."
+    }
+  },
+  "Blog": {
+    "title": "EloBoost Blog",
+    "description": "Rank guides, game tips and news from our boosters and coaches.",
+    "empty": "No articles yet. Check back soon.",
+    "read": "Read article",
+    "back": "All articles",
+    "minutes": "{count, plural, one {# min read} other {# min read}}"
+  },
+  "Shop": {
+    "title": "In-game services",
+    "subtitle": "Pick what you need: a boost, coaching, or a ready-to-play account.",
+    "tabsLabel": "Services",
+    "tabs": {
+      "proDivisions": "Pro Divisions",
+      "proGames": "Pro Games",
+      "placements": "Placements",
+      "accounts": "Accounts",
+      "smurfs": "Smurfs",
+      "coaching": "Coaching"
+    },
+    "from": "From {price}",
+    "noGames": "No game offers this service yet.",
+    "emptyShop": "No accounts are listed right now. Check back soon.",
+    "chooseGame": "Game",
+    "chooseServer": "Server",
+    "inStock": "{count} in stock",
+    "outOfStock": "Out of stock",
+    "soldOut": "Sold out",
+    "noProducts": "Nothing listed for this server yet.",
+    "level": "Level {level}",
+    "champions": "{count, plural, one {# champion / agent} other {# champions / agents}}",
+    "mailYes": "Full email access included",
+    "mailNo": "No email access",
+    "buy": "Buy now",
+    "buying": "Please wait…",
+    "deliveryNote": "Delivered instantly after payment. Change the password right away.",
+    "errors": {
+      "signInRequired": "Sign in to buy an account.",
+      "customersOnly": "Only customer accounts can buy.",
+      "unavailable": "This account is no longer available.",
+      "soldOut": "Sold out: another buyer was faster.",
+      "rateLimited": "Too many attempts. Please wait a moment."
+    },
+    "delivered": {
+      "title": "Your account",
+      "description": "Delivered instantly. Sign in and change the password (and the email, if included) right away.",
+      "tier": "Account",
+      "server": "Server",
+      "username": "Username",
+      "password": "Password",
+      "email": "Account email",
+      "emailPassword": "Email password",
+      "copy": "Copy",
+      "copied": "Copied.",
+      "none": "Not available",
+      "cancelled": "This purchase couldn't be completed because the account sold out. The amount was returned to your wallet."
     }
   }
 }

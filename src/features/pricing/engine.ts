@@ -19,7 +19,12 @@
  *   COACHING   hourly rate × hours
  */
 
-import type { DiscountType, ModifierCategory, OrderType, RankSystem } from "@/generated/prisma/enums";
+import type { DiscountType, ModifierCategory, OrderType as DbOrderType, RankSystem } from "@/generated/prisma/enums";
+
+/** Services priced by the calculator. Shop accounts (ACCOUNT) have fixed prices and never go through it. */
+export type OrderType = Exclude<DbOrderType, "ACCOUNT">;
+
+export const isBoostType = (value: DbOrderType): value is OrderType => value !== "ACCOUNT";
 
 // ---------------------------------------------------------------------------
 // Catalog (admin-editable price data, loaded from the database)
