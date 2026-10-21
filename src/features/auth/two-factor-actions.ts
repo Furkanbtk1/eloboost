@@ -9,6 +9,7 @@ import { getPathname } from "@/i18n/navigation";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { fail, failValidation, ok, type ActionResult } from "@/lib/action-result";
 import { homePathForRole } from "@/lib/auth/access";
+import { issueBackupCodes } from "@/lib/auth/backup-codes";
 import { isTwoFactorMandatory } from "@/lib/auth/policy";
 import { generateTotpSecret, openTotpSecret, sealTotpSecret, totpUri, verifyTotp } from "@/lib/auth/totp";
 import { db } from "@/lib/db";
@@ -74,10 +75,11 @@ export async function startTwoFactorSetupAction(rawLocale: string): Promise<Acti
   return ok({ qrCodeDataUrl, secret });
 }
 
+/** Turning 2FA on also issues the recovery codes; they are shown once, before moving on. */
 export async function enableTwoFactorAction(
   rawLocale: string,
   input: unknown,
-): Promise<ActionResult<{ redirectTo: string }>> {
+): Promise<ActionResult<{ redirectTo: string; backupCodes: string[] }>> {
   const ctx = await context(rawLocale);
   if (ctx.user?.is2FAEnabled) return fail(ctx.errors("alreadyEnabled"), 409);
 
@@ -88,7 +90,19 @@ export async function enableTwoFactorAction(
   await db.user.update({ where: { id: user.id }, data: { is2FAEnabled: true } });
   await unstable_update({}); // re-issue the token without the "needs 2FA setup" flag
 
-  return ok({ redirectTo: getPathname({ href: homePathForRole(user.role), locale: ctx.locale }) });
+  const backupCodes = await issueBackupCodes(user.id);
+  return ok({ redirectTo: getPathname({ href: homePathForRole(user.role), locale: ctx.locale }), backupCodes });
+}
+
+/** Invalidates every old recovery code. Needs a current authenticator code. */
+export async function regenerateBackupCodesAction(rawLocale: string, input: unknown): Promise<ActionResult<{ backupCodes: string[] }>> {
+  const ctx = await context(rawLocale);
+  if (ctx.user && !ctx.user.is2FAEnabled) return fail(ctx.errors("notEnabled"), 409);
+  const checked = await verifyUserCode(ctx, input);
+  if (!checked.success) return checked;
+  const limit = await rateLimit("backupCodes", checked.data.id);
+  if (!limit.success) return fail(ctx.errors("rateLimited"), 429);
+  return ok({ backupCodes: await issueBackupCodes(checked.data.id) });
 }
 
 export async function disableTwoFactorAction(rawLocale: string, input: unknown): Promise<ActionResult> {
@@ -99,7 +113,10 @@ export async function disableTwoFactorAction(rawLocale: string, input: unknown):
   const checked = await verifyUserCode(ctx, input);
   if (!checked.success) return checked;
 
-  await db.user.update({ where: { id: checked.data.id }, data: { is2FAEnabled: false, twoFactorSecret: null } });
+  await db.$transaction([
+    db.user.update({ where: { id: checked.data.id }, data: { is2FAEnabled: false, twoFactorSecret: null } }),
+    db.twoFactorBackupCode.deleteMany({ where: { userId: checked.data.id } }),
+  ]);
   await unstable_update({});
   return ok(undefined);
 }

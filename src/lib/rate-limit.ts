@@ -35,6 +35,14 @@ const LIMITS = {
   chatMessage: { requests: 30, windowSeconds: 60 },
   /** Per user: screenshots uploaded to chat. */
   chatAttachment: { requests: 20, windowSeconds: 60 * 60 },
+  /** Per IP: password reset requests (each can send an email). */
+  passwordResetIp: { requests: 10, windowSeconds: 60 * 60 },
+  /** Per email address: password reset requests, so one inbox can't be flooded. */
+  passwordResetEmail: { requests: 3, windowSeconds: 60 * 60 },
+  /** Per user: verification emails sent. */
+  verificationEmail: { requests: 3, windowSeconds: 60 * 60 },
+  /** Per user: recovery codes regenerated. */
+  backupCodes: { requests: 5, windowSeconds: 60 * 60 },
   /** Per user: disputes opened. */
   openDispute: { requests: 5, windowSeconds: 60 * 60 },
   /** Per customer: tips and reviews. */

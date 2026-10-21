@@ -86,7 +86,7 @@
     "passwordsDontMatch": "Las contraseñas no coinciden.",
     "nameTooShort": "El nombre debe tener al menos 2 caracteres.",
     "nameTooLong": "El nombre puede tener como máximo 50 caracteres.",
-    "codeInvalid": "Introduce el código de 6 dígitos de tu app de autenticación."
+    "codeInvalid": "Introduce el código de 6 dígitos de tu app de autenticación o un código de recuperación."
   },
   "Auth": {
     "login": {
@@ -96,9 +96,10 @@
       "noAccount": "¿No tienes cuenta?",
       "registerLink": "Regístrate",
       "twoFactorTitle": "Verificación en dos pasos",
-      "twoFactorHint": "Introduce el código de 6 dígitos de tu app de autenticación.",
+      "twoFactorHint": "Introduce el código de 6 dígitos de tu app de autenticación o uno de tus códigos de recuperación.",
       "verify": "Verificar",
-      "back": "Volver"
+      "back": "Volver",
+      "forgot": "¿Olvidaste tu contraseña?"
     },
     "register": {
       "title": "Crea tu cuenta",
@@ -124,7 +125,9 @@
       "accountBanned": "Esta cuenta ha sido suspendida. Contacta con soporte.",
       "rateLimited": "Demasiados intentos. Vuelve a intentarlo en {minutes} min.",
       "emailTaken": "Ya existe una cuenta con este correo.",
-      "generic": "Algo ha salido mal. Inténtalo de nuevo."
+      "generic": "Algo ha salido mal. Inténtalo de nuevo.",
+      "linkInvalid": "Este enlace no es válido o ha caducado.",
+      "emailFailed": "No se pudo enviar el correo. Inténtalo más tarde."
     },
     "oauthErrors": {
       "OAuthEmailUnverified": "Tu correo no está verificado en ese proveedor.",
@@ -133,6 +136,33 @@
       "OAuthTwoFactor": "Tu cuenta usa 2FA. Inicia sesión con tu contraseña.",
       "AccountBanned": "Esta cuenta ha sido suspendida. Contacta con soporte.",
       "default": "No se pudo iniciar sesión. Inténtalo de nuevo."
+    },
+    "forgot": {
+      "title": "Restablece tu contraseña",
+      "subtitle": "Escribe tu correo y te enviaremos un enlace para elegir una contraseña nueva.",
+      "submit": "Enviar enlace",
+      "sentTitle": "Revisa tu bandeja de entrada",
+      "sentBody": "Si existe una cuenta para {email}, el enlace va en camino. Es válido durante 1 hora.",
+      "back": "Volver a iniciar sesión"
+    },
+    "reset": {
+      "title": "Elige una contraseña nueva",
+      "subtitle": "Elige una contraseña que no uses en ningún otro sitio.",
+      "submit": "Guardar contraseña nueva",
+      "done": "Contraseña cambiada. Ya puedes iniciar sesión.",
+      "requestNew": "Pedir un enlace nuevo"
+    },
+    "verify": {
+      "title": "Verifica tu correo",
+      "subtitle": "Confirma que esta dirección es tuya.",
+      "confirm": "Verificar mi correo",
+      "done": "Tu correo está verificado. ¡Gracias!",
+      "invalid": "Este enlace no es válido o ha caducado. Pide uno nuevo desde tu panel.",
+      "continue": "Ir a mi panel",
+      "banner": "Verifica {email}, por favor. Te enviamos un enlace.",
+      "resend": "Reenviar correo",
+      "sent": "Correo de verificación enviado.",
+      "sentShort": "Enviado"
     }
   },
   "Security": {
@@ -162,7 +192,18 @@
       "notEnabled": "La 2FA no está activada.",
       "passwordRequired": "La 2FA requiere iniciar sesión con contraseña.",
       "mandatoryForRole": "Tu rol requiere 2FA."
-    }
+    },
+    "backupTitle": "Códigos de recuperación",
+    "backupLeft": "{count, plural, =0 {No te quedan códigos de recuperación sin usar.} one {Te queda # código de recuperación sin usar.} other {Te quedan # códigos de recuperación sin usar.}}",
+    "backupRegenerate": "Códigos nuevos",
+    "backupRegenerateHint": "Introduce un código actual para crear un juego nuevo. Los códigos anteriores dejarán de funcionar.",
+    "codesTitle": "Guarda tus códigos de recuperación",
+    "codesDescription": "Si pierdes tu app de autenticación, cada código te deja iniciar sesión una vez. Solo se muestran ahora: guárdalos en un lugar seguro.",
+    "codesCopy": "Copiar",
+    "codesDownload": "Descargar",
+    "codesCopied": "Códigos copiados.",
+    "codesCopyFailed": "No se pudo copiar. Selecciona los códigos y cópialos a mano.",
+    "codesSaved": "Ya los guardé"
   },
   "Panel": {
     "loading": "Cargando…",
@@ -1051,6 +1092,21 @@
       "unavailable": "Este método de pago no está disponible.",
       "providerError": "El proveedor de pago no respondió. Inténtalo de nuevo.",
       "alreadyReviewed": "Ya valoraste este pedido."
+    }
+  },
+  "Emails": {
+    "greeting": "Hola {name}:",
+    "reset": {
+      "subject": "Restablece tu contraseña de EloBoost",
+      "body": "Recibimos una solicitud para restablecer tu contraseña. El enlace de abajo es válido durante 1 hora y se puede usar una sola vez.",
+      "button": "Elegir contraseña nueva",
+      "footer": "Si no lo pediste tú, ignora este correo; tu contraseña seguirá igual."
+    },
+    "verify": {
+      "subject": "Verifica tu correo de EloBoost",
+      "body": "Confirma que esta dirección de correo es tuya. El enlace es válido durante 24 horas.",
+      "button": "Verificar mi correo",
+      "footer": "Si no creaste una cuenta de EloBoost, ignora este correo."
     }
   }
 }

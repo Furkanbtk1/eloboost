@@ -18,9 +18,12 @@ import { routing, type AppLocale } from "@/i18n/routing";
 import { fail, failValidation, ok, type ActionResult } from "@/lib/action-result";
 import { homePathForRole, safeCallbackPath } from "@/lib/auth/access";
 import { db } from "@/lib/db";
+import { actionEmail, sendEmail } from "@/lib/email";
+import { env } from "@/lib/env";
 import { getClientIp } from "@/lib/request";
 import { rateLimit } from "@/lib/rate-limit";
 
+import { issueEmailToken, verifyIdentifier, VERIFY_TTL_MS } from "./email-tokens";
 import { loginSchema, registerSchema } from "./schemas";
 
 // Root params are unavailable in Server Actions, so the client passes its locale.
@@ -100,16 +103,21 @@ export async function registerAction(rawLocale: string, input: unknown): Promise
   const emailTaken = () => fail(t.errors("emailTaken"), 409, { email: [t.errors("emailTaken")] });
   if (await db.user.findUnique({ where: { email }, select: { id: true } })) return emailTaken();
 
+  let userId: string;
   try {
-    await db.user.create({
+    ({ id: userId } = await db.user.create({
       data: { name, email, passwordHash: await bcrypt.hash(password, 12), role: "CUSTOMER" },
-    });
+      select: { id: true },
+    }));
   } catch (error) {
     // Lost a race against a parallel registration with the same email.
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") return emailTaken();
     console.error("[registerAction]", error);
     return fail(t.errors("generic"), 500);
   }
+
+  // Best effort: a mail problem must not block sign-up (the dashboard offers "resend").
+  await sendVerification(userId, email, name, locale);
 
   try {
     await signIn("credentials", { email, password, redirect: false });
@@ -118,6 +126,24 @@ export async function registerAction(rawLocale: string, input: unknown): Promise
     return ok({ redirectTo: getPathname({ href: "/login", locale }) });
   }
   return ok({ redirectTo: getPathname({ href: "/dashboard", locale }) });
+}
+
+async function sendVerification(userId: string, email: string, name: string, locale: AppLocale) {
+  try {
+    const token = await issueEmailToken(verifyIdentifier(userId), VERIFY_TTL_MS);
+    const t = await getTranslations({ locale, namespace: "Emails" });
+    const url = new URL(`${getPathname({ href: "/verify-email", locale })}?token=${encodeURIComponent(token)}`, env.NEXT_PUBLIC_APP_URL).toString();
+    const content = actionEmail({
+      greeting: t("greeting", { name }),
+      body: t("verify.body"),
+      button: t("verify.button"),
+      url,
+      footer: t("verify.footer"),
+    });
+    await sendEmail({ to: email, subject: t("verify.subject"), ...content });
+  } catch (error) {
+    console.error("[registerAction] verification email failed", error);
+  }
 }
 
 export async function oauthSignInAction(

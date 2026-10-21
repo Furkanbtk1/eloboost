@@ -86,7 +86,7 @@
     "passwordsDontMatch": "Passwords don't match.",
     "nameTooShort": "Name must be at least 2 characters.",
     "nameTooLong": "Name can be at most 50 characters.",
-    "codeInvalid": "Enter the 6-digit code from your authenticator app."
+    "codeInvalid": "Enter the 6-digit code from your authenticator app or a recovery code."
   },
   "Auth": {
     "login": {
@@ -96,9 +96,10 @@
       "noAccount": "Don't have an account?",
       "registerLink": "Sign up",
       "twoFactorTitle": "Two-factor authentication",
-      "twoFactorHint": "Enter the 6-digit code from your authenticator app.",
+      "twoFactorHint": "Enter the 6-digit code from your authenticator app, or one of your recovery codes.",
       "verify": "Verify",
-      "back": "Back"
+      "back": "Back",
+      "forgot": "Forgot your password?"
     },
     "register": {
       "title": "Create your account",
@@ -124,7 +125,9 @@
       "accountBanned": "This account has been suspended. Contact support.",
       "rateLimited": "Too many attempts. Try again in {minutes} min.",
       "emailTaken": "An account with this email already exists.",
-      "generic": "Something went wrong. Please try again."
+      "generic": "Something went wrong. Please try again.",
+      "linkInvalid": "This link is invalid or has expired.",
+      "emailFailed": "The email couldn't be sent. Please try again later."
     },
     "oauthErrors": {
       "OAuthEmailUnverified": "Your email isn't verified with that provider.",
@@ -133,6 +136,33 @@
       "OAuthTwoFactor": "Your account uses 2FA. Sign in with your password.",
       "AccountBanned": "This account has been suspended. Contact support.",
       "default": "Sign-in failed. Please try again."
+    },
+    "forgot": {
+      "title": "Reset your password",
+      "subtitle": "Enter your email and we'll send you a link to choose a new password.",
+      "submit": "Send reset link",
+      "sentTitle": "Check your inbox",
+      "sentBody": "If an account exists for {email}, a reset link is on its way. It works for 1 hour.",
+      "back": "Back to sign in"
+    },
+    "reset": {
+      "title": "Choose a new password",
+      "subtitle": "Pick a password you don't use anywhere else.",
+      "submit": "Save new password",
+      "done": "Password changed. You can sign in now.",
+      "requestNew": "Request a new link"
+    },
+    "verify": {
+      "title": "Verify your email",
+      "subtitle": "Confirm that this address is yours.",
+      "confirm": "Verify my email",
+      "done": "Your email is verified. Thank you!",
+      "invalid": "This link is invalid or has expired. Request a new one from your dashboard.",
+      "continue": "Go to my dashboard",
+      "banner": "Please verify {email}. We sent you a link.",
+      "resend": "Resend email",
+      "sent": "Verification email sent.",
+      "sentShort": "Sent"
     }
   },
   "Security": {
@@ -162,7 +192,18 @@
       "notEnabled": "2FA is not enabled.",
       "passwordRequired": "2FA requires a password sign-in.",
       "mandatoryForRole": "Your role requires 2FA."
-    }
+    },
+    "backupTitle": "Recovery codes",
+    "backupLeft": "{count, plural, =0 {You have no unused recovery codes.} one {# unused recovery code left.} other {# unused recovery codes left.}}",
+    "backupRegenerate": "New codes",
+    "backupRegenerateHint": "Enter a current code to create a new set. The old codes stop working.",
+    "codesTitle": "Save your recovery codes",
+    "codesDescription": "If you lose your authenticator app, each code lets you sign in once. They are shown only now: store them somewhere safe.",
+    "codesCopy": "Copy",
+    "codesDownload": "Download",
+    "codesCopied": "Codes copied.",
+    "codesCopyFailed": "Couldn't copy. Select the codes and copy them by hand.",
+    "codesSaved": "I've saved them"
   },
   "Panel": {
     "loading": "Loading…",
@@ -1051,6 +1092,21 @@
       "unavailable": "This payment method isn't available.",
       "providerError": "The payment provider didn't respond. Please try again.",
       "alreadyReviewed": "You already reviewed this order."
+    }
+  },
+  "Emails": {
+    "greeting": "Hi {name},",
+    "reset": {
+      "subject": "Reset your EloBoost password",
+      "body": "We received a request to reset your password. The link below works for 1 hour and can be used once.",
+      "button": "Choose a new password",
+      "footer": "If you didn't ask for this, you can ignore this email; your password stays the same."
+    },
+    "verify": {
+      "subject": "Verify your EloBoost email",
+      "body": "Confirm that this email address belongs to you. The link works for 24 hours.",
+      "button": "Verify my email",
+      "footer": "If you didn't create an EloBoost account, you can ignore this email."
     }
   }
 }

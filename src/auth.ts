@@ -8,6 +8,8 @@ import Twitch from "next-auth/providers/twitch";
 import { z } from "zod";
 
 import { LOGIN_PATH } from "@/lib/auth/access";
+import { consumeBackupCode } from "@/lib/auth/backup-codes";
+import { looksLikeBackupCode } from "@/lib/auth/secrets";
 import { needsTwoFactorSetup } from "@/lib/auth/policy";
 import { openTotpSecret, verifyTotp } from "@/lib/auth/totp";
 import { db } from "@/lib/db";
@@ -172,7 +174,11 @@ const config = {
           // Correct password, second step pending: not a failure.
           if (!code) throw new TwoFactorRequired();
           const secret = user.twoFactorSecret ? openTotpSecret(user.twoFactorSecret, user.id) : null;
-          if (!secret || !verifyTotp(secret, code)) throw await failed(new InvalidTwoFactorCode());
+          // A recovery code works once, in place of the authenticator code.
+          const secondFactorOk = looksLikeBackupCode(code)
+            ? await consumeBackupCode(user.id, code)
+            : secret !== null && verifyTotp(secret, code);
+          if (!secondFactorOk) throw await failed(new InvalidTwoFactorCode());
         }
 
         await Promise.all([

@@ -6,6 +6,7 @@ import { PanelHeader, PanelSkeleton } from "@/components/layout/panel";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { TwoFactorCard } from "@/features/auth/components/two-factor-card";
 import { isTwoFactorMandatory, needsTwoFactorSetup } from "@/lib/auth/policy";
+import { countUnusedBackupCodes } from "@/lib/auth/backup-codes";
 import { requireArea } from "@/lib/auth/session";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -23,7 +24,10 @@ export default function SecurityPage() {
 
 async function Security() {
   const user = await requireArea("/account/security");
-  const t = await getTranslations("Security");
+  const [t, unusedCodes] = await Promise.all([
+    getTranslations("Security"),
+    user.is2FAEnabled ? countUnusedBackupCodes(user.id) : Promise.resolve(0),
+  ]);
 
   return (
     <div className="max-w-xl">
@@ -37,6 +41,7 @@ async function Security() {
         enabled={user.is2FAEnabled}
         hasPassword={user.hasPassword}
         mandatory={isTwoFactorMandatory(user.role)}
+        unusedCodes={unusedCodes}
       />
     </div>
   );

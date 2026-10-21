@@ -86,7 +86,7 @@
     "passwordsDontMatch": "Şifreler eşleşmiyor.",
     "nameTooShort": "İsim en az 2 karakter olmalı.",
     "nameTooLong": "İsim en fazla 50 karakter olabilir.",
-    "codeInvalid": "Doğrulama uygulamandaki 6 haneli kodu gir."
+    "codeInvalid": "Doğrulama uygulamandaki 6 haneli kodu veya bir kurtarma kodunu gir."
   },
   "Auth": {
     "login": {
@@ -96,9 +96,10 @@
       "noAccount": "Hesabın yok mu?",
       "registerLink": "Kayıt ol",
       "twoFactorTitle": "İki adımlı doğrulama",
-      "twoFactorHint": "Doğrulama uygulamandaki 6 haneli kodu gir.",
+      "twoFactorHint": "Doğrulama uygulamandaki 6 haneli kodu veya kurtarma kodlarından birini gir.",
       "verify": "Doğrula",
-      "back": "Geri"
+      "back": "Geri",
+      "forgot": "Şifreni mi unuttun?"
     },
     "register": {
       "title": "Hesabını oluştur",
@@ -124,7 +125,9 @@
       "accountBanned": "Bu hesap askıya alındı. Destek ekibiyle iletişime geç.",
       "rateLimited": "Çok fazla deneme yapıldı. {minutes} dakika sonra tekrar dene.",
       "emailTaken": "Bu e-posta ile kayıtlı bir hesap zaten var.",
-      "generic": "Bir şeyler ters gitti. Lütfen tekrar dene."
+      "generic": "Bir şeyler ters gitti. Lütfen tekrar dene.",
+      "linkInvalid": "Bu bağlantı geçersiz veya süresi dolmuş.",
+      "emailFailed": "E-posta gönderilemedi. Lütfen daha sonra tekrar dene."
     },
     "oauthErrors": {
       "OAuthEmailUnverified": "E-posta adresin bu sağlayıcıda doğrulanmamış.",
@@ -133,6 +136,33 @@
       "OAuthTwoFactor": "Hesabında 2FA açık. Şifrenle giriş yap.",
       "AccountBanned": "Bu hesap askıya alındı. Destek ekibiyle iletişime geç.",
       "default": "Giriş başarısız oldu. Lütfen tekrar dene."
+    },
+    "forgot": {
+      "title": "Şifreni sıfırla",
+      "subtitle": "E-postanı gir, yeni şifre belirlemen için sana bir bağlantı gönderelim.",
+      "submit": "Sıfırlama bağlantısı gönder",
+      "sentTitle": "Gelen kutunu kontrol et",
+      "sentBody": "{email} için bir hesap varsa sıfırlama bağlantısı yola çıktı. Bağlantı 1 saat geçerli.",
+      "back": "Girişe dön"
+    },
+    "reset": {
+      "title": "Yeni şifre belirle",
+      "subtitle": "Başka yerde kullanmadığın bir şifre seç.",
+      "submit": "Yeni şifreyi kaydet",
+      "done": "Şifre değiştirildi. Şimdi giriş yapabilirsin.",
+      "requestNew": "Yeni bağlantı iste"
+    },
+    "verify": {
+      "title": "E-postanı doğrula",
+      "subtitle": "Bu adresin sana ait olduğunu onayla.",
+      "confirm": "E-postamı doğrula",
+      "done": "E-postan doğrulandı. Teşekkürler!",
+      "invalid": "Bu bağlantı geçersiz veya süresi dolmuş. Panelinden yenisini iste.",
+      "continue": "Panelime git",
+      "banner": "Lütfen {email} adresini doğrula. Sana bir bağlantı gönderdik.",
+      "resend": "E-postayı yeniden gönder",
+      "sent": "Doğrulama e-postası gönderildi.",
+      "sentShort": "Gönderildi"
     }
   },
   "Security": {
@@ -162,7 +192,18 @@
       "notEnabled": "2FA açık değil.",
       "passwordRequired": "2FA için şifreyle giriş gerekir.",
       "mandatoryForRole": "Rolün 2FA gerektiriyor."
-    }
+    },
+    "backupTitle": "Kurtarma kodları",
+    "backupLeft": "{count, plural, =0 {Kullanılmamış kurtarma kodun yok.} other {# kullanılmamış kurtarma kodun kaldı.}}",
+    "backupRegenerate": "Yeni kodlar",
+    "backupRegenerateHint": "Yeni bir set oluşturmak için güncel bir kod gir. Eski kodlar çalışmaz olur.",
+    "codesTitle": "Kurtarma kodlarını kaydet",
+    "codesDescription": "Doğrulama uygulamanı kaybedersen her kod bir kez giriş yapmanı sağlar. Yalnızca şimdi gösterilirler: güvenli bir yere kaydet.",
+    "codesCopy": "Kopyala",
+    "codesDownload": "İndir",
+    "codesCopied": "Kodlar kopyalandı.",
+    "codesCopyFailed": "Kopyalanamadı. Kodları seçip elle kopyala.",
+    "codesSaved": "Kaydettim"
   },
   "Panel": {
     "loading": "Yükleniyor…",
@@ -1051,6 +1092,21 @@
       "unavailable": "Bu ödeme yöntemi kullanılamıyor.",
       "providerError": "Ödeme sağlayıcısı yanıt vermedi. Lütfen tekrar dene.",
       "alreadyReviewed": "Bu siparişi zaten değerlendirdin."
+    }
+  },
+  "Emails": {
+    "greeting": "Merhaba {name},",
+    "reset": {
+      "subject": "EloBoost şifreni sıfırla",
+      "body": "Şifreni sıfırlama isteği aldık. Aşağıdaki bağlantı 1 saat geçerli ve yalnızca bir kez kullanılabilir.",
+      "button": "Yeni şifre belirle",
+      "footer": "Bunu sen istemediysen bu e-postayı yok sayabilirsin; şifren aynı kalır."
+    },
+    "verify": {
+      "subject": "EloBoost e-postanı doğrula",
+      "body": "Bu e-posta adresinin sana ait olduğunu onayla. Bağlantı 24 saat geçerli.",
+      "button": "E-postamı doğrula",
+      "footer": "EloBoost hesabını sen açmadıysan bu e-postayı yok sayabilirsin."
     }
   }
 }

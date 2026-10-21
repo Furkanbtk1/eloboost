@@ -127,7 +127,24 @@ Admin paneli bölümleri de aynı kurallarla korunur (`ADMIN_SECTIONS`, `src/lib
 - **Hata nesnesi:** Server action'lar `{ success, message, code, fieldErrors? }` döner. Mesajlar istemcinin dilinde
   gelir ve toast ile gösterilir.
 
-Henüz yok (e-posta altyapısı gerekiyor): e-posta doğrulama, şifre sıfırlama, 2FA yedek kodları.
+### E-posta, şifre sıfırlama ve kurtarma kodları
+
+E-postalar Resend'in HTTP API'siyle gönderilir (`src/lib/email.ts`). `RESEND_API_KEY` yoksa geliştirmede bağlantı sunucu
+konsoluna yazılır (`[email:dev]`), üretimde e-posta atlanır ve uyarı loglanır. Canlıda Resend'de alan adını doğrulayıp
+`EMAIL_FROM`'u o alan adından bir adrese ayarlayın.
+
+- **Şifre sıfırlama** (`/forgot-password`, `/reset-password`): Cevap, adres kayıtlı olsun olmasın aynıdır; böylece hangi
+  e-postaların hesabı olduğu öğrenilemez. Adres başına saatte 3, IP başına saatte 10 istek. Bağlantı 1 saat geçerli ve tek
+  kullanımlıktır. Yalnızca şifreli hesaplar e-posta alır. Şifre sıfırlamak 2FA'yı atlatmaz.
+- **E-posta doğrulama** (`/verify-email`): Kayıtta bağlantı gönderilir (24 saat). Doğrulanmamış şifreli hesaplar panelde
+  "yeniden gönder" düğmesi olan bir uyarı görür. Doğrulama giriş veya sipariş vermeyi engellemez. Bağlantı yalnızca
+  sayfayı açar, düğmeye basınca harcanır: e-posta tarayıcılarının bağlantıyı önceden açması onu bozmaz.
+- **Bağlantı güvenliği:** Veritabanında yalnızca SHA-256 hash'i saklanır (`VerificationToken`). Kullanılan bağlantı önce
+  silinir, yeni istek eskisini geçersiz kılar.
+- **2FA kurtarma kodları:** 2FA açılırken 8 kod üretilir ve yalnızca bir kez gösterilir (kopyala / indir). Her kod bir
+  kez giriş yaptırır; büyük/küçük harf ve tire önemli değildir. Kodlar hash'li saklanır, harcama koşullu güncellemeyle
+  yapılır. Güvenlik sayfasından, güncel bir TOTP koduyla yenileri üretilir ve eskiler geçersiz olur.
+- Şifre değişince açık oturumlar JWT süresi (7 gün) dolana kadar sürebilir; yasaklama gibi anında düşmez.
 
 ## Fiyat motoru ve sipariş akışı
 

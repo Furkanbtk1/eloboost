@@ -25,6 +25,7 @@ export type CurrentUser = {
   avatarUrl: string | null;
   is2FAEnabled: boolean;
   hasPassword: boolean;
+  emailVerified: boolean;
   boosterStatus: BoosterStatus | null;
 };
 
@@ -45,6 +46,7 @@ export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
       isBanned: true,
       is2FAEnabled: true,
       passwordHash: true,
+      emailVerified: true,
       boosterProfile: { select: { status: true } },
     },
   });
@@ -58,6 +60,7 @@ export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
     avatarUrl: user.avatarUrl,
     is2FAEnabled: user.is2FAEnabled,
     hasPassword: user.passwordHash !== null,
+    emailVerified: user.emailVerified !== null,
     boosterStatus: user.boosterProfile?.status ?? null,
   };
 });

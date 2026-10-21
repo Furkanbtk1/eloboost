@@ -101,13 +101,16 @@ export function LoginForm({ oauthProviders }: { oauthProviders: OAuthProviderId[
                 error={errors.password?.message}
                 {...form.register("password")}
               />
+              <Link href="/forgot-password" className="-mt-2 justify-self-end text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
+                {t("login.forgot")}
+              </Link>
             </>
           ) : (
             <FormField
               id="code"
               inputMode="numeric"
               autoComplete="one-time-code"
-              maxLength={6}
+              maxLength={11}
               autoFocus
               label={t("fields.code")}
               error={errors.code?.message}

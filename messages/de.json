@@ -86,7 +86,7 @@
     "passwordsDontMatch": "Die Passwörter stimmen nicht überein.",
     "nameTooShort": "Der Name muss mindestens 2 Zeichen lang sein.",
     "nameTooLong": "Der Name darf höchstens 50 Zeichen lang sein.",
-    "codeInvalid": "Gib den 6-stelligen Code aus deiner Authenticator-App ein."
+    "codeInvalid": "Gib den 6-stelligen Code deiner Authenticator-App oder einen Wiederherstellungscode ein."
   },
   "Auth": {
     "login": {
@@ -96,9 +96,10 @@
       "noAccount": "Noch kein Konto?",
       "registerLink": "Registrieren",
       "twoFactorTitle": "Zwei-Faktor-Authentifizierung",
-      "twoFactorHint": "Gib den 6-stelligen Code aus deiner Authenticator-App ein.",
+      "twoFactorHint": "Gib den 6-stelligen Code aus deiner Authenticator-App oder einen Wiederherstellungscode ein.",
       "verify": "Bestätigen",
-      "back": "Zurück"
+      "back": "Zurück",
+      "forgot": "Passwort vergessen?"
     },
     "register": {
       "title": "Konto erstellen",
@@ -124,7 +125,9 @@
       "accountBanned": "Dieses Konto wurde gesperrt. Kontaktiere den Support.",
       "rateLimited": "Zu viele Versuche. Versuche es in {minutes} Min. erneut.",
       "emailTaken": "Es gibt bereits ein Konto mit dieser E-Mail.",
-      "generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+      "generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+      "linkInvalid": "Dieser Link ist ungültig oder abgelaufen.",
+      "emailFailed": "Die E-Mail konnte nicht gesendet werden. Bitte versuch es später erneut."
     },
     "oauthErrors": {
       "OAuthEmailUnverified": "Deine E-Mail ist bei diesem Anbieter nicht bestätigt.",
@@ -133,6 +136,33 @@
       "OAuthTwoFactor": "Dein Konto nutzt 2FA. Melde dich mit deinem Passwort an.",
       "AccountBanned": "Dieses Konto wurde gesperrt. Kontaktiere den Support.",
       "default": "Anmeldung fehlgeschlagen. Bitte versuche es erneut."
+    },
+    "forgot": {
+      "title": "Passwort zurücksetzen",
+      "subtitle": "Gib deine E-Mail ein, dann schicken wir dir einen Link für ein neues Passwort.",
+      "submit": "Link senden",
+      "sentTitle": "Schau in dein Postfach",
+      "sentBody": "Falls es für {email} ein Konto gibt, ist ein Link unterwegs. Er gilt 1 Stunde.",
+      "back": "Zurück zur Anmeldung"
+    },
+    "reset": {
+      "title": "Neues Passwort wählen",
+      "subtitle": "Wähle ein Passwort, das du sonst nirgends benutzt.",
+      "submit": "Neues Passwort speichern",
+      "done": "Passwort geändert. Du kannst dich jetzt anmelden.",
+      "requestNew": "Neuen Link anfordern"
+    },
+    "verify": {
+      "title": "E-Mail bestätigen",
+      "subtitle": "Bestätige, dass diese Adresse dir gehört.",
+      "confirm": "Meine E-Mail bestätigen",
+      "done": "Deine E-Mail ist bestätigt. Danke!",
+      "invalid": "Dieser Link ist ungültig oder abgelaufen. Fordere in deinem Dashboard einen neuen an.",
+      "continue": "Zu meinem Dashboard",
+      "banner": "Bitte bestätige {email}. Wir haben dir einen Link geschickt.",
+      "resend": "E-Mail erneut senden",
+      "sent": "Bestätigungs-E-Mail gesendet.",
+      "sentShort": "Gesendet"
     }
   },
   "Security": {
@@ -162,7 +192,18 @@
       "notEnabled": "2FA ist nicht aktiv.",
       "passwordRequired": "2FA erfordert eine Anmeldung mit Passwort.",
       "mandatoryForRole": "Deine Rolle erfordert 2FA."
-    }
+    },
+    "backupTitle": "Wiederherstellungscodes",
+    "backupLeft": "{count, plural, =0 {Du hast keine unbenutzten Wiederherstellungscodes mehr.} one {# unbenutzter Wiederherstellungscode übrig.} other {# unbenutzte Wiederherstellungscodes übrig.}}",
+    "backupRegenerate": "Neue Codes",
+    "backupRegenerateHint": "Gib einen aktuellen Code ein, um neue zu erzeugen. Die alten Codes funktionieren dann nicht mehr.",
+    "codesTitle": "Wiederherstellungscodes speichern",
+    "codesDescription": "Wenn du deine Authenticator-App verlierst, kannst du dich mit jedem Code einmal anmelden. Sie werden nur jetzt angezeigt: Bewahre sie sicher auf.",
+    "codesCopy": "Kopieren",
+    "codesDownload": "Herunterladen",
+    "codesCopied": "Codes kopiert.",
+    "codesCopyFailed": "Kopieren nicht möglich. Markiere die Codes und kopiere sie von Hand.",
+    "codesSaved": "Ich habe sie gespeichert"
   },
   "Panel": {
     "loading": "Wird geladen…",
@@ -1051,6 +1092,21 @@
       "unavailable": "Diese Zahlungsmethode ist nicht verfügbar.",
       "providerError": "Der Zahlungsanbieter hat nicht geantwortet. Bitte versuch es erneut.",
       "alreadyReviewed": "Diesen Auftrag hast du schon bewertet."
+    }
+  },
+  "Emails": {
+    "greeting": "Hallo {name},",
+    "reset": {
+      "subject": "EloBoost-Passwort zurücksetzen",
+      "body": "Wir haben eine Anfrage zum Zurücksetzen deines Passworts erhalten. Der Link unten gilt 1 Stunde und kann einmal verwendet werden.",
+      "button": "Neues Passwort wählen",
+      "footer": "Falls du das nicht angefordert hast, ignoriere diese E-Mail; dein Passwort bleibt gleich."
+    },
+    "verify": {
+      "subject": "EloBoost-E-Mail bestätigen",
+      "body": "Bestätige, dass diese E-Mail-Adresse dir gehört. Der Link gilt 24 Stunden.",
+      "button": "Meine E-Mail bestätigen",
+      "footer": "Falls du kein EloBoost-Konto erstellt hast, ignoriere diese E-Mail."
     }
   }
 }

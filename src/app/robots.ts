@@ -4,7 +4,7 @@ import { routing } from "@/i18n/routing";
 import { absoluteUrl, siteUrl } from "@/lib/seo";
 
 /** Panels, checkout and sign-in pages are private or worthless to index, in every language prefix. */
-const PRIVATE = ["/admin", "/booster", "/dashboard", "/checkout", "/account", "/login", "/register"];
+const PRIVATE = ["/admin", "/booster", "/dashboard", "/checkout", "/account", "/login", "/register", "/forgot-password", "/reset-password", "/verify-email"];
 
 export default function robots(): MetadataRoute.Robots {
   const prefixes = ["", ...routing.locales.filter((locale) => locale !== routing.defaultLocale).map((locale) => `/${locale}`)];

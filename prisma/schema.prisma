@@ -198,6 +198,7 @@ model User {
   credentialAccessLogs CredentialAccessLog[]
   notifications        Notification[]
   auditLogs            AuditLog[]
+  backupCodes          TwoFactorBackupCode[]
 
   @@index([role])
 }
@@ -226,6 +227,20 @@ model Account {
 }
 
 /// Email verification and password reset tokens. `token` stores a SHA-256 hash.
+/// One-time 2FA recovery code (SHA-256 of the normalized code); `usedAt` marks it spent.
+model TwoFactorBackupCode {
+  id        String    @id @default(uuid(7)) @db.Uuid
+  userId    String    @db.Uuid
+  codeHash  String
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, codeHash])
+}
+
+/// Single-use email links. `identifier` is "reset:<userId>" or "verify:<userId>"; `token` is the SHA-256 of the emailed value.
 model VerificationToken {
   id         String   @id @default(uuid(7)) @db.Uuid
   identifier String

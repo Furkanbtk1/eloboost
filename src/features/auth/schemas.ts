@@ -39,7 +39,14 @@ export const loginSchema = (t: Translate) =>
     email: email(t),
     password: z.string().min(1, { error: t("passwordRequired") }).max(128),
     // Only sent on the second step, after the server asked for it.
-    code: z.union([z.literal(""), twoFactorCode(t)]).optional(),
+    // A 6-digit authenticator code or a recovery code ("k3m9x-q7w2a").
+    code: z
+      .union([
+        z.literal(""),
+        twoFactorCode(t),
+        z.string().trim().regex(/^[a-z0-9]{5}[\s-]?[a-z0-9]{5}$/i, { error: t("codeInvalid") }),
+      ])
+      .optional(),
   });
 
 export const registerSchema = (t: Translate) =>
@@ -59,8 +66,17 @@ export const registerSchema = (t: Translate) =>
       error: t("passwordsDontMatch"),
     });
 
+export const emailOnlySchema = (t: Translate) => z.object({ email: email(t) });
+
+export const resetPasswordSchema = (t: Translate) =>
+  z
+    .object({ password: newPassword(t), confirmPassword: z.string() })
+    .refine((data) => data.password === data.confirmPassword, { path: ["confirmPassword"], error: t("passwordsDontMatch") });
+
 export const twoFactorCodeSchema = (t: Translate) => z.object({ code: twoFactorCode(t) });
 
 export type LoginInput = z.input<ReturnType<typeof loginSchema>>;
 export type RegisterInput = z.input<ReturnType<typeof registerSchema>>;
+export type EmailOnlyInput = z.input<ReturnType<typeof emailOnlySchema>>;
+export type ResetPasswordInput = z.input<ReturnType<typeof resetPasswordSchema>>;
 export type TwoFactorCodeInput = z.input<ReturnType<typeof twoFactorCodeSchema>>;

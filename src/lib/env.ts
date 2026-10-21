@@ -53,6 +53,12 @@ const serverEnvSchema = z
     /** Simulated "test payment" method. Never offered when NODE_ENV is production. */
     PAYMENTS_SANDBOX: booleanFlag(true),
 
+    // Transactional email (Resend). Without a key, links are printed to the server console in
+    // development and emails are skipped (with a warning) in production.
+    RESEND_API_KEY: optional,
+    /** Verified sender, e.g. "EloBoost <no-reply@yourdomain.com>". */
+    EMAIL_FROM: z.string().default("EloBoost <onboarding@resend.dev>"),
+
     // Realtime (Pusher, or Soketi locally). Without it, chat and live updates need a page refresh.
     PUSHER_APP_ID: optional,
     PUSHER_KEY: optional,
